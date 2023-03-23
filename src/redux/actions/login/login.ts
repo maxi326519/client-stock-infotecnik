@@ -11,23 +11,11 @@ export function login(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      let response = {};
-      let error = null;
-
-      await axios
-        .post("/login", user)
-        .then((res: any) => {
-          response = res.data;
-        })
-        .catch((err: any) => {
-          error = err.response.data.error;
-        });
-
-      if (error) throw new Error(error);
+      const response = await axios.post("/login", user);
 
       dispatch({
         type: LOGIN,
-        payload: response,
+        payload: response.data,
       });
     } catch (e: any) {
       throw new Error(e);
