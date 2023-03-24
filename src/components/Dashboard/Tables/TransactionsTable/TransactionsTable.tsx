@@ -12,6 +12,7 @@ export default function TransactionsTable() {
   const transactions = useSelector((state: RootState) => state.transactions);
   const [rows, setRows] = useState<Transactions[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [transactionForm, setTransactionForm] = useState<boolean>(false);
 
   useEffect(() => {
     const filter = transactions.filter(() => {
@@ -26,11 +27,15 @@ export default function TransactionsTable() {
     setSearch(value);
   }
 
-  function handleInvoice() {}
+  function handleInvoice(): void {}
+
+  function handleClose(): void {
+    setTransactionForm(!transactionForm);
+  }
 
   return (
     <div className={styles.dashboardList}>
-      <ImportExcel/>
+      {transactionForm ? <ImportExcel handleClose={handleClose} /> : null}
       <h3>Movimientos</h3>
       <div className={styles.dashboardList__searchBar}>
         <input
@@ -39,7 +44,7 @@ export default function TransactionsTable() {
           placeholder="Buscar movimiento"
           onChange={handleSearchChange}
         />
-        <button className="btn btn-primary" type="button">
+        <button className="btn btn-primary" type="button" onClick={handleClose}>
           Importar
         </button>
       </div>

@@ -26,6 +26,12 @@ const capacidades: string[] = [
   "2TB",
 ];
 
+interface Category {
+  id: string;
+  name: string;
+  parent: string | null;
+}
+
 interface Props {
   handleForm: () => void;
 }
@@ -46,7 +52,9 @@ export default function Form({ handleForm }: Props) {
   const [product, setProduct] = useState(initialState);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [categories, setCategories] = useState<boolean>(false);
+  const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+
   const dispatch = useDispatch();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
@@ -85,15 +93,28 @@ export default function Form({ handleForm }: Props) {
   }
 
   function handleCloseCategories(): void {
-    setCategories(!categories);
+    setCategoriesForm(!categoriesForm);
   }
 
   function handleSetImage(files: File[], urls: string[]) {}
 
+  function onCategorySelect(category: Category | null) {
+    console.log("Select", category);
+  }
+
+  function onCategoryAdd(category: Category) {
+    console.log("Add", category);
+  }
+
   return (
     <div className={style.container}>
-      {categories ? (
-        <CategoriesTree data={[]} handleClose={handleCloseCategories} />
+      {categoriesForm ? (
+        <CategoriesTree
+          categories={categories}
+          onCategorySelect={onCategorySelect}
+          onCategoryAdd={onCategoryAdd}
+          handleClose={handleCloseCategories}
+        />
       ) : null}
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>

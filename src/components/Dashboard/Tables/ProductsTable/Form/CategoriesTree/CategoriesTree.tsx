@@ -8,12 +8,25 @@ type Node = {
   children?: Node[];
 };
 
+interface Category {
+  id: string;
+  name: string;
+  parent: string | null;
+}
+
 type Props = {
-  data: Node[];
+  categories: Category[];
+  onCategorySelect: (category: Category | null) => void;
+  onCategoryAdd: (category: Category) => void;
   handleClose: () => void;
 };
 
-const CategoriesTree = ({ data, handleClose }: Props) => {
+const CategoriesTree = ({
+  categories,
+  onCategorySelect,
+  onCategoryAdd,
+  handleClose,
+}: Props) => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState(false);
@@ -24,39 +37,30 @@ const CategoriesTree = ({ data, handleClose }: Props) => {
     setNewCategory(newCategory);
   }
 
-  const handleAddCategory = () => {
-    if (newCategory) {
-      const newNode: Node = { name: newCategory };
-      if (selectedNode) {
-        if (!selectedNode.children) {
-          selectedNode.children = [];
-        }
-        selectedNode.children.push(newNode);
-      } else {
-        data.push(newNode);
-      }
-      setNewCategory("");
-    }
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+
+  const handleSelect = (category: Category) => {
+    setSelectedCategory(category);
+    onCategorySelect(category);
   };
 
-  const handleNodeClick = (node: Node) => {
-    setSelectedNode(node);
-    setEditingCategory(false);
-  };
-
-  const handleEditCategory = (node: Node) => {
-    // TODO: implement edit functionality
-    setEditingCategory(true);
+  const handleAdd = () => {
+    const newCategory: Category = {
+      id: String(categories.length + 1),
+      name: "New Category",
+      parent: null,
+    };
+    onCategoryAdd(newCategory);
   };
 
   // Construir el array de datos para la gráfica
-  const chartData = data.reduce<string[]>((acc, node) => {
-    acc.push(node.name);
-    if (node.children) {
-      acc.push(...node.children.map((child) => child.name));
-    }
-    return acc;
-  }, []);
+  const chartData = categories.map((category) => [
+    category.parent ? category.parent : "",
+    category.name,
+    category.id,
+  ]);
 
   return (
     <div className={style.container}>
@@ -75,26 +79,39 @@ const CategoriesTree = ({ data, handleClose }: Props) => {
           <Chart
             width={"100%"}
             height={"400px"}
-            chartType="WordTree"
+            chartType="TreeMap"
             loader={<div>Loading Chart</div>}
-            data={[["Phrases"], ...chartData.map((name) => [name])]}
+            data={[["Category", "Parent", "Size"], ...chartData]}
             options={{
-              wordtree: {
-                format: "implicit",
-                word: selectedNode?.name || "",
-              },
+              highlightOnMouseOver: true,
+              maxDepth: 1,
+              maxPostDepth: 2,
+              minHighlightColor: "#8c6bb1",
+              midHighlightColor: "#9ebcda",
+              maxHighlightColor: "#edf8fb",
+              minColor: "#f7f7f7",
+              midColor: "#d9d9d9",
+              maxColor: "#636363",
+              headerHeight: 15,
+              fontColor: "black",
+              showScale: true,
+              useWeightedAverageForAggregation: true,
             }}
             chartEvents={[
               {
                 eventName: "select",
                 callback: ({ chartWrapper }) => {
                   const chart = chartWrapper.getChart();
-                  const [selectedItem] = chart.getSelection();
-                  if (selectedItem) {
-                    const node = data[selectedItem.row + 1];
-                    handleNodeClick(node);
+                  const selection = chart.getSelection();
+                  if (selection.length === 1) {
+                    const [selectedItem] = selection;
+                    const category = categories.find(
+                      (c) => c.id === chartData[selectedItem.row + 1][2]
+                    );
+                    if (category) handleSelect(category);
                   } else {
-                    setSelectedNode(null);
+                    setSelectedCategory(null);
+                    onCategorySelect(null);
                   }
                 },
               },
@@ -117,7 +134,7 @@ const CategoriesTree = ({ data, handleClose }: Props) => {
             </div>
             <button
               className="btn btn-primary"
-              onClick={handleAddCategory}
+              onClick={handleAdd}
               type="button"
             >
               Add
@@ -136,6 +153,13 @@ const CategoriesTree = ({ data, handleClose }: Props) => {
             Editar
           </button>
         </div>
+        {selectedCategory && (
+          <div>
+            <h3>{selectedCategory.name}</h3>
+            <p>Selected category ID: {selectedCategory.id}</p>
+            <p>Parent category ID: {selectedCategory.parent || "none"}</p>
+          </div>
+        )}
       </div>
     </div>
   );
