@@ -13,24 +13,21 @@ import CategoriesTree from "./CategoriesTree/CategoriesTree";
 
 import style from "./Form.module.css";
 
-const capacidades: string[] = [
-  "256GB",
-  "8GB",
-  "16",
-  "32",
-  "64",
-  "128",
-  "256",
-  "512",
-  "1TB",
-  "2TB",
-];
-
 interface Props {
+  capacidades: string[];
+  colores: string[];
   handleForm: () => void;
+  handleCapacidadesForm: () => void;
+  handleColoresForm: () => void;
 }
 
-export default function Form({ handleForm }: Props) {
+export default function Form({
+  capacidades,
+  colores,
+  handleForm,
+  handleCapacidadesForm,
+  handleColoresForm,
+}: Props) {
   const initialState: Product = {
     id: "",
     codigo: "",
@@ -145,17 +142,25 @@ export default function Form({ handleForm }: Props) {
               />
               <label htmlFor="marca">Marca</label>
             </div>
+
             <div className="mb-3 form-floating">
-              <input
+              <select
                 id="color"
                 name="color"
-                className="form-control"
-                type="text"
+                className="form-select"
                 value={product.color}
-                onChange={handleChange}
-              />
-              <label htmlFor="color">Color</label>
+                onChange={handleChangeSelect}
+              >
+                <option value="0">Seleccionar color</option>
+                {colores.map((col, i) => (
+                  <option key={i} value={col}>
+                    {col}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="color">Colores</label>
             </div>
+
             <div className="mb-3 form-floating">
               <select
                 id="capacidad"
@@ -164,6 +169,7 @@ export default function Form({ handleForm }: Props) {
                 value={product.capacidad}
                 onChange={handleChangeSelect}
               >
+                <option value="0">Seleccionar capacidad</option>
                 {capacidades.map((cap, i) => (
                   <option key={i} value={cap}>
                     {cap}
@@ -172,6 +178,7 @@ export default function Form({ handleForm }: Props) {
               </select>
               <label htmlFor="capacidad">Capacidad</label>
             </div>
+
             <div className="mb-3 form-floating">
               <textarea
                 id="descLarga"
@@ -206,9 +213,27 @@ export default function Form({ handleForm }: Props) {
           </div>
           <AddImages imageUrls={imageUrls} handleSetImage={handleSetImage} />
         </div>
-        <button className="btn btn-success" type="submit">
-          Agregar
-        </button>
+        <div className={style.buttons}>
+          <button className="btn btn-success" type="submit">
+            Agregar
+          </button>
+          <div className={style.buttonsForm}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleCapacidadesForm}
+            >
+              Capacidades
+            </button>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleColoresForm}
+            >
+              Colores
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );

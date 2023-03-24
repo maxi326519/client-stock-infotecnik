@@ -1,4 +1,4 @@
-.container{
+.container {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -10,7 +10,7 @@
   background-color: #0006;
 }
 
-.form{
+.form {
   padding: 20px;
   background-color: var(--panel);
   border: 1px solid var(--border);
@@ -28,17 +28,17 @@
   margin: none;
 }
 
-.flex{
+.flex {
   display: flex;
 }
 
-.inputs{
+.inputs {
   display: flex;
   flex-direction: column;
   width: 350px;
 }
 
-.familia{
+.familia {
   display: flex;
   align-items: center;
   padding: 10px;
@@ -46,17 +46,17 @@
   background-color: #0003;
 }
 
-.familia label{
+.familia label {
   flex-grow: 1;
   text-align: center;
 }
 
-.left{
+.left {
   width: 300px;
   margin-right: 20px;
 }
 
-.right{
+.right {
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -72,23 +72,37 @@
 .container select,
 .container select:focus,
 .container select:active,
-.form-floating{
+.form-floating {
   background-color: #0002;
   border-color: var(--border);
   color: var(--font);
 }
 
-.right div:first-child{
+.right div:first-child {
   flex-grow: 1;
   height: 130px;
 }
 
-.container .textArea{
+.container .textArea {
   width: 100%;
   height: 100% !important;
 }
 
-.right input[type="file"]{
+.right input[type="file"] {
   margin-bottom: 20px;
   height: 60px;
+}
+
+.buttons {
+  display: flex;
+}
+
+.buttonsForm {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonsForm button:first-child {
+  margin-right: 10px;
 }

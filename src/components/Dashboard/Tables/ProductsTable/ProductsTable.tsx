@@ -8,12 +8,18 @@ import ProductRow from "./ProductRow/ProductRow";
 
 import styles from "../../Dashboard.module.css";
 import style from "./ProductsTable.module.css";
+import Capacidades from "./Capacidades/Capacidades";
+import Colores from "./Colores/Colores";
 
 export default function ProductTable() {
   const products: Product[] = useSelector((state: RootState) => state.products);
+  const [capacidades, setCapacidades] = useState<string[]>([]);
+  const [colores, setColores] = useState<string[]>([]);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
   const [details, setDetails] = useState(false);
+  const [capacidadesForm, setCapacidadesForm] = useState(false);
+  const [coloresForm, setColoresForm] = useState(false);
 
   useEffect(() => {
     setRows(products);
@@ -27,11 +33,49 @@ export default function ProductTable() {
     setDetails(!details);
   }
 
+  function handleSubmitCapacidades(data: string[]) {
+    setCapacidades(data);
+  }
+
+  function handleSubmitColores(data: string[]) {
+    setColores(data);
+  }
+
+  function handleCapacidadesForm() {
+    setCapacidadesForm(!capacidadesForm);
+  }
+
+  function handleColoresForm() {
+    setColoresForm(!coloresForm);
+  }
+
   return (
     <div className={styles.dashboardList}>
-      {form ? <Form handleForm={handleForm} /> : null}
+      {form ? (
+        <Form
+          capacidades={capacidades}
+          colores={colores}
+          handleForm={handleForm}
+          handleCapacidadesForm={handleCapacidadesForm}
+          handleColoresForm={handleColoresForm}
+        />
+      ) : null}
       {details ? (
         <Details product={products[0]} handleDetails={handleDetails} />
+      ) : null}
+      {capacidadesForm ? (
+        <Capacidades
+          data={capacidades}
+          handleClose={handleCapacidadesForm}
+          handleSubmit={handleSubmitCapacidades}
+        />
+      ) : null}
+      {coloresForm ? (
+        <Colores
+          data={colores}
+          handleClose={handleColoresForm}
+          handleSubmit={handleSubmitColores}
+        />
       ) : null}
       <h3>Poductos</h3>
       <div className={styles.dashboardList__searchBar}>
