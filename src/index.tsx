@@ -9,7 +9,7 @@ import App from "./App";
 
 import "./index.css";
 
-axios.defaults.baseURL = "http://api.infotecnik.cat/";
+axios.defaults.baseURL = "https://api.infotecnik.cat/";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
