@@ -15,7 +15,7 @@ function App() {
   const loading = useSelector((state: RootState) => state.loading);
 
   useEffect(() => {
-    redirect("/login");
+    redirect("/dashboard");
   }, []);
 
   return (
