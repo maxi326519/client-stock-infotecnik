@@ -1,5 +1,8 @@
-import { useState } from "react";
-import Chart from "react-google-charts";
+import React, { useEffect, useState } from "react";
+import Chart, {
+  ReactGoogleChartEvent,
+  ReactGoogleChartProps,
+} from "react-google-charts";
 
 import style from "./CategoriesTree.module.css";
 
@@ -8,59 +11,65 @@ type Node = {
   children?: Node[];
 };
 
-interface Category {
-  id: string;
-  name: string;
-  parent: string | null;
-}
-
 type Props = {
-  categories: Category[];
-  onCategorySelect: (category: Category | null) => void;
-  onCategoryAdd: (category: Category) => void;
+  categories: any;
   handleClose: () => void;
 };
 
-const CategoriesTree = ({
-  categories,
-  onCategorySelect,
-  onCategoryAdd,
-  handleClose,
-}: Props) => {
+const CategoriesTree = ({ categories, handleClose }: Props) => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [newCategory, setNewCategory] = useState("");
-  const [editingCategory, setEditingCategory] = useState(false);
   const [edit, setEdit] = useState<boolean>(false);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newCategory = event.target.value;
-    setNewCategory(newCategory);
+    const value = event.target.value;
+    setNewCategory(value);
   }
 
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
+  function handleAdd() {}
 
-  const handleSelect = (category: Category) => {
-    setSelectedCategory(category);
-    onCategorySelect(category);
+  function handleSelect(event: ReactGoogleChartProps) {}
+
+  const data = [
+    ["Phrases"],
+    ["cats are better than dogs"],
+    ["cats eat kibble"],
+    ["cats are better than hamsters"],
+    ["cats are awesome"],
+    ["cats are people too"],
+    ["cats eat mice"],
+    ["cats meowing"],
+    ["cats in the cradle"],
+    ["cats eat mice"],
+    ["cats in the cradle lyrics"],
+    ["cats eat kibble"],
+    ["cats for adoption"],
+    ["cats are family"],
+    ["cats eat mice"],
+    ["cats are better than kittens"],
+    ["cats are evil"],
+    ["cats are weird"],
+    ["cats eat mice"],
+  ];
+
+  const options = {
+    wordtree: {
+      format: "implicit",
+      word: "cats",
+    },
   };
 
-  const handleAdd = () => {
-    const newCategory: Category = {
-      id: String(categories.length + 1),
-      name: "New Category",
-      parent: null,
-    };
-    onCategoryAdd(newCategory);
-  };
-
-  // Construir el array de datos para la gráfica
-  const chartData = categories.map((category) => [
-    category.parent ? category.parent : "",
-    category.name,
-    category.id,
-  ]);
+  const chartEvents = [
+    {
+      callback: (props: any) => {
+        const chartWrapper = props.chartWrapper;
+        const google = props.google;
+        const chart = chartWrapper.getChart();
+        chart.container.addEventListener("click", (ev: any) => console.log(ev));
+      },
+      eventName: "ready",
+    },
+  ];
 
   return (
     <div className={style.container}>
@@ -77,45 +86,12 @@ const CategoriesTree = ({
         </div>
         <div className={style.chartContainer}>
           <Chart
-            width={"100%"}
-            height={"400px"}
-            chartType="TreeMap"
-            loader={<div>Loading Chart</div>}
-            data={[["Category", "Parent", "Size"], ...chartData]}
-            options={{
-              highlightOnMouseOver: true,
-              maxDepth: 1,
-              maxPostDepth: 2,
-              minHighlightColor: "#8c6bb1",
-              midHighlightColor: "#9ebcda",
-              maxHighlightColor: "#edf8fb",
-              minColor: "#f7f7f7",
-              midColor: "#d9d9d9",
-              maxColor: "#636363",
-              headerHeight: 15,
-              fontColor: "black",
-              showScale: true,
-              useWeightedAverageForAggregation: true,
-            }}
-            chartEvents={[
-              {
-                eventName: "select",
-                callback: ({ chartWrapper }) => {
-                  const chart = chartWrapper.getChart();
-                  const selection = chart.getSelection();
-                  if (selection.length === 1) {
-                    const [selectedItem] = selection;
-                    const category = categories.find(
-                      (c) => c.id === chartData[selectedItem.row + 1][2]
-                    );
-                    if (category) handleSelect(category);
-                  } else {
-                    setSelectedCategory(null);
-                    onCategorySelect(null);
-                  }
-                },
-              },
-            ]}
+            chartType="WordTree"
+            width="100%"
+            height="400px"
+            data={data}
+            options={options}
+            chartEvents={chartEvents}
           />
         </div>
         {edit ? (
@@ -153,13 +129,6 @@ const CategoriesTree = ({
             Editar
           </button>
         </div>
-        {selectedCategory && (
-          <div>
-            <h3>{selectedCategory.name}</h3>
-            <p>Selected category ID: {selectedCategory.id}</p>
-            <p>Parent category ID: {selectedCategory.parent || "none"}</p>
-          </div>
-        )}
       </div>
     </div>
   );
