@@ -211,7 +211,6 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
               <button
                 className="btn btn-success"
                 type="button"
-                disabled={selectedNode === "categorias"}
                 onClick={handleSuibmit}
               >
                 Guardar
