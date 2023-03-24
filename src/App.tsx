@@ -8,14 +8,39 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Loading from "./components/Loading/Loading";
 import { RootState } from "./interfaces";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getProduct } from "./redux/actions/products";
+import { getSuppliers } from "./redux/actions/suppliers";
+import { getInvoice } from "./redux/actions/invoices";
+import { getInventory } from "./redux/actions/inventory";
+import { closeLoading } from "./redux/actions/loading/loading";
+import swal from "sweetalert";
 
 function App() {
   const redirect = useNavigate();
+  const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.loading);
 
   useEffect(() => {
     redirect("/dashboard");
+    Promise.all([
+      dispatch<any>(getProduct()),
+      dispatch<any>(getSuppliers()),
+      dispatch<any>(getInvoice()),
+      dispatch<any>(getInventory()),
+    ])
+      .then(() => {
+        dispatch(closeLoading());
+      })
+      .catch((err: any) => {
+        swal(
+          "Error",
+          "Ocurrio un error al cargar los datos, intentelo mas tarde",
+          "error"
+        );
+        dispatch(closeLoading());
+        console.log(err);
+      });
   }, []);
 
   return (

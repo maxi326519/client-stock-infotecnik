@@ -59,7 +59,7 @@ export default function Signin() {
       setError(err);
     } else {
       redirect("/dashboard");
-/* 
+
       dispatch(loading());
       dispatch<any>(login(user))
         .then(() => {
@@ -97,7 +97,7 @@ export default function Signin() {
             console.log(err);
           }
           dispatch(closeLoading());
-        }); */
+        });
     }
   }
 
