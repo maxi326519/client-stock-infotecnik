@@ -95,7 +95,7 @@ export default function Form({ handleForm }: Props) {
   return (
     <div className={style.container}>
       {categoriesForm ? (
-        <CategoriesTree categories={null} handleClose={handleClose} />
+        <CategoriesTree categories={null} handleClose={handleCloseCategories} />
       ) : null}
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
