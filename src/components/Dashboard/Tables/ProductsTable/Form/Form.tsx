@@ -26,12 +26,6 @@ const capacidades: string[] = [
   "2TB",
 ];
 
-interface Category {
-  id: string;
-  name: string;
-  parent: string | null;
-}
-
 interface Props {
   handleForm: () => void;
 }
@@ -53,7 +47,7 @@ export default function Form({ handleForm }: Props) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Node[]>([]);
 
   const dispatch = useDispatch();
 
@@ -98,23 +92,10 @@ export default function Form({ handleForm }: Props) {
 
   function handleSetImage(files: File[], urls: string[]) {}
 
-  function onCategorySelect(category: Category | null) {
-    console.log("Select", category);
-  }
-
-  function onCategoryAdd(category: Category) {
-    console.log("Add", category);
-  }
-
   return (
     <div className={style.container}>
       {categoriesForm ? (
-        <CategoriesTree
-          categories={categories}
-          onCategorySelect={onCategorySelect}
-          onCategoryAdd={onCategoryAdd}
-          handleClose={handleCloseCategories}
-        />
+        <CategoriesTree categories={null} handleClose={handleCloseCategories} />
       ) : null}
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
