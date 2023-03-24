@@ -38,7 +38,7 @@
   width: 350px;
 }
 
-.familia {
+.categoria {
   display: flex;
   align-items: center;
   padding: 10px;
@@ -46,7 +46,7 @@
   background-color: #0003;
 }
 
-.familia label {
+.categoria label {
   flex-grow: 1;
   text-align: center;
 }

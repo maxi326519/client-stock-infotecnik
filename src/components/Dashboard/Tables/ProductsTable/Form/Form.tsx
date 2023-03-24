@@ -200,7 +200,7 @@ export default function Form({
               />
               <label htmlFor="descCorta">Desc Corta</label>
             </div>
-            <div className={style.familia}>
+            <div className={style.categoria}>
               <button
                 className="btn btn-primary"
                 type="button"
@@ -208,7 +208,7 @@ export default function Form({
               >
                 Agregar
               </button>
-              <label htmlFor="familia">Familia</label>
+              <label htmlFor="categoria">Categoria</label>
             </div>
           </div>
           <AddImages imageUrls={imageUrls} handleSetImage={handleSetImage} />
