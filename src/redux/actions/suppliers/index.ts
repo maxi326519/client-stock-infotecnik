@@ -23,7 +23,7 @@ AnyAction
         payload: response.data,
       })
     }catch(error: any){
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 }
@@ -39,7 +39,7 @@ export function getSuppliers(): ThunkAction<Promise<void>, RootState, null, AnyA
         payload: suppliers.data,
       });
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   };
 }
@@ -57,7 +57,7 @@ export function updateSuppllier(
         payload: updateSupplier,
       });
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   };
 }

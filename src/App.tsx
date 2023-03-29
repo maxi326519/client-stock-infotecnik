@@ -9,7 +9,7 @@ import "./App.css";
 import Loading from "./components/Loading/Loading";
 import { RootState } from "./interfaces";
 import { useDispatch, useSelector } from "react-redux";
-import { getProduct } from "./redux/actions/products";
+import { getAttributes, getProduct } from "./redux/actions/products";
 import { getSuppliers } from "./redux/actions/suppliers";
 import { getInvoice } from "./redux/actions/invoices";
 import { getInventory } from "./redux/actions/inventory";
@@ -25,8 +25,9 @@ function App() {
     redirect("/dashboard");
     Promise.all([
       dispatch<any>(getProduct()),
+      dispatch<any>(getAttributes()),
       dispatch<any>(getSuppliers()),
-      dispatch<any>(getInvoice()),
+      /*       dispatch<any>(getInvoice()), */
       dispatch<any>(getInventory()),
     ])
       .then(() => {

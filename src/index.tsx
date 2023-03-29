@@ -9,7 +9,8 @@ import App from "./App";
 
 import "./index.css";
 
-axios.defaults.baseURL = "https://api.infotecnik.cat/";
+/* axios.defaults.baseURL = "https://api.infotecnik.cat/"; */
+axios.defaults.baseURL = "http://localhost:3001/";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -2,16 +2,21 @@ import { useEffect, useState } from "react";
 
 import img from "../../../../../../assets/svg/image.svg";
 
-import styles from "./AddImages.module.css";
+import styles from "./ImageEditor.module.css";
 
 interface Props {
   imageUrls: string[];
-  setImageUrls: (imageUrl: string[]) => void
+  setImageUrls: (imageUrl: string[]) => void;
   imageFiles: File[];
   setImageFiles: (image: File[]) => void;
 }
 
-export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImageFiles }: Props) {
+export default function ImageEditor({
+  imageUrls,
+  setImageUrls,
+  imageFiles,
+  setImageFiles,
+}: Props) {
   const [selectedImage, setSelectedImage] = useState<string>(img);
 
   // Set selected image
@@ -42,16 +47,14 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
   }
 
   function handleRemove() {
-    setImageUrls(
-      imageUrls.filter((url: string) => url !== selectedImage)
-    );
+    setImageUrls(imageUrls.filter((url: string) => url !== selectedImage));
   }
 
   return (
     <div className={styles.form}>
       <div>
         <div className={styles.imageContainer}>
-          {imageUrls.length > 0 ? (
+{/*           {imageUrls.length > 0 ? (
             <button
               className={`btn btn-outline-danger ${styles.delete}`}
               type="button"
@@ -59,10 +62,14 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
             >
               X
             </button>
-          ) : null}
-          <img className={styles.icon} src={selectedImage} alt="img" />
+          ) : null} */}
+          <img
+            className={styles.icon}
+            src={`http://localhost:3001${selectedImage}`}
+            alt="img"
+          />
         </div>
-        <div className="mb-3 form-floating">
+{/*         <div className="mb-3 form-floating">
           <label className="form-control" htmlFor="images">
             Agregar otra imagen
           </label>
@@ -72,7 +79,7 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
             type="file"
             onChange={handleChange}
           />
-        </div>
+        </div> */}
       </div>
       <div className={styles.imgList}>
         {imageUrls.map((url) => (
@@ -81,7 +88,7 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
             className={styles.image}
             onClick={() => handleSelect(url)}
           >
-            <img src={url} alt="product" />
+            <img src={`http://localhost:3001${url}`} alt="product" />
           </div>
         ))}
       </div>

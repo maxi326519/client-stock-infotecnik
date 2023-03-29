@@ -17,7 +17,7 @@ export interface Product {
   descLarga: string;
   descCorta: string;
   imgGenerica: string[];
-  categoria: string;
+  CategoryId: string;
 }
 
 export interface Supplier {
@@ -60,11 +60,11 @@ export enum TipoImpositivo {
   REBU,
 }
 
-export interface Transactions{
-  id: string,
-  fecha: string,
-  fechaValor: string,
-  movimiento: string,
+export interface Transactions {
+  id: string;
+  fecha: string;
+  fechaValor: string;
+  movimiento: string;
   datos: string;
   importe: number;
   saldo: number;
@@ -82,10 +82,15 @@ export enum BarCode {
 
 export interface RootState {
   user: User;
+  attributes: {
+    capacidades: Array<string>;
+    colores: Array<string>;
+    categories: Array<any>;
+  };
   products: Array<Product>;
   suppliers: Array<Supplier>;
   stock: Array<Stock>;
   invoices: Array<Invoices>;
-  transactions: Array<Transactions>
+  transactions: Array<Transactions>;
   loading: boolean;
 }

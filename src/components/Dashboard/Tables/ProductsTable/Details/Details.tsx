@@ -1,8 +1,18 @@
-import { useState } from "react";
-import { Product } from "../../../../../interfaces";
+import { useEffect, useState } from "react";
+import { Product, RootState } from "../../../../../interfaces";
 import swal from "sweetalert";
 
 import style from "./Details.module.css";
+import ImageEditor from "./ImageEditor/ImageEditor";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteProduct,
+  updateProduct,
+} from "../../../../../redux/actions/products";
+import {
+  closeLoading,
+  loading,
+} from "../../../../../redux/actions/loading/loading";
 
 interface Props {
   product: Product;
@@ -10,10 +20,82 @@ interface Props {
 }
 
 export default function Details({ product, handleDetails }: Props) {
-  const [isDisabled, setDisabled] = useState(true);
+  const dispatch = useDispatch();
+  const capacidades = useSelector(
+    (state: RootState) => state.attributes.capacidades
+  );
+  const colores = useSelector((state: RootState) => state.attributes.colores);
+  const [localProduct, setLocalProduct] = useState<Product>(product);
+  const [isDisabled, setDisabled] = useState<boolean>(true);
+  const [imageUrls, setImageUrls] = useState<string[]>(product?.imgGenerica);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
+  useEffect(() => {
+    console.log("Update", product);
+    setLocalProduct(product);
+    setImageUrls(product?.imgGenerica);
+  }, [product]);
 
   function handleDisabled(): void {
     setDisabled(!isDisabled);
+  }
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const editProduct: Product = {
+      ...localProduct,
+      [event.target.name]: event.target.value,
+    };
+    setLocalProduct(editProduct);
+  }
+
+  function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const editProduct: Product = {
+      ...localProduct,
+      [event.target.name]: event.target.value,
+    };
+    setLocalProduct(editProduct);
+  }
+
+  function handleSave() {
+    swal({
+      text: "¿Quiere guardar los cambios?",
+      buttons: {
+        si: true,
+        cancel: true,
+      },
+    }).then((res) => {
+      if (res) {
+        dispatch(loading());
+        dispatch<any>(updateProduct(localProduct))
+          .then(() => {
+            handleDisabled();
+            dispatch(closeLoading());
+            swal("Actualizado", "Producto actualizado con exito", "success");
+          })
+          .catch((err: any) => {
+            console.log(err);
+            dispatch(closeLoading());
+            swal(
+              "Error",
+              "Hubo un error al intentar actualizar el producto, intentelo mas tarde",
+              "error"
+            );
+          });
+      }
+    });
+  }
+
+  function handleCancel() {
+    swal({
+      text: "¿Seguro que no desea guardar los cambios?",
+      buttons: {
+        si: true,
+        cancel: true,
+      },
+    }).then(() => {
+      handleDisabled();
+      setLocalProduct(product);
+    });
   }
 
   function handleRemove(): void {
@@ -25,6 +107,21 @@ export default function Details({ product, handleDetails }: Props) {
         eliminar: true,
         cancel: true,
       },
+    }).then((res) => {
+      if (res) {
+        dispatch<any>(deleteProduct(product?.id))
+          .then(() => {
+            handleDetails();
+            swal("Eliminado", "Se elimino el producto con exito", "success");
+          })
+          .catch(() => {
+            swal(
+              "Error",
+              "Hubo un error al intentar eliminar el peducto, intentalo mas tarde",
+              "Error"
+            );
+          });
+      }
     });
   }
 
@@ -39,127 +136,164 @@ export default function Details({ product, handleDetails }: Props) {
 
         <div className={style.data}>
           <div className={style.inputs}>
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
-                id="id"
+                id="codigo"
+                name="codigo"
                 type="text"
-                value={product.id}
+                value={localProduct?.codigo}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
-              <label htmlFor="id">ID</label>
+              <label htmlFor="codigo">Codigo</label>
             </div>
 
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
                 id="modelo"
+                name="modelo"
                 type="text"
-                value={product.modelo}
+                value={localProduct?.modelo}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="modelo">Modelo</label>
             </div>
 
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
                 id="marca"
+                name="marca"
                 type="text"
-                value={product.marca}
+                value={localProduct?.marca}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="marca">Marca</label>
             </div>
 
-            <div className="form-floating">
-              <input
-                className="form-control"
+            <div className="form-floating mb-3">
+              <select
+                className="form-select"
                 id="color"
-                type="text"
-                value={product.color}
+                name="color"
+                value={localProduct?.color}
+                onChange={handleSelectChange}
                 disabled={isDisabled}
-              />
+              >
+                <option value="0">Seleccionar color</option>
+                {colores.map((col, i) => (
+                  <option key={i} value={col}>
+                    {col}
+                  </option>
+                ))}
+              </select>
               <label htmlFor="color">Color</label>
             </div>
 
-            <div className="form-floating">
-              <input
-                className="form-control"
+            <div className="form-floating mb-3">
+              <select
+                className="form-select"
                 id="capacidad"
-                type="text"
-                value={product.capacidad}
+                name="capacidad"
+                value={localProduct?.capacidad}
+                onChange={handleSelectChange}
                 disabled={isDisabled}
-              />
+              >
+                <option value="0">Seleccionar capacidad</option>
+                {capacidades.map((cap, i) => (
+                  <option key={i} value={cap}>
+                    {cap}
+                  </option>
+                ))}
+              </select>
               <label htmlFor="capacidad">Capacidad</label>
             </div>
 
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
-                id="descripcionLarga"
+                id="descLarga"
+                name="descLarga"
                 type="text"
-                value={product.descLarga}
+                value={localProduct?.descLarga}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
-              <label htmlFor="descripcionLarga">Descripcion larga</label>
+              <label htmlFor="descLarga">Descripcion larga</label>
             </div>
 
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
-                id="descripcionCorta"
+                id="descCorta"
+                name="descCorta"
                 type="text"
-                value={product.descCorta}
+                value={localProduct?.descCorta}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
-              <label htmlFor="descripcionCorta">Descripcion corta</label>
+              <label htmlFor="descCorta">Descripcion corta</label>
             </div>
 
-            <div className="form-floating">
+            <div className="form-floating mb-3">
               <input
                 className="form-control"
                 id="categoria"
                 type="text"
-                value={product.categoria}
+                value={localProduct?.CategoryId}
+                onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="categoria">Familia</label>
             </div>
           </div>
           <div className={style.rightData}>
-            <div className={style.imgContainer}>
-              <img
-                src="https://images.samsung.com/es/smartphones/galaxy-z-fold4/images/galaxy-z-fold4_highlights_kv.jpg"
-                alt="img generica"
-              />
-            </div>
-            <div className="form-floating">
-              <input
-                className="form-control"
-                id="imgGenerica"
-                type="file"
-                value={product.imgGenerica}
-                disabled={isDisabled}
-              />
-              <label htmlFor="imgGenerica">imagen</label>
-            </div>
+            <ImageEditor
+              imageUrls={imageUrls}
+              setImageUrls={setImageUrls}
+              imageFiles={imageFiles}
+              setImageFiles={setImageFiles}
+            />
           </div>
         </div>
         <div className={style.btnContainer}>
           {isDisabled ? (
-            <button className="btn btn-success" onClick={handleDisabled}>
-              Editar
-            </button>
+            <div className={style.leftButtons}>
+              <button
+                className="btn btn-success"
+                type="button"
+                onClick={handleDisabled}
+              >
+                Editar
+              </button>
+            </div>
           ) : (
-            <button className="btn btn-success" onClick={handleDisabled}>
-              Guardar
-            </button>
+            <div className={style.leftButtons}>
+              <button
+                className="btn btn-success"
+                type="button"
+                onClick={handleSave}
+              >
+                Guardar
+              </button>
+              <button
+                className="btn btn-success"
+                type="button"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+            </div>
           )}
-          <button className="btn btn-success" onClick={handleDetails}>
-            Cancelar
-          </button>
-          <button className="btn btn-danger" onClick={handleRemove}>
+          <button
+            className="btn btn-danger"
+            type="button"
+            onClick={handleRemove}
+          >
             Eliminar
           </button>
         </div>

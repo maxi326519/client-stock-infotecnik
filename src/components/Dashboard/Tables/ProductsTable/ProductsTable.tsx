@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, Product } from "../../../../interfaces";
 
 import Form from "./Form/Form";
@@ -10,11 +10,13 @@ import styles from "../../Dashboard.module.css";
 import style from "./ProductsTable.module.css";
 import Capacidades from "./Capacidades/Capacidades";
 import Colores from "./Colores/Colores";
+import { postCapacidades, postColores } from "../../../../redux/actions/products";
 
 export default function ProductTable() {
+  const dispatch = useDispatch();
   const products: Product[] = useSelector((state: RootState) => state.products);
-  const [capacidades, setCapacidades] = useState<string[]>([]);
-  const [colores, setColores] = useState<string[]>([]);
+  const capacidades = useSelector((state: RootState) => state.attributes.capacidades);
+  const colores = useSelector((state: RootState) => state.attributes.colores);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
   const [details, setDetails] = useState(false);
@@ -34,11 +36,11 @@ export default function ProductTable() {
   }
 
   function handleSubmitCapacidades(data: string[]) {
-    setCapacidades(data);
+    dispatch<any>(postCapacidades(data));
   }
 
   function handleSubmitColores(data: string[]) {
-    setColores(data);
+    dispatch<any>(postColores(data));
   }
 
   function handleCapacidadesForm() {

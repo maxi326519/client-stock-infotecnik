@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import swal from "sweetalert";
 import Chart from "react-google-charts";
 
@@ -6,39 +6,76 @@ import style from "./CategoriesTree.module.css";
 import add from "../../../../../../assets/svg/add.svg";
 import remove from "../../../../../../assets/svg/delete.svg";
 import root from "../../../../../../assets/svg/tree.svg";
+import { postCategories } from "../../../../../../redux/actions/products";
+import { useDispatch } from "react-redux";
+import {
+  closeLoading,
+  loading,
+} from "../../../../../../redux/actions/loading/loading";
 
-const tree = [
-  ["id", "childLabel", "parent", "size", { role: "style" }],
-  [0, "categorias", -1, 1, "red"],
-];
-
-type Node = {
-  name: string;
-  children?: Node[];
-};
+const tree = [["id", "childLabel", "parent", "size", { role: "style" }]];
 
 type Props = {
   categories: any;
+  handleSelected: (selected: string) => void;
   handleClose: () => void;
 };
 
-const CategoriesTree = ({ categories, handleClose }: Props) => {
+const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
+  const dispatch = useDispatch();
   const [selectedNode, setSelectedNode] = useState<string>("categorias");
   const [newCategory, setNewCategory] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<any>(tree);
+
+  useEffect(() => {
+    const newData = [
+      ...tree,
+      ...categories.map((cat: any) => [
+        ...cat,
+        1,
+        cat[0] === 0 ? "red" : "black",
+      ]),
+    ];
+    setData(newData);
+  }, [categories]);
+
+  function handleSubmit() {
+    const node = data.find((node: any) => node[1] === selectedNode);
+    handleSelected(node[0]);
+    handleClose();
+  }
+
+  function handlePost() {
+    let postData = data.map((node: any) => [node[0], node[1], node[2]]);
+    postData.shift();
+    dispatch(loading());
+    dispatch<any>(postCategories(postData))
+      .then(() => {
+        dispatch(closeLoading());
+      })
+      .catch((err: any) => {
+        console.log(err);
+        dispatch(closeLoading());
+      });
+    setEdit(false);
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setNewCategory(value);
   }
 
-  function handleSuibmit() {
-    setEdit(false);
-  }
-
   function handleCancel() {
-    setData(tree);
+    const newData = [
+      ...tree,
+      ...categories.map((cat: any) => [
+        ...cat,
+        1,
+        cat[0] === 0 ? "red" : "black",
+      ]),
+    ];
+    setData(newData);
     setEdit(false);
   }
 
@@ -56,7 +93,7 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
       data.forEach((node: any) => {
         if (node.includes(selectedNode)) {
           newData.push([
-            data.length - 1,
+            getID(data.length),
             selected,
             Number(node[0]),
             1,
@@ -66,6 +103,19 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
       });
       setData(newData);
     }
+  }
+
+  function getID(length: number) {
+    let id = length - 1;
+    while (true) {
+      if (data.some((node: any) => node[0] === id)) {
+        id++;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return id;
   }
 
   function handleRemove() {
@@ -97,6 +147,7 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
   function handleSelect({ chartWrapper }: any) {
     const chart = chartWrapper.getChart();
     const selection = chart.getSelection();
+    console.log("seleccionando");
     if (selection) {
       setSelectedNode(selection.word);
       setColor(selection.word);
@@ -211,7 +262,7 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
               <button
                 className="btn btn-success"
                 type="button"
-                onClick={handleSuibmit}
+                onClick={handlePost}
               >
                 Guardar
               </button>
@@ -229,6 +280,7 @@ const CategoriesTree = ({ categories, handleClose }: Props) => {
             <button
               className="btn btn-primary"
               type="button"
+              onClick={handleSubmit}
               disabled={selectedNode === "categorias"}
             >
               Seleccionar

@@ -56,7 +56,7 @@ export default function Details({ product, stock, handleClose }: Props) {
 
             <div className={style.dataContainer}>
               <span className={style.title}>Familia:</span>
-              <span>{product?.categoria}</span>
+              <span>{product?.CategoryId}</span>
             </div>
 
           </div>

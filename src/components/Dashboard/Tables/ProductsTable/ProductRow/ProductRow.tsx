@@ -10,11 +10,6 @@ interface Props {
 }
 
 export default function ProductCard({ product, handleDetails }: Props) {
-  const [isDisabled, setDisabled] = useState(true);
-
-  function handleDisabled() {
-    setDisabled(!isDisabled);
-  }
 
   return (
     <div className={style.row}>
@@ -24,7 +19,7 @@ export default function ProductCard({ product, handleDetails }: Props) {
         placeholder="Codigo"
         type="text"
         value={product.codigo}
-        disabled={isDisabled}
+        disabled={true}
       />
       <input
         className="form-control"
@@ -32,15 +27,15 @@ export default function ProductCard({ product, handleDetails }: Props) {
         placeholder="Msarca"
         type="text"
         value={`${product.marca} / ${product.modelo} / ${product.color} / ${product.capacidad}`}
-        disabled={isDisabled}
+        disabled={true}
       />
       <input
         className="form-control"
         id="categoria"
         placeholder="Categoria"
         type="text"
-        value={product.categoria}
-        disabled={isDisabled}
+        value={product.CategoryId}
+        disabled={true}
       />
       <button className="btn btn-primary" type="button" onClick={handleDetails}>
         <img src={details} alt="details" />
