@@ -5,26 +5,60 @@ import style from "./SupplierRows.module.css";
 
 import edit from "../../../../../assets/svg/edit.svg";
 import deleteSvg from "../../../../../assets/svg/delete.svg";
+import { useDispatch } from "react-redux";
+import {
+  closeLoading,
+  loading,
+} from "../../../../../redux/actions/loading/loading";
+import { deleteSuppllier } from "../../../../../redux/actions/suppliers";
+import swal from "sweetalert";
 
 interface Props {
   supplier: Supplier;
 }
 
 export default function SupplieRows({ supplier }: Props) {
+  const dispatch = useDispatch();
   const [isDisabled, setDisabled] = useState(true);
 
   function handleDisabled() {
     setDisabled(!isDisabled);
   }
 
-  function handleRemove() {}
+  function handleRemove() {
+    swal({
+      text: "Seguro que quiere eliminar el proveedor?",
+      buttons: {
+        confirm: true,
+        cancel: true,
+      },
+    }).then((res) => {
+      if (res) {
+        dispatch(loading());
+        dispatch<any>(deleteSuppllier(supplier.id))
+          .then(() => {
+            swal("Eliminado", "Se eliminó el proveedor con exito", "success");
+            dispatch(closeLoading());
+          })
+          .catch((err: any) => {
+            console.log(err);
+            dispatch(closeLoading());
+            swal(
+              "Error",
+              "Ocurrió un error al intentar eliminar el proveedor",
+              "error"
+            );
+          });
+      }
+    });
+  }
 
   return (
     <div className={style.row}>
       <input
         className="form-control"
-        value={supplier.codigo}
-        placeholder="Codigo"
+        value={supplier.numero}
+        placeholder="Numero"
         disabled={isDisabled}
       />
       <input
@@ -68,10 +102,10 @@ export default function SupplieRows({ supplier }: Props) {
         type="button"
         onClick={handleDisabled}
       >
-        <img src={edit} alt="edit"/>
+        <img src={edit} alt="edit" />
       </button>
       <button className="btn btn-danger" type="button" onClick={handleRemove}>
-        <img src={deleteSvg} alt="delete"/>
+        <img src={deleteSvg} alt="delete" />
       </button>
     </div>
   );

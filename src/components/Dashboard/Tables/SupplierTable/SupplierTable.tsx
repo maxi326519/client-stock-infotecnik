@@ -41,7 +41,7 @@ export default function SupplierTable() {
       </div>
       <div className={styles.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>
-          <span>Codigo</span>
+          <span>Numero</span>
           <span>Nombre</span>
           <span>Direccion</span>
           <span>Telefono</span>

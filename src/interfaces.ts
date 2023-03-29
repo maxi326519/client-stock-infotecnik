@@ -22,7 +22,7 @@ export interface Product {
 
 export interface Supplier {
   id: string;
-  codigo: string;
+  numero: number;
   nombre: string;
   direccion: string;
   poblacion: string;

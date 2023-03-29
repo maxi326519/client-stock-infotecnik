@@ -17,7 +17,7 @@ interface Props {
 export default function Form({ handleForm }: Props) {
   const initialState: Supplier = {
     id: "",
-    codigo: "",
+    numero: 0,
     nombre: "",
     direccion: "",
     poblacion: "",
@@ -68,6 +68,20 @@ export default function Form({ handleForm }: Props) {
           </button>
         </div>
         <div className={style.inputs}>
+          <div className="form-floating">
+            <input
+              id="numero"
+              name="numero"
+              type="text"
+              className="form-control"
+              value={supplier.numero}
+              onChange={handleChange}
+            />
+            <label className="form-label" htmlFor="numero">
+              Numero
+            </label>
+          </div>
+
           <div className="form-floating">
             <input
               id="nombre"

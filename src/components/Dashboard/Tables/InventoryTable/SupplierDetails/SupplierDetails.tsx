@@ -25,8 +25,8 @@ export default function SupplierDetails({ supplier, handleClose }: Props) {
           <div className={style.dataGrid}>
             {/* CODGIO */}
             <div className={style.dataContainer}>
-              <span className={style.title}>Codigo:</span>
-              <span>{supplier?.codigo}</span>
+              <span className={style.title}>Numero:</span>
+              <span>{supplier?.numero}</span>
             </div>
 
             {/* POSTAL */}

@@ -17,8 +17,8 @@ export function login(
         type: LOGIN,
         payload: response.data,
       });
-    } catch (e: any) {
-      throw new Error(e);
+    } catch (error: any) {
+      throw new Error(error.response.data.error);
     }
   };
 }
@@ -32,8 +32,8 @@ export function logOut(
         type: LOG_OUT,
         payload: null,
       });
-    } catch (e: any) {
-      throw new Error(e);
+    } catch (error: any) {
+      throw new Error(error.response.data.error);
     }
   };
 }

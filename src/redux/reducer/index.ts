@@ -15,6 +15,7 @@ import {
   POST_SUPPLIER,
   GET_SUPPLIER,
   UPDATE_SUPPLIER,
+  DELETE_SUPPLIER,
 } from "../actions/suppliers";
 import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
@@ -173,6 +174,12 @@ export default function Reducer(
       return {
         ...state,
         products: state.products.filter((p) => p.id !== action.payload),
+      };
+
+    case DELETE_SUPPLIER:
+      return {
+        ...state,
+        suppliers: state.suppliers.filter((s) => s.id !== action.payload),
       };
 
     default:

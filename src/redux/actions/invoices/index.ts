@@ -19,8 +19,8 @@ export function postInvoice(
         type: POST_INVOICE,
         payload: response.data,
       });
-    } catch (e: any) {
-      throw new Error(e);
+    } catch (error: any) {
+      throw new Error(error.response.data.error);
     }
   };
 }
@@ -35,8 +35,8 @@ export function getInvoice(): ThunkAction<Promise<void>, RootState, null, AnyAct
         type: GET_INVOICE,
         payload: invoices.data,
       });
-    } catch (e: any) {
-      throw new Error(e);
+    } catch (error: any) {
+      throw new Error(error.response.data.error);
     }
   };
 }
@@ -53,8 +53,8 @@ export function updateInvoice(
         type: UPDATE_INVOICE,
         payload: updateInventory,
       });
-    } catch (e: any) {
-      throw new Error(e);
+    } catch (error: any) {
+      throw new Error(error.response.data.error);
     }
   };
 }
