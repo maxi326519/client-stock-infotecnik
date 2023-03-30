@@ -9,8 +9,8 @@ import App from "./App";
 
 import "./index.css";
 
-/* axios.defaults.baseURL = "https://api.infotecnik.cat/"; */
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = "https://api.infotecnik.cat/";
+/* axios.defaults.baseURL = process.env.REACT_APP_API_URL; */
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
