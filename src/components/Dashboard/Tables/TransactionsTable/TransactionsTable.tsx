@@ -1,14 +1,22 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-
-import styles from "../../Dashboard.module.css";
-import style from "./TransactionsTable.module.css";
 import { RootState, Transactions } from "../../../../interfaces";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { postTransactions } from "../../../../redux/actions/transactions";
+import {
+  closeLoading,
+  loading,
+} from "../../../../redux/actions/loading/loading";
+
 import TransactionsRow from "./TransactionsRow/TransactionsRow";
 import ImportExcel from "./ImportExcel/ImportExcel";
 
+import styles from "../../Dashboard.module.css";
+import style from "./TransactionsTable.module.css";
+import swal from "sweetalert";
+
 export default function TransactionsTable() {
+  const dispatch = useDispatch();
   const transactions = useSelector((state: RootState) => state.transactions);
   const [rows, setRows] = useState<Transactions[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -29,13 +37,44 @@ export default function TransactionsTable() {
 
   function handleInvoice(): void {}
 
+  function handleData(data: any) {
+    let newData: any[] = [];
+    newData = data.slice(3);
+    newData = newData.filter((d: any) => d.length > 0);
+    newData = newData.map((d: any) => ({
+      fecha: d[0],
+      fechaValor: d[1],
+      movimiento: d[2],
+      masDatos: d[3],
+      importe: d[4],
+    }));
+    dispatch(loading());
+    dispatch<any>(postTransactions(newData))
+      .then(() => {
+        handleClose();
+        dispatch(closeLoading());
+        swal("Guardado", "Se importaron sus movimientos con exito", "success");
+      })
+      .catch((err: any) => {
+        console.log(err);
+        dispatch(closeLoading());
+        swal(
+          "Error",
+          "Error al guardar los movimientos, intentelo mas tarde",
+          "error"
+        );
+      });
+  }
+
   function handleClose(): void {
     setTransactionForm(!transactionForm);
   }
 
   return (
     <div className={styles.dashboardList}>
-      {transactionForm ? <ImportExcel handleClose={handleClose} /> : null}
+      {transactionForm ? (
+        <ImportExcel handleData={handleData} handleClose={handleClose} />
+      ) : null}
       <h3>Movimientos</h3>
       <div className={styles.dashboardList__searchBar}>
         <input
@@ -55,7 +94,6 @@ export default function TransactionsTable() {
           <span>Movimiento</span>
           <span>Mas datos</span>
           <span>Importe</span>
-          <span>Saldo</span>
           <span className={style.buttons}>Factura</span>
           <span className={style.buttons}>Vincular</span>
           <span className={style.buttons}>Eliminar</span>

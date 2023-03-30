@@ -17,15 +17,21 @@ import {
   UPDATE_SUPPLIER,
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
+import {
+  POST_TRANSACTIONS,
+  GET_TRANSACTIONS,
+  DELETE_TRANSACTION,
+} from "../actions/transactions";
 import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
 import { LOGIN, LOG_OUT } from "../actions/login/login";
 
 const initialState: RootState = {
-  user: {
-    name: "Cargando",
+  currentUser: {
+    name: "",
   },
+  users: [],
   attributes: {
     capacidades: [],
     colores: [],
@@ -114,6 +120,12 @@ export default function Reducer(
         },
       };
 
+    case POST_TRANSACTIONS:
+      return {
+        ...state,
+        transactions: action.payload,
+      };
+
     /* GET METHOD*/
     case GET_PRODUCT:
       return {
@@ -143,6 +155,12 @@ export default function Reducer(
       return {
         ...state,
         attributes: action.payload,
+      };
+
+    case GET_TRANSACTIONS:
+      return {
+        ...state,
+        transactions: action.payload,
       };
 
     /* UPDATE METHOD*/

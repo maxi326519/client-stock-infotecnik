@@ -81,7 +81,8 @@ export enum BarCode {
 }
 
 export interface RootState {
-  user: User;
+  currentUser: User;
+  users: User[];
   attributes: {
     capacidades: Array<string>;
     colores: Array<string>;

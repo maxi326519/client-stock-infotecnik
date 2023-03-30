@@ -4,16 +4,14 @@ import * as XLSX from "xlsx";
 import styles from "./ImportExcel.module.css";
 
 interface Props {
+  handleData: (data: any) => void;
   handleClose: () => void;
 }
 
-export default function ImportExcel({ handleClose }: Props) {
-  const [file, setFile] = useState<File | null>(null);
-  const [data, setData] = useState<any[]>([]);
+export default function ImportExcel({ handleData, handleClose }: Props) {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
       const reader = new FileReader();
       reader.onload = (e) => {
         const workbook = XLSX.read(e.target?.result, { type: "binary" });
@@ -21,7 +19,7 @@ export default function ImportExcel({ handleClose }: Props) {
         const worksheetData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
         });
-        setData(worksheetData);
+        handleData(worksheetData);
       };
       reader.readAsBinaryString(event.target.files[0]);
     }
@@ -46,17 +44,6 @@ export default function ImportExcel({ handleClose }: Props) {
           placeholder="Importar movimientos"
           onChange={handleFileChange}
         />
-        <table>
-          <tbody>
-            {data.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell: any, cellIndex: any) => (
-                  <td key={`${rowIndex}-${cellIndex}`}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </form>
     </div>
   );

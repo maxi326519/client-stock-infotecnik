@@ -18,7 +18,6 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
       <span>{transaction.movimiento}</span>
       <span>{transaction.datos}</span>
       <span>{transaction.importe}</span>
-      <span>{transaction.saldo}</span>
       <button
         className="btn btn-primary"
         type="button"
