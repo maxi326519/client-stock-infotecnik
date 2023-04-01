@@ -89,7 +89,7 @@ export default function Reducer(
     case POST_INVOICE:
       return {
         ...state,
-        stock: [...state.stock, action.payload.inventory],
+        stock: [...state.stock, ...action.payload.inventory],
         invoices: [...state.invoices, action.payload.invoce],
       };
 

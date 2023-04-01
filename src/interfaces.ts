@@ -32,13 +32,17 @@ export interface Supplier {
 }
 export interface Stock {
   id: string;
-  status: string;
+  estado: string;
+  fechaAlta: string;
+  catalogo: boolean;
   IMEISerie: string /* enum[IMEI, nroSerie] */;
   tipoCodigoDeBarras: string;
   codigoDeBarras: string;
   precioSinIVA: number;
   precioIVA: number;
   precioIVAINC: number;
+  recargo: number;
+  detalles: string;
   imagen: string;
   ProductId: string;
   InvoiceId: string;
@@ -48,6 +52,7 @@ export interface Invoices {
   id: string;
   fecha: string;
   numero: number;
+  pendiente: boolean;
   archivo: string;
   tipoImpositivo: TipoImpositivo;
   SuipplierId: string;
@@ -72,7 +77,7 @@ export interface Transactions {
 }
 
 export enum BarCode {
-  Coded128,
+  Code128,
   Code39,
   UPCA,
   UPCE,

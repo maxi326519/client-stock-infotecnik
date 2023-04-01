@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { postInvoice } from "../../../../../redux/actions/invoices";
 import { Supplier, TipoImpositivo } from "../../../../../interfaces";
 import { Stock, RootState, Invoices } from "../../../../../interfaces";
+import isBarCodeValid from "../../../../../functions/barCodes";
+import isValidIMEI from "../../../../../functions/IMEI";
+import calcularIVA from "../../../../../functions/IVA";
 
 import AddProduct from "./AddProduct/AddProduct";
 import AddSupplier from "./AddSupplier/AddSupplier";
@@ -25,9 +28,10 @@ interface Props {
 
 const initialState: Invoices = {
   id: "",
-  fecha: "",
+  fecha: new Date().toISOString().split("T")[0],
   numero: 0,
-  archivo: "",
+  pendiente: false,
+  archivo: "123",
   tipoImpositivo: TipoImpositivo.IVA,
   SuipplierId: "",
   ProductId: [],
@@ -35,13 +39,17 @@ const initialState: Invoices = {
 
 const initialStock: Stock = {
   id: "",
+  estado: "Nuevo",
+  catalogo: true,
+  fechaAlta: new Date().toISOString().split("T")[0],
   IMEISerie: "",
-  status: "Nuevo",
   tipoCodigoDeBarras: "",
   codigoDeBarras: "",
   precioSinIVA: 0,
   precioIVA: 0,
   precioIVAINC: 0,
+  recargo: 0,
+  detalles: "",
   imagen: "",
   ProductId: "",
   InvoiceId: "",
@@ -62,7 +70,7 @@ export default function Form({ handleClose }: Props) {
   useEffect(() => {
     setStock(
       productsSelected.map((p) => {
-        return { ...initialStock, product: p };
+        return { ...initialStock, ProductId: p };
       })
     );
   }, [productsSelected]);
@@ -75,10 +83,11 @@ export default function Form({ handleClose }: Props) {
       supplier: supplierSelected?.id,
     };
     console.log(newInvoice);
-    dispatch(loading());
+    console.log(newInvoice);
+        dispatch(loading());
     dispatch<any>(postInvoice(newInvoice))
       .then(() => {
-        /* handleClose(); */
+        handleClose();
         swal("Guardado", "Su inventario se guardo correctamente", "success");
         dispatch(closeLoading());
       })
@@ -87,6 +96,49 @@ export default function Form({ handleClose }: Props) {
         dispatch(closeLoading());
         swal("Error", "Hubo un error al guardar el nuevo inventario", "error");
       });
+  }
+
+  function handleChangeInvoice(name: string, value: string | number) {
+    const newInvoice = { ...invoice, [name]: value };
+    console.log(newInvoice);
+    setInvoice(newInvoice);
+  }
+
+  function handleChangeProduct(productId: string, name: string, value: string | number) {
+    const newStock: Stock[] = stock.map((s: Stock): Stock => {
+      if (s.ProductId === productId) {
+        switch (name) {
+          case "precioSinIVA":
+            return {
+              ...s,
+              ...calcularIVA(invoice.tipoImpositivo, name, value),
+            };
+          case "precioIVA":
+            return {
+              ...s,
+              ...calcularIVA(invoice.tipoImpositivo, name, value),
+            };
+          default:
+            return {
+              ...s,
+              [name]: value,
+            };
+        }
+      }
+      return s;
+    });
+
+    console.log(newStock);
+    setStock(newStock);
+  }
+
+  function handleValidation(stock: Stock, name: string, value: any) {
+    if (name === "codigoDeBarras") {
+      console.log(isBarCodeValid(stock.tipoCodigoDeBarras, value));
+    }
+    if (name === "IMEISerie") {
+      console.log(isValidIMEI(value));
+    }
   }
 
   function handleLocalClose(): void {
@@ -155,7 +207,10 @@ export default function Form({ handleClose }: Props) {
                 </button>
               </div>
 
-              <InvoiceData invoice={invoice} setInvoice={setInvoice} />
+              <InvoiceData
+                invoice={invoice}
+                handleChange={handleChangeInvoice}
+              />
               <SupplierData supplier={supplierSelected} />
               <button type="submit" className="btn btn-success">
                 Agregar inventario
@@ -164,10 +219,9 @@ export default function Form({ handleClose }: Props) {
             {/* Products */}
             {productsSelected.length > 0 ? (
               <ProductData
-                productsSelected={productsSelected}
                 stock={stock}
-                setStock={setStock}
                 tipoImpositivo={invoice.tipoImpositivo}
+                handleChange={handleChangeProduct}
               />
             ) : null}
           </div>

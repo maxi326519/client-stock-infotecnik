@@ -63,7 +63,7 @@ export default function Details({ product, stock, handleClose }: Props) {
           <div className={style.stock}>
             <div className={style.dataContainer}>
               <span className={style.title}>Estado:</span>
-              <span>{stock?.status}</span>
+              <span>{stock?.estado}</span>
             </div>
 
             <div className={style.dataContainer}>
