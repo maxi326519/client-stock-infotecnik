@@ -12,12 +12,12 @@ export default function calcularIVA(
       if (name === "precioSinIVA") {
         prices = {
           precioSinIVA: value,
-          precioIVA: (Number(value) * 1.21).toFixed(2),
+          precioIVA: (Number(value) * 0.21).toFixed(2),
         };
       }
       if (name === "precioIVA") {
         prices = {
-          precioSinIVA: (Number(value) / 1.21).toFixed(2),
+          precioSinIVA: (Number(value) / 0.21).toFixed(2),
           precioIVA: value,
         };
       }
@@ -26,13 +26,15 @@ export default function calcularIVA(
       if (name === "precioSinIVA") {
         prices = {
           precioSinIVA: value,
-          precioIVA: (Number(value) * 1.262).toFixed(2),
+          precioIVA: (Number(value) * 0.21).toFixed(2),
+          recargo: (Number(value) * 0.052).toFixed(2),
         };
       }
       if (name === "precioIVA") {
         prices = {
-          precioSinIVA: (Number(value) / 1.262).toFixed(2),
+          precioSinIVA: (Number(value) / 0.21).toFixed(2),
           precioIVA: value,
+          recargo: ((Number(value) / 0.21) * 0.052).toFixed(2),
         };
       }
       break;

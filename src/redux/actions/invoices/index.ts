@@ -42,9 +42,9 @@ export function postInvoice(
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code39) {
             tipoCodigoDeBarras = "Code39";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCA) {
-            tipoCodigoDeBarras = "UPCA";
+            tipoCodigoDeBarras = "UPC-A";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCE) {
-            tipoCodigoDeBarras = "UPCE";
+            tipoCodigoDeBarras = "UPC-E";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN8) {
             tipoCodigoDeBarras = "EAN8";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN13) {
@@ -76,9 +76,11 @@ export function postInvoice(
 
       console.log(formatInvoice);
 
-      /*       const response = await axios.post("/invoices", formatInvoice); */
+      const response = await axios.post("/invoices", formatInvoice);
 
-      /*       dispatch({
+      console.log(response.data);
+
+/*       dispatch({
         type: POST_INVOICE,
         payload: response.data,
       }); */

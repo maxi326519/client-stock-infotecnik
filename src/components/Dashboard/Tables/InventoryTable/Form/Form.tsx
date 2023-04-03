@@ -21,6 +21,7 @@ import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
+import axios from "axios";
 
 interface Props {
   handleClose: () => void;
@@ -62,30 +63,52 @@ export default function Form({ handleClose }: Props) {
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);
   const [stock, setStock] = useState<Stock[]>([]); // Datos de los productos seleccionados
   const [invoice, setInvoice] = useState<Invoices>(initialState); // Datos de la factura
-
+  const [file, setFile] = useState<File | undefined>();
   const [addProducts, setFormProducts] = useState<boolean>(false);
   const [addSupplier, setFormSuppliers] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setStock(
-      productsSelected.map((p) => {
-        return { ...initialStock, ProductId: p };
-      })
-    );
+    const stock = productsSelected.map((p, i) => {
+      return { ...initialStock, id: i.toString(), ProductId: p };
+    });
+    setStock(stock);
   }, [productsSelected]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    let invoiceURL: string = "";
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post("/upload/files", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        invoiceURL = response.data.path;
+        console.log(invoiceURL);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     const newInvoice = {
       ...invoice,
       detalles: stock,
+      archivo: invoiceURL,
       supplier: supplierSelected?.id,
     };
+
+    console.log(newInvoice);
+
     dispatch(loading());
     dispatch<any>(postInvoice(newInvoice))
       .then(() => {
-        /*         handleClose(); */
+        handleClose();
         swal("Guardado", "Su inventario se guardo correctamente", "success");
         dispatch(closeLoading());
       })
@@ -103,12 +126,12 @@ export default function Form({ handleClose }: Props) {
   }
 
   function handleChangeProduct(
-    productId: string,
+    id: string,
     name: string,
     value: string | number | boolean
   ) {
     const newStock: Stock[] = stock.map((s: Stock): Stock => {
-      if (s.ProductId === productId) {
+      if (s.id === id) {
         switch (name) {
           case "precioSinIVA":
             return {
@@ -144,7 +167,7 @@ export default function Form({ handleClose }: Props) {
   }
 
   function handleDuplicate(newStock: Stock) {
-    const newStockList = [...stock, newStock];
+    const newStockList = [...stock, { ...newStock, id: (stock.length + 1).toString() }];
     console.log(newStockList);
     setStock(newStockList);
   }
@@ -218,6 +241,7 @@ export default function Form({ handleClose }: Props) {
               <InvoiceData
                 invoice={invoice}
                 handleChange={handleChangeInvoice}
+                setFile={setFile}
               />
               <SupplierData supplier={supplierSelected} />
               <button type="submit" className="btn btn-success">

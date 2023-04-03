@@ -65,23 +65,23 @@ export default function Row({
   function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const name: string = event.target.name;
     const value: string = event.target.value;
-    handleChange(stock.ProductId, name, value);
+    handleChange(stock.id, name, value);
   }
 
   function handleChangeSelect(event: React.ChangeEvent<HTMLSelectElement>) {
     const name: string = event.target.name;
     const value: string = event.target.value;
 
-    handleChange(stock.ProductId, name, value);
+    handleChange(stock.id, name, value);
   }
 
   function handleChangeCheck(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
     const value = event.target.checked;
     if (name === "temporal") {
-      handleChange(stock.ProductId, "estado", value ? "Temporal" : "Nuevo");
+      handleChange(stock.id, "estado", value ? "Temporal" : "Nuevo");
     } else if (name === "catalogo") {
-      handleChange(stock.ProductId, name, value);
+      handleChange(stock.id, name, value);
     }
   }
 
@@ -103,7 +103,7 @@ export default function Row({
             <img
               src={
                 currentProduct?.imgGenerica[0]
-                  ? `http://localhost:3001/${currentProduct?.imgGenerica[0]}`
+                  ? `http://localhost:3001${currentProduct?.imgGenerica[0]}`
                   : img
               }
               alt="img"
@@ -176,19 +176,24 @@ export default function Row({
             className={
               tipoImpositivo === TipoImpositivo.recargo
                 ? styles.recargo
-                : styles.price
+                : tipoImpositivo === TipoImpositivo.REBU
+                  ? styles.rebu
+                  : styles.price
             }
           >
-            <div className="form-floating">
-              <input
-                className="form-control"
-                id="precioSinIVA"
-                name="precioSinIVA"
-                value={stock.precioSinIVA}
-                onChange={handleLocalChange}
-              />
-              <label htmlFor="precioSinIVA">Precio </label>
-            </div>
+            {tipoImpositivo !== TipoImpositivo.REBU ? (
+              <div className="form-floating">
+                <input
+                  className="form-control"
+                  id="precioSinIVA"
+                  name="precioSinIVA"
+                  value={stock.precioSinIVA}
+                  onChange={handleLocalChange}
+                />
+                <label htmlFor="precioSinIVA">Precio </label>
+              </div>
+            )
+              : null}
             <div className="form-floating">
               <input
                 className="form-control"

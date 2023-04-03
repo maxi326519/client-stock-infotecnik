@@ -97,3 +97,10 @@
   grid-column: 2 / 4;
   grid-row: 2 / 3;
 }
+
+.rebu {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 135px;
+  grid-template-rows: repeat(2, 1fr);
+}

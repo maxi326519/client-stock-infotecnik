@@ -6,9 +6,10 @@ import styles from "./InvoiceData.module.css";
 interface Props {
   invoice: Invoices;
   handleChange: (name: string, value: string | number) => void;
+  setFile: (file: File) => void;
 }
 
-export default function InvoiceData({ invoice, handleChange }: Props) {
+export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
   const [pending, setpending] = useState<boolean>(false);
 
   function handleCheck() {
@@ -33,6 +34,12 @@ export default function InvoiceData({ invoice, handleChange }: Props) {
     } else if (Number(value) === TipoImpositivo.recargo) {
       handleChange("tipoImpositivo", TipoImpositivo.recargo);
     }
+  }
+
+  function handleFile(event: React.ChangeEvent<HTMLInputElement>){
+    const file = event.target.files?.[0];
+
+    if(file) setFile(file);
   }
 
   return (
@@ -103,8 +110,9 @@ export default function InvoiceData({ invoice, handleChange }: Props) {
             name="archivo"
             className="form-control"
             type="file"
+            placeholder="archivo"
             disabled={pending}
-            onChange={handleLocalChange}
+            onChange={handleFile}
           />
         </div>
       </div>

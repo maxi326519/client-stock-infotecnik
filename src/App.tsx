@@ -28,7 +28,7 @@ function App() {
       dispatch<any>(getProduct()),
       dispatch<any>(getAttributes()),
       dispatch<any>(getSuppliers()),
-      /*       dispatch<any>(getInvoice()), */
+            dispatch<any>(getInvoice()),
       dispatch<any>(getInventory()),
       dispatch<any>(getTransactions()),
     ])
