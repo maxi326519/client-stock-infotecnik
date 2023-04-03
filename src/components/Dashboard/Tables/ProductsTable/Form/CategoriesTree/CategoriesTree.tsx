@@ -45,6 +45,7 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
         ]),
       ];
     }
+    console.log(newData);
     setData(newData);
   }, [categories]);
 
