@@ -74,16 +74,14 @@ export function postInvoice(
         }),
       };
 
-      console.log(formatInvoice);
-
       const response = await axios.post("/invoices", formatInvoice);
 
       console.log(response.data);
 
-/*       dispatch({
+      dispatch({
         type: POST_INVOICE,
         payload: response.data,
-      }); */
+      });
     } catch (error: any) {
       throw new Error(error.response.data.error);
     }
