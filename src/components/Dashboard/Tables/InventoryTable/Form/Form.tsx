@@ -82,12 +82,10 @@ export default function Form({ handleClose }: Props) {
       detalles: stock,
       supplier: supplierSelected?.id,
     };
-    console.log(newInvoice);
-    console.log(newInvoice);
-        dispatch(loading());
+    dispatch(loading());
     dispatch<any>(postInvoice(newInvoice))
       .then(() => {
-        handleClose();
+        /*         handleClose(); */
         swal("Guardado", "Su inventario se guardo correctamente", "success");
         dispatch(closeLoading());
       })
@@ -104,19 +102,23 @@ export default function Form({ handleClose }: Props) {
     setInvoice(newInvoice);
   }
 
-  function handleChangeProduct(productId: string, name: string, value: string | number) {
+  function handleChangeProduct(
+    productId: string,
+    name: string,
+    value: string | number | boolean
+  ) {
     const newStock: Stock[] = stock.map((s: Stock): Stock => {
       if (s.ProductId === productId) {
         switch (name) {
           case "precioSinIVA":
             return {
               ...s,
-              ...calcularIVA(invoice.tipoImpositivo, name, value),
+              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
             };
           case "precioIVA":
             return {
               ...s,
-              ...calcularIVA(invoice.tipoImpositivo, name, value),
+              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
             };
           default:
             return {
@@ -139,6 +141,12 @@ export default function Form({ handleClose }: Props) {
     if (name === "IMEISerie") {
       console.log(isValidIMEI(value));
     }
+  }
+
+  function handleDuplicate(newStock: Stock) {
+    const newStockList = [...stock, newStock];
+    console.log(newStockList);
+    setStock(newStockList);
   }
 
   function handleLocalClose(): void {
@@ -222,6 +230,7 @@ export default function Form({ handleClose }: Props) {
                 stock={stock}
                 tipoImpositivo={invoice.tipoImpositivo}
                 handleChange={handleChangeProduct}
+                handleDuplicate={handleDuplicate}
               />
             ) : null}
           </div>

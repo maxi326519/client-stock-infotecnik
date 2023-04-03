@@ -35,7 +35,9 @@ export function postInvoice(
         detalles: newInventory.detalles.map((stock: any) => {
           let tipoCodigoDeBarras = "";
 
-          if (Number(stock.tipoCodigoDeBarras) === BarCode.Code128) {
+          if (Number(stock.tipoCodigoDeBarras) === -1) {
+            tipoCodigoDeBarras = "Ninguno";
+          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code128) {
             tipoCodigoDeBarras = "Code128";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code39) {
             tipoCodigoDeBarras = "Code39";
@@ -48,6 +50,11 @@ export function postInvoice(
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN13) {
             tipoCodigoDeBarras = "EAN13";
           }
+
+          console.log(tipoCodigoDeBarras);
+          console.log(stock);
+          console.log(stock.tipoCodigoDeBarras);
+          console.log(Number(stock.tipoCodigoDeBarras));
 
           return {
             estado: stock.estado,
@@ -69,12 +76,12 @@ export function postInvoice(
 
       console.log(formatInvoice);
 
-      const response = await axios.post("/invoices", formatInvoice);
+      /*       const response = await axios.post("/invoices", formatInvoice); */
 
-      dispatch({
+      /*       dispatch({
         type: POST_INVOICE,
         payload: response.data,
-      });
+      }); */
     } catch (error: any) {
       throw new Error(error.response.data.error);
     }

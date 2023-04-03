@@ -8,13 +8,19 @@ import styles from "./ProductData.module.css";
 interface Props {
   stock: Stock[];
   tipoImpositivo: TipoImpositivo;
-  handleChange: (productId: string, name: string, value: string | number) => void;
+  handleChange: (
+    productId: string,
+    name: string,
+    value: string | number | boolean
+  ) => void;
+  handleDuplicate: (stock: Stock) => void;
 }
 
 export default function ProductData({
   stock,
   tipoImpositivo,
   handleChange,
+  handleDuplicate,
 }: Props) {
   return (
     <div className={styles.productAdd}>
@@ -26,6 +32,7 @@ export default function ProductData({
               stock={s}
               tipoImpositivo={tipoImpositivo}
               handleChange={handleChange}
+              handleDuplicate={handleDuplicate}
             />
           );
         })}

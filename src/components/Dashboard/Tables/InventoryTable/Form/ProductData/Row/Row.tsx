@@ -37,11 +37,17 @@ interface Props {
   handleChange: (
     productId: string,
     name: string,
-    value: string | number
+    value: string | number | boolean
   ) => void;
+  handleDuplicate: (stock: Stock) => void;
 }
 
-export default function Row({ stock, tipoImpositivo, handleChange }: Props) {
+export default function Row({
+  stock,
+  tipoImpositivo,
+  handleChange,
+  handleDuplicate,
+}: Props) {
   const products = useSelector((state: RootState) => state.products);
   const [currentProduct, setCurrentProduct] = useState<Product>();
   const [newStock, setStock] = useState<Stock>(initialStock);
@@ -63,7 +69,20 @@ export default function Row({ stock, tipoImpositivo, handleChange }: Props) {
   }
 
   function handleChangeSelect(event: React.ChangeEvent<HTMLSelectElement>) {
+    const name: string = event.target.name;
     const value: string = event.target.value;
+
+    handleChange(stock.ProductId, name, value);
+  }
+
+  function handleChangeCheck(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.checked;
+    if (name === "temporal") {
+      handleChange(stock.ProductId, "estado", value ? "Temporal" : "Nuevo");
+    } else if (name === "catalogo") {
+      handleChange(stock.ProductId, name, value);
+    }
   }
 
   return (
@@ -75,22 +94,44 @@ export default function Row({ stock, tipoImpositivo, handleChange }: Props) {
           setStock={setStock}
         />
       ) : null}
-      <div className={styles.productData}>
-        <span>{currentProduct?.marca}</span>
-        <span>{currentProduct?.modelo}</span>
-      </div>
       <div className={styles.item}>
-        <div className={styles.image} onClick={handleClose}>
-          <img
-            src={
-              currentProduct?.imgGenerica[0]
-                ? `http://localhost:3001/${currentProduct?.imgGenerica[0]}`
-                : img
-            }
-            alt="img"
-          />
+        <div className={styles.productLeft}>
+          <span>
+            {currentProduct?.marca} - {currentProduct?.modelo}
+          </span>
+          <div className={styles.image} onClick={handleClose}>
+            <img
+              src={
+                currentProduct?.imgGenerica[0]
+                  ? `http://localhost:3001/${currentProduct?.imgGenerica[0]}`
+                  : img
+              }
+              alt="img"
+            />
+          </div>
         </div>
         <div className={styles.inputs}>
+          <div className={styles.check}>
+            <div>
+              <input
+                id="temporal"
+                name="temporal"
+                type="checkbox"
+                onChange={handleChangeCheck}
+              />
+              <label htmlFor="temporal">Temporal</label>
+            </div>
+            <div>
+              <input
+                id="catalogo"
+                name="catalogo"
+                type="checkbox"
+                checked={stock.catalogo}
+                onChange={handleChangeCheck}
+              />
+              <label htmlFor="catalogo">Vista en catalogo</label>
+            </div>
+          </div>
           <div className={styles.codes}>
             <div className="form-floating ">
               <select
@@ -131,7 +172,13 @@ export default function Row({ stock, tipoImpositivo, handleChange }: Props) {
               <label htmlFor="IMEISerie">Nro de Serie/IMEI </label>
             </div>
           </div>
-          <div className={styles.price}>
+          <div
+            className={
+              tipoImpositivo === TipoImpositivo.recargo
+                ? styles.recargo
+                : styles.price
+            }
+          >
             <div className="form-floating">
               <input
                 className="form-control"
@@ -198,6 +245,14 @@ export default function Row({ stock, tipoImpositivo, handleChange }: Props) {
           </div>
         </div>
       </div>
+      <button
+        className="btn btn-primary"
+        type="button"
+        onClick={() => handleDuplicate(stock)}
+      >
+        +
+      </button>
+      <hr></hr>
     </div>
   );
 }
