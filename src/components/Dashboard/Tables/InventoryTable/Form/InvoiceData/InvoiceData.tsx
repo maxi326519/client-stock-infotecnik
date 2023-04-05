@@ -5,33 +5,41 @@ import styles from "./InvoiceData.module.css";
 
 interface Props {
   invoice: Invoices;
-  setInvoice: (invoice: Invoices) => void;
+  handleChange: (name: string, value: string | number) => void;
+  setFile: (file: File) => void;
 }
 
-export default function InvoiceData({ invoice, setInvoice }: Props) {
+export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
   const [pending, setpending] = useState<boolean>(false);
 
   function handleCheck() {
     setpending(!pending);
   }
 
-  function handleSelect(event: React.ChangeEvent<HTMLSelectElement>) {
-    const value = event.target.value;
-
-    if (Number(value) === TipoImpositivo.IVA) {
-      setInvoice({ ...invoice, tipoImpositivo: TipoImpositivo.IVA });
-    } else if (Number(value) === TipoImpositivo.REBU) {
-      setInvoice({ ...invoice, tipoImpositivo: TipoImpositivo.REBU });
-    } else if (Number(value) === TipoImpositivo.recargo) {
-      setInvoice({ ...invoice, tipoImpositivo: TipoImpositivo.recargo });
-    }
-  }
-
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     const name = event.target.name;
 
-    setInvoice({ ...invoice, [name]: value });
+    handleChange(name, value);
+  }
+
+  function handleLocalSelect(event: React.ChangeEvent<HTMLSelectElement>) {
+    const value = event.target.value;
+    const name = event.target.name;
+
+    if (Number(value) === TipoImpositivo.IVA) {
+      handleChange("tipoImpositivo", TipoImpositivo.IVA);
+    } else if (Number(value) === TipoImpositivo.REBU) {
+      handleChange("tipoImpositivo", TipoImpositivo.REBU);
+    } else if (Number(value) === TipoImpositivo.recargo) {
+      handleChange("tipoImpositivo", TipoImpositivo.recargo);
+    }
+  }
+
+  function handleFile(event: React.ChangeEvent<HTMLInputElement>){
+    const file = event.target.files?.[0];
+
+    if(file) setFile(file);
   }
 
   return (
@@ -40,24 +48,26 @@ export default function InvoiceData({ invoice, setInvoice }: Props) {
       <h5>Factura</h5>
       <div className={styles.pending}>
         <input
-          id="pending"
+          id="pendiente"
+          name="pendiente"
           type="checkbox"
           checked={pending}
           className="btn btn-success"
           onChange={handleCheck}
         />
-        <label htmlFor="pending">Pendiente</label>
+        <label htmlFor="pendiente">Pendiente</label>
       </div>
       <div className={styles.data}>
         <div className="form-floating">
           <input
-            id="nro"
+            id="numero"
+            name="numero"
             className="form-control"
             type="number"
             value={invoice.numero}
-            onChange={handleChange}
+            onChange={handleLocalChange}
           />
-          <label htmlFor="nro" className="form-label">
+          <label htmlFor="numero" className="form-label">
             Numero
           </label>
         </div>
@@ -65,11 +75,12 @@ export default function InvoiceData({ invoice, setInvoice }: Props) {
         <div className="form-floating">
           <input
             id="fecha"
+            name="fecha"
             className="form-control"
             type="date"
             max={new Date().toISOString().split("T")[0]}
             value={invoice.fecha}
-            onChange={handleChange}
+            onChange={handleLocalChange}
           />
           <label htmlFor="fecha" className="form-label">
             Fecha
@@ -77,33 +88,32 @@ export default function InvoiceData({ invoice, setInvoice }: Props) {
         </div>
 
         <div className="form-floating">
-          <input
-            id="factura"
-            className="form-control"
-            type="number"
-            disabled={pending}
-            value={invoice.archivo}
-            onChange={handleChange}
-          />
-          <label htmlFor="factura" className="form-label">
-            URL
-          </label>
-        </div>
-
-        <div className="form-floating">
           <select
-            id="impositivo"
+            id="tipoImpositivo"
+            name="tipoImpositivo"
             className="form-control"
             value={invoice.tipoImpositivo}
-            onChange={handleSelect}
+            onChange={handleLocalSelect}
           >
             <option value={TipoImpositivo.IVA}>IVA</option>
             <option value={TipoImpositivo.recargo}>Recargo</option>
             <option value={TipoImpositivo.REBU}>REBU</option>
           </select>
-          <label htmlFor="impositivo" className="form-label">
+          <label htmlFor="tipoImpositivo" className="form-label">
             Tipo Impositivo:
           </label>
+        </div>
+
+        <div className="form-floating">
+          <input
+            id="archivo"
+            name="archivo"
+            className="form-control"
+            type="file"
+            placeholder="archivo"
+            disabled={pending}
+            onChange={handleFile}
+          />
         </div>
       </div>
     </div>

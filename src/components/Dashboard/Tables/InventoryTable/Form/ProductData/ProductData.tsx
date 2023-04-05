@@ -6,25 +6,34 @@ import Row from "./Row/Row";
 
 import styles from "./ProductData.module.css";
 interface Props {
-  productsSelected: string[];
   stock: Stock[];
-  setStock: (stock: Stock[]) => void;
-  tipoImpositivo: TipoImpositivo; 
+  tipoImpositivo: TipoImpositivo;
+  handleChange: (
+    productId: string,
+    name: string,
+    value: string | number | boolean
+  ) => void;
+  handleDuplicate: (stock: Stock) => void;
 }
 
 export default function ProductData({
-  productsSelected,
   stock,
-  setStock,
-  tipoImpositivo
+  tipoImpositivo,
+  handleChange,
+  handleDuplicate,
 }: Props) {
   return (
     <div className={styles.productAdd}>
       <h5>Productos</h5>
       <div className={styles.list}>
-        {productsSelected.map((p) => {
+        {stock.map((s) => {
           return (
-            <Row id={p} tipoImpositivo={tipoImpositivo}/>
+            <Row
+              stock={s}
+              tipoImpositivo={tipoImpositivo}
+              handleChange={handleChange}
+              handleDuplicate={handleDuplicate}
+            />
           );
         })}
       </div>

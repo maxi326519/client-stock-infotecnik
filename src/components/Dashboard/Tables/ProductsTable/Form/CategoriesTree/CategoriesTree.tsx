@@ -29,14 +29,23 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
   const [data, setData] = useState<any>(tree);
 
   useEffect(() => {
-    const newData = [
-      ...tree,
-      ...categories.map((cat: any) => [
-        ...cat,
-        1,
-        cat[0] === 0 ? "red" : "black",
-      ]),
-    ];
+    let newData: any = [];
+    if(categories.length <= 0){
+      newData = [
+        ...tree,
+        [ 0, "categorias", -1, 1, "black" ]
+      ]
+    }else{
+      newData = [
+        ...tree,
+        ...categories.map((cat: any) => [
+          ...cat,
+          1,
+          cat[0] === 0 ? "red" : "black",
+        ]),
+      ];
+    }
+    console.log(newData);
     setData(newData);
   }, [categories]);
 

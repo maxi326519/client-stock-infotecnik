@@ -1,10 +1,6 @@
-.container{  
+.container {
+  width: min-content;
   margin: 10px 20px;
-}
-
-.productData{
-  padding: 5px;
-  margin-left: 10px;
 }
 
 .list {
@@ -17,35 +13,94 @@
   align-items: center;
 }
 
-.image{
-  width: 120px;
-  height: 120px;
+.productLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.productLeft span{
+  margin-bottom: 10px;
+}
+
+.inputs {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.inputs div:last-child {
+  grid-column: 1 / 3;
+}
+
+.check{
+  display: flex;
+  grid-column: 1 / 3;
+}
+
+.check input{
+  margin-right: 5px;
+}
+
+.check label{
+  margin-right: 30px;
+}
+
+.image {
+  display: flex;
+  align-items: center;
+  width: 190px;
+  height: 190px;
   margin-right: 20px;
   border-radius: 10px;
+  overflow: hidden;
   border: 1px solid var(--border);
   background-color: var(--background);
 }
 
-.image img{
-  filter: invert(60%);
+.image img {
+  width: 100%;
+  max-height: 100%;
 }
 
-.image:hover{
+.image:hover {
   cursor: pointer;
   outline: 2px solid var(--primary-color);
 }
-.codes{
-  margin-right: 20px;
+.codes {
+  display: grid;
+  grid-template-columns: 120px 250px;
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 5px;
 }
 
-.codes .top{
-  display: flex;
+.price {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(2, 135px);
+  grid-template-rows: repeat(2, 1fr);
 }
 
-.price{
-  display: flex;
+.price div:last-child {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
 }
 
-.price .top{
-  display: flex;
+.recargo {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(3, 135px);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.recargo div:last-child {
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+}
+
+.rebu {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 135px;
+  grid-template-rows: repeat(2, 1fr);
 }

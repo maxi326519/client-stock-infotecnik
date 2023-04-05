@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { postInvoice } from "../../../../../redux/actions/invoices";
 import { Supplier, TipoImpositivo } from "../../../../../interfaces";
 import { Stock, RootState, Invoices } from "../../../../../interfaces";
+import isBarCodeValid from "../../../../../functions/barCodes";
+import isValidIMEI from "../../../../../functions/IMEI";
+import calcularIVA from "../../../../../functions/IVA";
 
 import AddProduct from "./AddProduct/AddProduct";
 import AddSupplier from "./AddSupplier/AddSupplier";
@@ -18,6 +21,7 @@ import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
+import axios from "axios";
 
 interface Props {
   handleClose: () => void;
@@ -25,9 +29,10 @@ interface Props {
 
 const initialState: Invoices = {
   id: "",
-  fecha: "",
+  fecha: new Date().toISOString().split("T")[0],
   numero: 0,
-  archivo: "",
+  pendiente: false,
+  archivo: "123",
   tipoImpositivo: TipoImpositivo.IVA,
   SuipplierId: "",
   ProductId: [],
@@ -35,13 +40,17 @@ const initialState: Invoices = {
 
 const initialStock: Stock = {
   id: "",
+  estado: "Nuevo",
+  catalogo: true,
+  fechaAlta: new Date().toISOString().split("T")[0],
   IMEISerie: "",
-  status: "Nuevo",
   tipoCodigoDeBarras: "",
   codigoDeBarras: "",
   precioSinIVA: 0,
   precioIVA: 0,
   precioIVAINC: 0,
+  recargo: 0,
+  detalles: "",
   imagen: "",
   ProductId: "",
   InvoiceId: "",
@@ -54,31 +63,52 @@ export default function Form({ handleClose }: Props) {
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);
   const [stock, setStock] = useState<Stock[]>([]); // Datos de los productos seleccionados
   const [invoice, setInvoice] = useState<Invoices>(initialState); // Datos de la factura
-
+  const [file, setFile] = useState<File | undefined>();
   const [addProducts, setFormProducts] = useState<boolean>(false);
   const [addSupplier, setFormSuppliers] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setStock(
-      productsSelected.map((p) => {
-        return { ...initialStock, product: p };
-      })
-    );
+    const stock = productsSelected.map((p, i) => {
+      return { ...initialStock, id: i.toString(), ProductId: p };
+    });
+    setStock(stock);
   }, [productsSelected]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    let invoiceURL: string = "";
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post("/upload/files", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        invoiceURL = response.data.path;
+        console.log(invoiceURL);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     const newInvoice = {
       ...invoice,
       detalles: stock,
+      archivo: invoiceURL,
       supplier: supplierSelected?.id,
     };
+
     console.log(newInvoice);
+
     dispatch(loading());
     dispatch<any>(postInvoice(newInvoice))
       .then(() => {
-        /* handleClose(); */
+        handleClose();
         swal("Guardado", "Su inventario se guardo correctamente", "success");
         dispatch(closeLoading());
       })
@@ -87,6 +117,59 @@ export default function Form({ handleClose }: Props) {
         dispatch(closeLoading());
         swal("Error", "Hubo un error al guardar el nuevo inventario", "error");
       });
+  }
+
+  function handleChangeInvoice(name: string, value: string | number) {
+    const newInvoice = { ...invoice, [name]: value };
+    console.log(newInvoice);
+    setInvoice(newInvoice);
+  }
+
+  function handleChangeProduct(
+    id: string,
+    name: string,
+    value: string | number | boolean
+  ) {
+    const newStock: Stock[] = stock.map((s: Stock): Stock => {
+      if (s.id === id) {
+        switch (name) {
+          case "precioSinIVA":
+            return {
+              ...s,
+              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
+            };
+          case "precioIVA":
+            return {
+              ...s,
+              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
+            };
+          default:
+            return {
+              ...s,
+              [name]: value,
+            };
+        }
+      }
+      return s;
+    });
+
+    console.log(newStock);
+    setStock(newStock);
+  }
+
+  function handleValidation(stock: Stock, name: string, value: any) {
+    if (name === "codigoDeBarras") {
+      console.log(isBarCodeValid(stock.tipoCodigoDeBarras, value));
+    }
+    if (name === "IMEISerie") {
+      console.log(isValidIMEI(value));
+    }
+  }
+
+  function handleDuplicate(newStock: Stock) {
+    const newStockList = [...stock, { ...newStock, id: (stock.length + 1).toString() }];
+    console.log(newStockList);
+    setStock(newStockList);
   }
 
   function handleLocalClose(): void {
@@ -155,7 +238,11 @@ export default function Form({ handleClose }: Props) {
                 </button>
               </div>
 
-              <InvoiceData invoice={invoice} setInvoice={setInvoice} />
+              <InvoiceData
+                invoice={invoice}
+                handleChange={handleChangeInvoice}
+                setFile={setFile}
+              />
               <SupplierData supplier={supplierSelected} />
               <button type="submit" className="btn btn-success">
                 Agregar inventario
@@ -164,10 +251,10 @@ export default function Form({ handleClose }: Props) {
             {/* Products */}
             {productsSelected.length > 0 ? (
               <ProductData
-                productsSelected={productsSelected}
                 stock={stock}
-                setStock={setStock}
                 tipoImpositivo={invoice.tipoImpositivo}
+                handleChange={handleChangeProduct}
+                handleDuplicate={handleDuplicate}
               />
             ) : null}
           </div>
