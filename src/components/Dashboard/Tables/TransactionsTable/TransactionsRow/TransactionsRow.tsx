@@ -16,7 +16,7 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
       <span>{transaction.fecha}</span>
       <span>{transaction.fechaValor}</span>
       <span>{transaction.movimiento}</span>
-      <span>{transaction.datos}</span>
+      <span>{transaction.masDatos}</span>
       <span>{transaction.importe}</span>
       <button
         className="btn btn-primary"

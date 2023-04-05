@@ -51,7 +51,7 @@ const initialStock: Stock = {
   precioIVAINC: 0,
   recargo: 0,
   detalles: "",
-  imagen: "",
+  Images: [],
   ProductId: "",
   InvoiceId: "",
 };

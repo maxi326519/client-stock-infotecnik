@@ -26,8 +26,8 @@ export function postProduct(
         capacidad: newProduct.capacidad,
         descLarga: newProduct.descLarga,
         descCorta: newProduct.descCorta,
-        imgGenerica: newProduct.imgGenerica,
         categoria: newProduct.CategoryId,
+        Images: newProduct.Images,
       };
 
       const response = await axios.post("/products", product);

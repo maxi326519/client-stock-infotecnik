@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     redirect("/dashboard");
     Promise.all([
-      dispatch<any>(getInvoice()),
+      /* dispatch<any>(getInvoice()), */
       dispatch<any>(getProduct()),
       dispatch<any>(getAttributes()),
       dispatch<any>(getSuppliers()),

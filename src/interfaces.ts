@@ -16,7 +16,7 @@ export interface Product {
   capacidad: string;
   descLarga: string;
   descCorta: string;
-  imgGenerica: string[];
+  Images: string[];
   CategoryId: string;
 }
 
@@ -30,6 +30,7 @@ export interface Supplier {
   cifNif: string;
   telefono: string;
 }
+
 export interface Stock {
   id: string;
   estado: string;
@@ -43,7 +44,7 @@ export interface Stock {
   precioIVAINC: number;
   recargo: number;
   detalles: string;
-  imagen: string;
+  Images: string[];
   ProductId: string;
   InvoiceId: string;
 }
@@ -70,7 +71,7 @@ export interface Transactions {
   fecha: string;
   fechaValor: string;
   movimiento: string;
-  datos: string;
+  masDatos: string;
   importe: number;
   saldo: number;
   InvoiceId: string;

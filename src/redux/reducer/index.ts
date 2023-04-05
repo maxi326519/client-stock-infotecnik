@@ -41,18 +41,7 @@ const initialState: RootState = {
   suppliers: [],
   stock: [],
   invoices: [],
-  transactions: [
-    {
-      id: "",
-      fecha: "15/03/2023",
-      fechaValor: "15/03/2023",
-      movimiento: "PRCU-2023-2279",
-      datos: "AXARNET COMUNICACIONES SL",
-      importe: -241.95,
-      saldo: 4144.48,
-      InvoiceId: "",
-    },
-  ],
+  transactions: [],
   loading: false,
 };
 

@@ -26,7 +26,7 @@ const initialStock: Stock = {
   precioIVAINC: 0,
   recargo: 0,
   detalles: "",
-  imagen: "",
+  Images: [],
   ProductId: "",
   InvoiceId: "",
 };
@@ -102,8 +102,8 @@ export default function Row({
           <div className={styles.image} onClick={handleClose}>
             <img
               src={
-                currentProduct?.imgGenerica[0]
-                  ? `http://localhost:3001${currentProduct?.imgGenerica[0]}`
+                currentProduct?.Images?.[0]
+                  ? `http://localhost:3001${currentProduct?.Images[0]}`
                   : img
               }
               alt="img"

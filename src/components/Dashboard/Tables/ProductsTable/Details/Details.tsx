@@ -27,13 +27,13 @@ export default function Details({ product, handleDetails }: Props) {
   const colores = useSelector((state: RootState) => state.attributes.colores);
   const [localProduct, setLocalProduct] = useState<Product>(product);
   const [isDisabled, setDisabled] = useState<boolean>(true);
-  const [imageUrls, setImageUrls] = useState<string[]>(product?.imgGenerica);
+  const [imageUrls, setImageUrls] = useState<string[]>(product?.Images);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   useEffect(() => {
-    console.log("Update", product);
+    console.log("Products", product);
     setLocalProduct(product);
-    setImageUrls(product?.imgGenerica);
+    setImageUrls(product?.Images);
   }, [product]);
 
   function handleDisabled(): void {

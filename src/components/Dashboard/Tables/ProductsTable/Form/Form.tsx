@@ -38,8 +38,8 @@ export default function Form({
     capacidad: "",
     descLarga: "",
     descCorta: "",
-    imgGenerica: [],
     CategoryId: "",
+    Images: [],
   };
   const categories = useSelector(
     (state: RootState) => state.attributes.categories
