@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteSuppllier } from "../../../../../redux/actions/suppliers";
-import { Supplier } from "../../../../../interfaces";
+import { deleteClient } from "../../../../../redux/actions/clients";
+import { Client } from "../../../../../interfaces";
 import swal from "sweetalert";
 import {
   closeLoading,
@@ -14,10 +14,10 @@ import deleteSvg from "../../../../../assets/svg/delete.svg";
 import style from "./ClientRows.module.css";
 
 interface Props {
-  supplier: Supplier;
+  client: Client;
 }
 
-export default function ClientRows({ supplier }: Props) {
+export default function ClientRows({ client }: Props) {
   const dispatch = useDispatch();
   const [isDisabled, setDisabled] = useState(true);
 
@@ -27,7 +27,7 @@ export default function ClientRows({ supplier }: Props) {
 
   function handleRemove() {
     swal({
-      text: "Seguro que quiere eliminar el proveedor?",
+      text: "Seguro que quiere eliminar al cliente?",
       buttons: {
         confirm: true,
         cancel: true,
@@ -35,9 +35,9 @@ export default function ClientRows({ supplier }: Props) {
     }).then((res) => {
       if (res) {
         dispatch(loading());
-        dispatch<any>(deleteSuppllier(supplier.id))
+        dispatch<any>(deleteClient(client.id))
           .then(() => {
-            swal("Eliminado", "Se eliminó el proveedor con exito", "success");
+            swal("Eliminado", "Se eliminó el cliente con exito", "success");
             dispatch(closeLoading());
           })
           .catch((err: any) => {
@@ -45,7 +45,7 @@ export default function ClientRows({ supplier }: Props) {
             dispatch(closeLoading());
             swal(
               "Error",
-              "Ocurrió un error al intentar eliminar el proveedor",
+              "Ocurrió un error al intentar eliminar el cliente",
               "error"
             );
           });
@@ -57,43 +57,43 @@ export default function ClientRows({ supplier }: Props) {
     <div className={style.row}>
       <input
         className="form-control"
-        value={supplier.numero}
+        value={client.numero}
         placeholder="Numero"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.nombre}
+        value={client.nombre}
         placeholder="Nombre"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.direccion}
+        value={client.direccion}
         placeholder="Direccion"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.telefono}
+        value={client.telefono}
         placeholder="Telefono"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.poblacion}
+        value={client.poblacion}
         placeholder="Poblacion"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.postal}
+        value={client.postal}
         placeholder="Postal"
         disabled={isDisabled}
       />
       <input
         className="form-control"
-        value={supplier.cifNif}
+        value={client.cifNif}
         placeholder="CIF NIF"
         disabled={isDisabled}
       />

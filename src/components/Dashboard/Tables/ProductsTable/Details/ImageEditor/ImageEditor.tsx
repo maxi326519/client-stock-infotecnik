@@ -5,6 +5,7 @@ import img from "../../../../../../assets/svg/image.svg";
 import styles from "./ImageEditor.module.css";
 
 interface Props {
+  isDisabled: boolean;
   imageUrls: string[];
   setImageUrls: (imageUrl: string[]) => void;
   imageFiles: File[];
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function ImageEditor({
+  isDisabled,
   imageUrls,
   setImageUrls,
   imageFiles,
@@ -21,11 +23,10 @@ export default function ImageEditor({
 
   // Set selected image
   useEffect(() => {
-    console.log(imageUrls);
     if (imageUrls.length === 0) {
       setSelectedImage(img);
     } else {
-      setSelectedImage(imageUrls[0]);
+      setSelectedImage(`http://localhost:3001${imageUrls[0]}`);
     }
   }, [imageUrls]);
 
@@ -44,7 +45,7 @@ export default function ImageEditor({
   }
 
   function handleSelect(url: string) {
-    setSelectedImage(url);
+    setSelectedImage(`http://localhost:3001${url}`);
   }
 
   function handleRemove() {
@@ -55,7 +56,7 @@ export default function ImageEditor({
     <div className={styles.form}>
       <div>
         <div className={styles.imageContainer}>
-          {/*           {imageUrls.length > 0 ? (
+          {!isDisabled && imageUrls.length > 0 ? (
             <button
               className={`btn btn-outline-danger ${styles.delete}`}
               type="button"
@@ -63,14 +64,14 @@ export default function ImageEditor({
             >
               X
             </button>
-          ) : null} */}
+          ) : null}
           <img
             className={styles.icon}
             src={selectedImage}
             alt="img"
           />
         </div>
-        {/*         <div className="mb-3 form-floating">
+        {isDisabled ? null : <div className="mb-3 form-floating">
           <label className="form-control" htmlFor="images">
             Agregar otra imagen
           </label>
@@ -80,7 +81,7 @@ export default function ImageEditor({
             type="file"
             onChange={handleChange}
           />
-        </div> */}
+        </div>}
       </div>
       <div className={styles.imgList}>
         {imageUrls.map((url) => (

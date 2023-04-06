@@ -9,7 +9,7 @@ import {
 } from "../../../../../redux/actions/loading/loading";
 
 import AddImages from "./AddImages/AddImages";
-import CategoriesTree from "./CategoriesTree/CategoriesTree";
+import CategoriesTree from "../CategoriesTree/CategoriesTree";
 
 import style from "./Form.module.css";
 import axios from "axios";
@@ -74,7 +74,7 @@ export default function Form({
 
     const newProduct = {
       ...product,
-      imgGenerica: imagesUrl,
+      Images: imagesUrl,
     };
 
     console.log(newProduct);

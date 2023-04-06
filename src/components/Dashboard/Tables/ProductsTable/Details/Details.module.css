@@ -29,6 +29,19 @@
   width: 400px;
 }
 
+.categoria {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #0003;
+}
+
+.categoria label {
+  flex-grow: 1;
+  text-align: center;
+}
+
 .rightData {
   display: flex;
   flex-direction: column;

@@ -3,15 +3,15 @@ import swal from "sweetalert";
 import Chart from "react-google-charts";
 
 import style from "./CategoriesTree.module.css";
-import add from "../../../../../../assets/svg/add.svg";
-import remove from "../../../../../../assets/svg/delete.svg";
-import root from "../../../../../../assets/svg/tree.svg";
-import { postCategories } from "../../../../../../redux/actions/products";
+import add from "../../../../../assets/svg/add.svg";
+import remove from "../../../../../assets/svg/delete.svg";
+import root from "../../../../../assets/svg/tree.svg";
+import { postCategories } from "../../../../../redux/actions/products";
 import { useDispatch } from "react-redux";
 import {
   closeLoading,
   loading,
-} from "../../../../../../redux/actions/loading/loading";
+} from "../../../../../redux/actions/loading/loading";
 
 const tree = [["id", "childLabel", "parent", "size", { role: "style" }]];
 
@@ -30,12 +30,12 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
 
   useEffect(() => {
     let newData: any = [];
-    if(categories.length <= 0){
+    if (categories.length <= 0) {
       newData = [
         ...tree,
-        [ 0, "categorias", -1, 1, "black" ]
+        [0, "categorias", -1, 1, "black"]
       ]
-    }else{
+    } else {
       newData = [
         ...tree,
         ...categories.map((cat: any) => [

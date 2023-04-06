@@ -16,6 +16,7 @@ import { getInventory } from "./redux/actions/inventory";
 import { closeLoading } from "./redux/actions/loading/loading";
 import swal from "sweetalert";
 import { getTransactions } from "./redux/actions/transactions";
+import { getClients } from "./redux/actions/clients";
 
 function App() {
   const redirect = useNavigate();
@@ -29,6 +30,7 @@ function App() {
       dispatch<any>(getProduct()),
       dispatch<any>(getAttributes()),
       dispatch<any>(getSuppliers()),
+      dispatch<any>(getClients()),
       dispatch<any>(getInventory()),
       dispatch<any>(getTransactions()),
     ])

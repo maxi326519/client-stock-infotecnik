@@ -60,6 +60,17 @@ export interface Invoices {
   ProductId: Stock[];
 }
 
+export interface Client {
+  id: string;
+  numero: number;
+  nombre: string;
+  direccion: string;
+  poblacion: string;
+  postal: number;
+  cifNif: string;
+  telefono: string;
+}
+
 export enum TipoImpositivo {
   IVA,
   recargo,
@@ -96,6 +107,7 @@ export interface RootState {
   };
   products: Array<Product>;
   suppliers: Array<Supplier>;
+  clients: Array<Client>;
   stock: Array<Stock>;
   invoices: Array<Invoices>;
   transactions: Array<Transactions>;

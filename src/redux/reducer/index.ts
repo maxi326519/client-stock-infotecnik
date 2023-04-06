@@ -18,6 +18,12 @@ import {
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
 import {
+  POST_CLIENT,
+  GET_CLIENT,
+  UPDATE_CLIENT,
+  DELETE_CLIENT,
+} from "../actions/clients";
+import {
   POST_TRANSACTIONS,
   GET_TRANSACTIONS,
   DELETE_TRANSACTION,
@@ -39,6 +45,7 @@ const initialState: RootState = {
   },
   products: [],
   suppliers: [],
+  clients: [],
   stock: [],
   invoices: [],
   transactions: [],
@@ -73,6 +80,12 @@ export default function Reducer(
       return {
         ...state,
         suppliers: [...state.suppliers, action.payload],
+      };
+
+    case POST_CLIENT:
+      return {
+        ...state,
+        clients: [...state.clients, action.payload],
       };
 
     case POST_INVOICE:
@@ -126,6 +139,12 @@ export default function Reducer(
       return {
         ...state,
         suppliers: action.payload,
+      };
+
+    case GET_CLIENT:
+      return {
+        ...state,
+        clients: action.payload,
       };
 
     case GET_INVOICE:
