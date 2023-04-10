@@ -45,6 +45,7 @@ export default function ImageEditor({
   }
 
   function handleSelect(url: string) {
+    console.log(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
     setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
   }
 

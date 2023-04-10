@@ -21,7 +21,7 @@ export default function ImageEditor({
       setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${imageUrls[0]}`);
     }
   }, [imageUrls]);
-
+  
   function handleSelect(url: string) {
     setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
   }
