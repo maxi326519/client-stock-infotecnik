@@ -109,7 +109,7 @@ export function getInvoice(): ThunkAction<
         payload: invoices.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -126,7 +126,7 @@ export function updateInvoice(
         payload: updateInventory,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

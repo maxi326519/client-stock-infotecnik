@@ -30,7 +30,7 @@ export function postUser(
         payload: response.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -50,7 +50,7 @@ export function getUsers(): ThunkAction<
         payload: response.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -67,7 +67,7 @@ export function updateUser(
         payload: user,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -84,7 +84,7 @@ export function deleteUser(
         payload: userId,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

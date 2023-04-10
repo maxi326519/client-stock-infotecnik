@@ -33,7 +33,7 @@ export function logOut(
         payload: null,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
