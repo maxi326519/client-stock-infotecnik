@@ -24,8 +24,8 @@ export function postTransactions(
         payload: transactions,
       });
     } catch (error: any) {
-      console.log(error.response.data.error);
-      throw new Error(error.response.data.error);
+      console.log(error.response ? error.response.data.error : error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -47,8 +47,8 @@ export function getTransactions(): ThunkAction<
         payload: transactions.data,
       });
     } catch (error: any) {
-      console.log(error.response.data.error);
-      throw new Error(error.response.data.error);
+      console.log(error.response ? error.response.data.error : error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

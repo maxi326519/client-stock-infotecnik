@@ -30,8 +30,8 @@ export function postClient(
         payload: response.data,
       });
     } catch (error: any) {
-      console.log(error.response.data.error);
-      throw new Error(error.response.data.error);
+      console.log(error.response ? error.response.data.error : error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -51,7 +51,7 @@ export function getClients(): ThunkAction<
         payload: clients.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -68,7 +68,7 @@ export function updateClient(
         payload: updateClient,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -86,7 +86,7 @@ export function deleteClient(
         payload: clientId,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

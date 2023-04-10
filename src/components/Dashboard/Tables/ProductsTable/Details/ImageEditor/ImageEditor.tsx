@@ -90,7 +90,7 @@ export default function ImageEditor({
             className={styles.image}
             onClick={() => handleSelect(url)}
           >
-            <img src={`http://localhost:3001/images/${url}`} alt="product" />
+            <img src={`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`} alt="product" />
           </div>
         ))}
       </div>

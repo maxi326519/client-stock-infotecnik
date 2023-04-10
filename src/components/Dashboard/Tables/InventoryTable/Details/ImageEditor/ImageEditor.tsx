@@ -18,12 +18,12 @@ export default function ImageEditor({
     if (imageUrls === undefined || imageUrls.length === 0) {
       setSelectedImage(img);
     } else {
-      setSelectedImage(`http://localhost:3001/images/${imageUrls[0]}`);
+      setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${imageUrls[0]}`);
     }
   }, [imageUrls]);
 
   function handleSelect(url: string) {
-    setSelectedImage(`http://localhost:3001/images/${url}`);
+    setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
   }
 
   return (
@@ -42,7 +42,7 @@ export default function ImageEditor({
             className={styles.image}
             onClick={() => handleSelect(url)}
           >
-            <img src={`http://localhost:3001/images/${url}`} alt="product" />
+            <img src={`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`} alt="product" />
           </div>
         ))}
       </div>

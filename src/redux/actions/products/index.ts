@@ -37,7 +37,7 @@ export function postProduct(
         payload: response.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -57,7 +57,7 @@ export function getProduct(): ThunkAction<
         payload: products.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -74,7 +74,7 @@ export function updateProduct(
         payload: updateProduct,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -91,7 +91,7 @@ export function deleteProduct(
         payload: productId,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -110,7 +110,7 @@ export function postCapacidades(
       });
     } catch (error: any) {
       console.log(error);
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -128,7 +128,7 @@ export function postColores(
         payload: colores,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -158,7 +158,7 @@ export function getAttributes(): ThunkAction<
         payload: attributes,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -178,7 +178,7 @@ export function postCategories(
       });
     } catch (error: any) {
       console.log(error);
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

@@ -30,8 +30,8 @@ export function postSupplier(
         payload: response.data,
       });
     } catch (error: any) {
-      console.log(error.response.data.error);
-      throw new Error(error.response.data.error);
+      console.log(error.response ? error.response.data.error : error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -51,7 +51,7 @@ export function getSuppliers(): ThunkAction<
         payload: suppliers.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -68,7 +68,7 @@ export function updateSuppllier(
         payload: updateSupplier,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -86,7 +86,7 @@ export function deleteSuppllier(
         payload: supplierId,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
