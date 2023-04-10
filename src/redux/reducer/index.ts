@@ -67,7 +67,8 @@ export default function Reducer(
 ) {
   switch (action.type) {
     case LOGIN:
-      localStorage.setItem("user", action.payload)
+      console.log(action.payload);
+      localStorage.setItem("user", JSON.stringify(action.payload))
       return {
         ...state,
         currentUser: action.payload,

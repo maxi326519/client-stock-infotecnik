@@ -26,7 +26,11 @@ function App() {
   const loading = useSelector((state: RootState) => state.loading);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    const data = localStorage.getItem("user");
+    let userData = null;
+
+/*     if(data)
+      userData = JSON.parse(data); */
 
     if(userData){
       console.log(userData);

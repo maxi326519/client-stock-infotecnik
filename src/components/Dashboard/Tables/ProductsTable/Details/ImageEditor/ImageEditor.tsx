@@ -26,7 +26,7 @@ export default function ImageEditor({
     if (imageUrls.length === 0) {
       setSelectedImage(img);
     } else {
-      setSelectedImage(`http://localhost:3001/images/${imageUrls[0]}`);
+      setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${imageUrls[0]}`);
     }
   }, [imageUrls]);
 
@@ -45,7 +45,7 @@ export default function ImageEditor({
   }
 
   function handleSelect(url: string) {
-    setSelectedImage(`http://localhost:3001/images/${url}`);
+    setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
   }
 
   function handleRemove() {
