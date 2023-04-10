@@ -16,6 +16,7 @@ import img from "../../../../../../../assets/svg/image.svg";
 const initialStock: Stock = {
   id: "",
   estado: "Nuevo",
+  cantidad: 1,
   catalogo: true,
   fechaAlta: new Date().toISOString().split("T")[0],
   IMEISerie: "",
@@ -25,14 +26,24 @@ const initialStock: Stock = {
   precioIVA: 0,
   precioIVAINC: 0,
   recargo: 0,
+  total: 0,
   detalles: "",
   Images: [],
   ProductId: "",
+  SupplierId: "",
   InvoiceId: "",
 };
 
+interface ImagesData {
+  stockId: string;
+  imageUrls: string[];
+  imageFiles: File[];
+}
+
 interface Props {
   stock: Stock;
+  images: ImagesData | undefined;
+  handleSaveImages: (stockId: string, imageUrls: string[], imageFiles: File[]) => void;
   tipoImpositivo: TipoImpositivo;
   handleChange: (
     productId: string,
@@ -44,6 +55,8 @@ interface Props {
 
 export default function Row({
   stock,
+  images,
+  handleSaveImages,
   tipoImpositivo,
   handleChange,
   handleDuplicate,
@@ -85,13 +98,18 @@ export default function Row({
     }
   }
 
+  function handleSubmitImages(imageUrls: string[], imageFiles: File[]){
+    handleSaveImages(stock.id, imageUrls, imageFiles);
+  }
+
   return (
     <div className={styles.container}>
       {imagesForm ? (
         <AddImages
           handleClose={handleClose}
-          newStock={newStock}
-          setStock={setStock}
+          handleSubmit={handleSubmitImages}
+          imageUrls={images?.imageUrls}
+          imageFiles={images?.imageFiles}
         />
       ) : null}
       <div className={styles.item}>
@@ -103,7 +121,7 @@ export default function Row({
             <img
               src={
                 currentProduct?.Images?.[0]
-                  ? `http://localhost:3001${currentProduct?.Images[0]}`
+                  ? `http://localhost:3001/images/${currentProduct?.Images[0]}`
                   : img
               }
               alt="img"
@@ -111,27 +129,19 @@ export default function Row({
           </div>
         </div>
         <div className={styles.inputs}>
-          <div className={styles.check}>
-            <div>
-              <input
-                id="temporal"
-                name="temporal"
-                type="checkbox"
-                onChange={handleChangeCheck}
-              />
-              <label htmlFor="temporal">Temporal</label>
-            </div>
-            <div>
-              <input
-                id="catalogo"
-                name="catalogo"
-                type="checkbox"
-                checked={stock.catalogo}
-                onChange={handleChangeCheck}
-              />
-              <label htmlFor="catalogo">Vista en catalogo</label>
-            </div>
-          </div>
+          {stock.estado !== "Temporal" ?
+            <div className={styles.check}>
+              <div>
+                <input
+                  id="catalogo"
+                  name="catalogo"
+                  type="checkbox"
+                  checked={stock.catalogo}
+                  onChange={handleChangeCheck}
+                />
+                <label htmlFor="catalogo">Vista en catalogo</label>
+              </div>
+            </div> : null}
           <div className={styles.codes}>
             <div className="form-floating ">
               <select
@@ -257,6 +267,16 @@ export default function Row({
       >
         +
       </button>
+      <div className="form-floating">
+        <input
+          className="form-control"
+          id="cantidad"
+          name="cantidad"
+          value={stock.cantidad}
+          onChange={handleLocalChange}
+        />
+        <label htmlFor="cantidad">Cantidad</label>
+      </div>
       <hr></hr>
     </div>
   );

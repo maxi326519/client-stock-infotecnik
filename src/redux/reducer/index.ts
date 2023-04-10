@@ -1,6 +1,11 @@
 import { RootState } from "../../interfaces";
 import { AnyAction } from "redux";
-
+import {
+  POST_USER,
+  GET_USERS,
+  UPDATE_USER,
+  DELETE_USER,
+} from "../actions/user";
 import {
   POST_PRODUCT,
   GET_PRODUCT,
@@ -35,7 +40,11 @@ import { LOGIN, LOG_OUT } from "../actions/login/login";
 
 const initialState: RootState = {
   currentUser: {
+    id: "",
+    rol: "",
+    userName: "",
     name: "",
+    email: "",
   },
   users: [],
   attributes: {
@@ -57,6 +66,13 @@ export default function Reducer(
   action: AnyAction
 ) {
   switch (action.type) {
+    case LOGIN:
+      localStorage.setItem("user", action.payload)
+      return {
+        ...state,
+        currentUser: action.payload,
+      }
+
     /* LOADING */
     case LOADING:
       return {
@@ -128,6 +144,12 @@ export default function Reducer(
         transactions: action.payload,
       };
 
+    case POST_USER:
+      return {
+        ...state,
+        users: [...state.users, action.payload],
+      };
+
     /* GET METHOD*/
     case GET_PRODUCT:
       return {
@@ -171,6 +193,12 @@ export default function Reducer(
         transactions: action.payload,
       };
 
+    case GET_USERS:
+      return {
+        ...state,
+        users: action.payload,
+      };
+
     /* UPDATE METHOD*/
     case UPDATE_PRODUCT:
       return {
@@ -196,6 +224,14 @@ export default function Reducer(
         ),
       };
 
+    case UPDATE_USER:
+      return {
+        ...state,
+        users: state.users.map((user) =>
+          user.id === action.payload.id ? action.payload : user
+        ),
+      };
+
     case DELETE_PRODUCT:
       return {
         ...state,
@@ -206,6 +242,12 @@ export default function Reducer(
       return {
         ...state,
         suppliers: state.suppliers.filter((s) => s.id !== action.payload),
+      };
+
+    case DELETE_USER:
+      return {
+        ...state,
+        users: state.users.filter((user) => user.id !== action.payload),
       };
 
     default:

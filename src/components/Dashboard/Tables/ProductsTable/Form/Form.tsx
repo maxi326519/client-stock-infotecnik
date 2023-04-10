@@ -53,7 +53,7 @@ export default function Form({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const imagesUrl: string[] = [];
+    let imagesUrl: string[] = [];
 
     for (let i = 0; i < imageFiles.length; i++) {
       const formData = new FormData();

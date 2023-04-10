@@ -23,6 +23,12 @@ import {
 } from "../../../../../redux/actions/loading/loading";
 import axios from "axios";
 
+interface ImagesData {
+  stockId: string;
+  imageUrls: string[];
+  imageFiles: File[];
+}
+
 interface Props {
   handleClose: () => void;
 }
@@ -30,19 +36,20 @@ interface Props {
 const initialState: Invoices = {
   id: "",
   fecha: new Date().toISOString().split("T")[0],
-  numero: 0,
+  numero: 1,
   pendiente: false,
-  archivo: "123",
+  archivo: "",
   tipoImpositivo: TipoImpositivo.IVA,
   SuipplierId: "",
-  ProductId: [],
+  StockId: [],
 };
 
 const initialStock: Stock = {
   id: "",
-  estado: "Nuevo",
-  catalogo: true,
   fechaAlta: new Date().toISOString().split("T")[0],
+  estado: "Nuevo",
+  cantidad: 1,
+  catalogo: true,
   IMEISerie: "",
   tipoCodigoDeBarras: "",
   codigoDeBarras: "",
@@ -50,15 +57,17 @@ const initialStock: Stock = {
   precioIVA: 0,
   precioIVAINC: 0,
   recargo: 0,
+  total: 0,
   detalles: "",
   Images: [],
   ProductId: "",
+  SupplierId: "",
   InvoiceId: "",
 };
 
 export default function Form({ handleClose }: Props) {
   const invoices = useSelector((state: RootState) => state.invoices);
-
+  const [images, setImages] = useState<ImagesData[]>([]);
   const [productsSelected, setProduct] = useState<string[]>([]);
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);
   const [stock, setStock] = useState<Stock[]>([]); // Datos de los productos seleccionados
@@ -79,7 +88,9 @@ export default function Form({ handleClose }: Props) {
     event.preventDefault();
 
     let invoiceURL: string = "";
-    if (file) {
+    let imagesList: Array<{ stockId: string, imagesUrls: string[] }> = [];
+
+    if (!invoice.pendiente && file) {
       const formData = new FormData();
       formData.append("file", file);
 
@@ -90,17 +101,46 @@ export default function Form({ handleClose }: Props) {
           },
         });
         invoiceURL = response.data.path;
-        console.log(invoiceURL);
       } catch (error) {
         console.error(error);
       }
     }
 
+    for (let image of images) {
+      let url: string[] = [];
+
+      for (let i = 0; i < image.imageFiles.length; i++) {
+        const formData = new FormData();
+        formData.append("file", image.imageFiles[i]);
+
+        try {
+          const response = await axios.post("/upload/image", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          url.push(response.data.path);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      imagesList.push({
+        stockId: image.stockId,
+        imagesUrls: url
+      });
+    }
+
+    console.log(imagesList);
+
     const newInvoice = {
       ...invoice,
-      detalles: stock,
+      detalles: stock.map((stock: Stock) => ({
+        ...stock,
+        Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)?.imagesUrls,
+      })),
       archivo: invoiceURL,
-      supplier: supplierSelected?.id,
+      SupplierId: supplierSelected?.id,
     };
 
     console.log(newInvoice);
@@ -115,14 +155,19 @@ export default function Form({ handleClose }: Props) {
       .catch((err: any) => {
         console.log(err);
         dispatch(closeLoading());
-        swal("Error", "Hubo un error al guardar el nuevo inventario", "error");
+        swal("Error", `Hubo un error al guardar el nuevo inventario: ${err.message}`, "error");
       });
   }
 
-  function handleChangeInvoice(name: string, value: string | number) {
+  function handleChangeInvoice(name: string, value: string | number | boolean) {
     const newInvoice = { ...invoice, [name]: value };
-    console.log(newInvoice);
     setInvoice(newInvoice);
+
+    if (name === "pendiente") {
+      if (value) {
+        setFile(undefined);
+      }
+    }
   }
 
   function handleChangeProduct(
@@ -152,8 +197,6 @@ export default function Form({ handleClose }: Props) {
       }
       return s;
     });
-
-    console.log(newStock);
     setStock(newStock);
   }
 
@@ -168,8 +211,13 @@ export default function Form({ handleClose }: Props) {
 
   function handleDuplicate(newStock: Stock) {
     const newStockList = [...stock, { ...newStock, id: (stock.length + 1).toString() }];
-    console.log(newStockList);
     setStock(newStockList);
+  }
+
+  function handleTemporal() {
+    const newStockList = [...stock, { ...initialStock, id: (stock.length + 1).toString(), estado: "Temporal" }];
+    setStock(newStockList);
+    handleFormProduct();
   }
 
   function handleLocalClose(): void {
@@ -178,6 +226,28 @@ export default function Form({ handleClose }: Props) {
     setSupplier(null);
     setStock([]);
     setInvoice(initialState);
+  }
+
+  function handleSaveImages(stockId: string, imageUrls: string[], imageFiles: File[]) {
+    const imageSelected: ImagesData | undefined = images.find((i: ImagesData) => i.stockId === stockId);
+    if (imageSelected) {
+      setImages(images.map((i: ImagesData) => (
+        i.stockId === stockId ? {
+          imageUrls,
+          imageFiles,
+          stockId
+        } : i
+      )));
+    } else {
+      setImages([
+        ...images,
+        {
+          imageUrls,
+          imageFiles,
+          stockId
+        }
+      ])
+    }
   }
 
   /* Formularios */
@@ -196,6 +266,7 @@ export default function Form({ handleClose }: Props) {
           productsSelected={productsSelected}
           setProduct={setProduct}
           handleClose={handleFormProduct}
+          handleTemporal={handleTemporal}
         />
       ) : null}
       {addSupplier ? (
@@ -241,6 +312,7 @@ export default function Form({ handleClose }: Props) {
               <InvoiceData
                 invoice={invoice}
                 handleChange={handleChangeInvoice}
+                file={file}
                 setFile={setFile}
               />
               <SupplierData supplier={supplierSelected} />
@@ -252,6 +324,8 @@ export default function Form({ handleClose }: Props) {
             {productsSelected.length > 0 ? (
               <ProductData
                 stock={stock}
+                images={images}
+                handleSaveImages={handleSaveImages}
                 tipoImpositivo={invoice.tipoImpositivo}
                 handleChange={handleChangeProduct}
                 handleDuplicate={handleDuplicate}

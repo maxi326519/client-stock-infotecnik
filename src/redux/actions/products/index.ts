@@ -26,10 +26,10 @@ export function postProduct(
         capacidad: newProduct.capacidad,
         descLarga: newProduct.descLarga,
         descCorta: newProduct.descCorta,
-        categoria: newProduct.CategoryId,
         Images: newProduct.Images,
+        CategoryId: newProduct.CategoryId,
       };
-
+            
       const response = await axios.post("/products", product);
 
       dispatch({

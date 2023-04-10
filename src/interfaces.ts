@@ -4,7 +4,24 @@ export interface Login {
 }
 
 export interface User {
+  id: string;
+  rol: string;
   name: string;
+  userName: string;
+  email: string;
+}
+
+export interface PostUser {
+  rol: string;
+  name: string;
+  userName: string;
+  email: string;
+  password: string;
+}
+
+export enum Rol {
+  Admin = "Admin",
+  Contador =  "Contador",
 }
 
 export interface Product {
@@ -33,19 +50,22 @@ export interface Supplier {
 
 export interface Stock {
   id: string;
-  estado: string;
   fechaAlta: string;
+  estado: string;
+  cantidad: number;
   catalogo: boolean;
-  IMEISerie: string /* enum[IMEI, nroSerie] */;
+  IMEISerie: string;
   tipoCodigoDeBarras: string;
   codigoDeBarras: string;
   precioSinIVA: number;
   precioIVA: number;
   precioIVAINC: number;
   recargo: number;
+  total: number;
   detalles: string;
   Images: string[];
   ProductId: string;
+  SupplierId: string;
   InvoiceId: string;
 }
 
@@ -57,7 +77,7 @@ export interface Invoices {
   archivo: string;
   tipoImpositivo: TipoImpositivo;
   SuipplierId: string;
-  ProductId: Stock[];
+  StockId: Stock[];
 }
 
 export interface Client {

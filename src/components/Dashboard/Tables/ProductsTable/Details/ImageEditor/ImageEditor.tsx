@@ -26,7 +26,7 @@ export default function ImageEditor({
     if (imageUrls.length === 0) {
       setSelectedImage(img);
     } else {
-      setSelectedImage(`http://localhost:3001${imageUrls[0]}`);
+      setSelectedImage(`http://localhost:3001/images/${imageUrls[0]}`);
     }
   }, [imageUrls]);
 
@@ -45,7 +45,7 @@ export default function ImageEditor({
   }
 
   function handleSelect(url: string) {
-    setSelectedImage(`http://localhost:3001${url}`);
+    setSelectedImage(`http://localhost:3001/images/${url}`);
   }
 
   function handleRemove() {
@@ -90,7 +90,7 @@ export default function ImageEditor({
             className={styles.image}
             onClick={() => handleSelect(url)}
           >
-            <img src={`http://localhost:3001${url}`} alt="product" />
+            <img src={`http://localhost:3001/images/${url}`} alt="product" />
           </div>
         ))}
       </div>

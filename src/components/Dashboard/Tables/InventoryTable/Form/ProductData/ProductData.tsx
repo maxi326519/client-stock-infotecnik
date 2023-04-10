@@ -5,8 +5,17 @@ import { Stock, RootState, TipoImpositivo } from "../../../../../../interfaces";
 import Row from "./Row/Row";
 
 import styles from "./ProductData.module.css";
+
+interface ImagesData {
+  stockId: string;
+  imageUrls: string[];
+  imageFiles: File[];
+}
+
 interface Props {
   stock: Stock[];
+  images: ImagesData[];
+  handleSaveImages: (stockId: string, imageUrls: string[], imageFiles: File[]) => void;
   tipoImpositivo: TipoImpositivo;
   handleChange: (
     productId: string,
@@ -18,10 +27,14 @@ interface Props {
 
 export default function ProductData({
   stock,
+  images,
+  handleSaveImages,
   tipoImpositivo,
   handleChange,
   handleDuplicate,
 }: Props) {
+
+
   return (
     <div className={styles.productAdd}>
       <h5>Productos</h5>
@@ -30,6 +43,8 @@ export default function ProductData({
           return (
             <Row
               stock={s}
+              images={images.find((i) => i.stockId === s.id)}
+              handleSaveImages={handleSaveImages}
               tipoImpositivo={tipoImpositivo}
               handleChange={handleChange}
               handleDuplicate={handleDuplicate}

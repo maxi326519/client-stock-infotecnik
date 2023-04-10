@@ -30,11 +30,12 @@ export default function InventoryRow({
   return (
     <div className={style.row}>
       <span>{stock.codigoDeBarras}</span>
-      <span>{stock.estado}</span>
+      <span>{stock.IMEISerie}</span>
       <span>{stock.estado}</span>
       <span>
         {`${product?.marca} / ${product?.modelo} / ${product?.color} / ${product?.capacidad}`}
       </span>
+      <span>{stock.cantidad}</span>
       <span>{stock.precioSinIVA.toFixed(2)}</span>
       <span>{stock.precioIVA.toFixed(2)}</span>
       <span>{stock.precioIVAINC.toFixed(2)}</span>
