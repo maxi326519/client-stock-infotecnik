@@ -26,7 +26,7 @@ export default function ImageEditor({
     if (imageUrls.length === 0) {
       setSelectedImage(img);
     } else {
-      setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${imageUrls[0]}`);
+      setSelectedImage(`${process.env.REACT_APP_API_URL || "https://api.infotecnik.cat"}/images/${imageUrls[0]}`);
     }
   }, [imageUrls]);
 
@@ -45,8 +45,8 @@ export default function ImageEditor({
   }
 
   function handleSelect(url: string) {
-    console.log(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
-    setSelectedImage(`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`);
+    console.log(`${process.env.REACT_APP_API_URL || "https://api.infotecnik.cat"}/images/${url}`);
+    setSelectedImage(`${process.env.REACT_APP_API_URL || "https://api.infotecnik.cat"}/images/${url}`);
   }
 
   function handleRemove() {
@@ -91,7 +91,7 @@ export default function ImageEditor({
             className={styles.image}
             onClick={() => handleSelect(url)}
           >
-            <img src={`${process.env.REACT_APP_API_URL || "api.infotecnik.cat"}/images/${url}`} alt="product" />
+            <img src={`${process.env.REACT_APP_API_URL || "https://api.infotecnik.cat"}/images/${url}`} alt="product" />
           </div>
         ))}
       </div>
