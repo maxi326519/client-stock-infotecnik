@@ -13,7 +13,17 @@ export function postSupplier(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const response = await axios.post("/suppliers", newSupplier);
+      const supplier = {
+        numero: newSupplier.numero,
+        nombre: newSupplier.nombre,
+        direccion: newSupplier.direccion,
+        poblacion: newSupplier.poblacion,
+        postal: newSupplier.postal,
+        cifNif: newSupplier.cifNif,
+        telefono: newSupplier.telefono,
+      };
+
+      const response = await axios.post("/suppliers", supplier);
 
       dispatch({
         type: POST_SUPPLIER,

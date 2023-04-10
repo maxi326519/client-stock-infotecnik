@@ -35,21 +35,11 @@ export default function TransactionsTable() {
     setSearch(value);
   }
 
-  function handleInvoice(): void {}
+  function handleInvoice(): void { }
 
   function handleData(data: any) {
-    let newData: any[] = [];
-    newData = data.slice(3);
-    newData = newData.filter((d: any) => d.length > 0);
-    newData = newData.map((d: any) => ({
-      fecha: d[0],
-      fechaValor: d[1],
-      movimiento: d[2],
-      masDatos: d[3],
-      importe: d[4],
-    }));
     dispatch(loading());
-    dispatch<any>(postTransactions(newData))
+    dispatch<any>(postTransactions(data))
       .then(() => {
         handleClose();
         dispatch(closeLoading());
@@ -98,7 +88,7 @@ export default function TransactionsTable() {
           <span className={style.buttons}>Vincular</span>
           <span className={style.buttons}>Eliminar</span>
         </div>
-        <div className={style.card}>
+        <div className={styles.contentCard}>
           {rows.length <= 0 ? (
             <div className={styles.listEmpty}>
               <span>No hay productos</span>

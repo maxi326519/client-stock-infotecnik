@@ -10,12 +10,14 @@ interface Props {
   productsSelected: string[];
   setProduct: (selected: string[]) => void;
   handleClose: () => void;
+  handleTemporal: () => void;
 }
 
 export default function AddProduct({
   productsSelected,
   setProduct,
   handleClose,
+  handleTemporal
 }: Props) {
   const products: Product[] = useSelector((state: RootState) => state.products);
   const [rows, setRows] = useState<Product[]>([]);
@@ -71,13 +73,8 @@ export default function AddProduct({
     }
   }
 
-  function handleTemporal() {
-    setTemporal(!temporal);
-  }
-
   return (
     <div className={style.container}>
-      {temporal ? <Temporal handleClose={handleTemporal} /> : null}
       <form className={style.window} onSubmit={handleSubmit}>
         <div className={style.close}>
           <h4>Productos</h4>

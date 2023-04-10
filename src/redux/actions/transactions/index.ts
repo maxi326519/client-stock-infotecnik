@@ -19,8 +19,6 @@ export function postTransactions(
         transactions.push(response.data);
       }
 
-      console.log(transactions);
-
       dispatch({
         type: POST_TRANSACTIONS,
         payload: transactions,

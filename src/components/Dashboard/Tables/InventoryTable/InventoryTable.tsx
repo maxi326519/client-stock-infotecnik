@@ -1,31 +1,34 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Invoices, Product, Stock, Supplier } from "../../../../interfaces";
 
 import Form from "./Form/Form";
 import Details from "./Details/Details";
 import SupplierDetails from "./SupplierDetails/SupplierDetails";
+import InventoryRow from "./InventoryRow/InventoryRow";
 
 import styles from "../../Dashboard.module.css";
 import style from "./InventoryTable.module.css";
-import InventoryRow from "./InventoryRow/InventoryRow";
-import { Product, Stock, Supplier } from "../../../../interfaces";
 
 interface Selection {
   product: Product;
   stock: Stock;
   supplier: Supplier;
+  invoice: Invoices;
 }
 
 export default function InventoryTable() {
   const stock = useSelector((state: any) => state.stock);
   const products = useSelector((state: any) => state.products);
   const suppliers = useSelector((state: any) => state.suppliers);
+  const invoices = useSelector((state: any) => state.invoices);
   const [search, setSearch] = useState<string>("");
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [details, setDetails] = useState(false);
   const [supplierDetails, setSupplierdetails] = useState(false);
+
   useEffect(() => {
     const filter = stock.filter(() => {
       if (search === "") return true;
@@ -43,20 +46,21 @@ export default function InventoryTable() {
     setForm(!form);
   }
 
-  function handleSelection(stock: Stock | null){
-    if(stock === null){
+  function handleSelection(stock: Stock | null) {
+    if (stock === null) {
       setSelection(null);
-    }else{
+    } else {
       const product: Product = products.find((p: Product) => p.id === stock.ProductId);
-      const supplier: Supplier = suppliers.find((s: Supplier) => s.id === stock.ProductId);
+      const supplier: Supplier = suppliers.find((s: Supplier) => s.id === stock.SupplierId);
+      const invoice: Invoices = invoices.find((i: Invoices) => i.id === stock.InvoiceId);
 
-      const slection: Selection = {
+      const selection: Selection = {
         product,
         stock,
-        supplier
+        supplier,
+        invoice,
       }
-
-      setSelection(slection);
+      setSelection(selection);
     }
   }
 
@@ -77,6 +81,7 @@ export default function InventoryTable() {
         <Details
           product={selection?.product}
           stock={selection?.stock}
+          invoice={selection?.invoice}
           handleClose={handleCloseDetails}
         />
       ) : null}
@@ -104,6 +109,7 @@ export default function InventoryTable() {
           <span>Nro de Serie</span>
           <span>Estado</span>
           <span>Marca / Modelo / Color / Capacidad</span>
+          <span>Cantidad</span>
           <span>Precio</span>
           <span>Precio IVA</span>
           <span>Precio IVA INC</span>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState, Supplier } from "../../../../interfaces";
+import { RootState, Client } from "../../../../interfaces";
 
 import ClientRows from "./ClientRows/ClientRows";
 import Form from "./Form/Form";
@@ -9,13 +9,13 @@ import styles from "../../Dashboard.module.css";
 import style from "./ClientsTable.module.css";
 
 export default function ClientsTable() {
-  const supplier = useSelector((state: RootState) => state.suppliers);
+  const client = useSelector((state: RootState) => state.clients);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
 
   useEffect(() => {
-    setRows(supplier);
-  }, [supplier]);
+    setRows(client);
+  }, [client]);
 
   function handleForm(): void {
     setForm(!form);
@@ -57,8 +57,8 @@ export default function ClientsTable() {
               </button>
             </div>
           ) : (
-            rows?.map((supplier: Supplier) => (
-              <ClientRows key={supplier.id} supplier={supplier} />
+            rows?.map((client: Client) => (
+              <ClientRows key={client.id} client={client} />
             ))
           )}
         </div>

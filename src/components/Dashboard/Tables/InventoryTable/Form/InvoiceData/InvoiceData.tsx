@@ -1,19 +1,32 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Invoices, TipoImpositivo } from "../../../../../../interfaces";
 
 import styles from "./InvoiceData.module.css";
 
 interface Props {
   invoice: Invoices;
-  handleChange: (name: string, value: string | number) => void;
+  handleChange: (name: string, value: string | number | boolean) => void;
+  file: File | undefined;
   setFile: (file: File) => void;
 }
 
-export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
-  const [pending, setpending] = useState<boolean>(false);
+export default function InvoiceData({ invoice, handleChange, file, setFile }: Props) {
 
-  function handleCheck() {
-    setpending(!pending);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!file) {
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+    }
+  }, [file])
+
+  function handleCheck(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.checked;
+
+    handleChange(name, value);
   }
 
   function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -36,10 +49,10 @@ export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
     }
   }
 
-  function handleFile(event: React.ChangeEvent<HTMLInputElement>){
+  function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-
-    if(file) setFile(file);
+    console.log(file);
+    if (file) setFile(file);
   }
 
   return (
@@ -51,7 +64,7 @@ export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
           id="pendiente"
           name="pendiente"
           type="checkbox"
-          checked={pending}
+          checked={invoice.pendiente}
           className="btn btn-success"
           onChange={handleCheck}
         />
@@ -111,8 +124,9 @@ export default function InvoiceData({ invoice, handleChange, setFile }: Props) {
             className="form-control"
             type="file"
             placeholder="archivo"
-            disabled={pending}
             onChange={handleFile}
+            ref={inputRef}
+            disabled={invoice.pendiente}
           />
         </div>
       </div>

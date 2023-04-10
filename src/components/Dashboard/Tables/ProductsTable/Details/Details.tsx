@@ -13,6 +13,7 @@ import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
+import CategoriesTree from "../CategoriesTree/CategoriesTree";
 
 interface Props {
   product: Product;
@@ -25,15 +26,18 @@ export default function Details({ product, handleDetails }: Props) {
     (state: RootState) => state.attributes.capacidades
   );
   const colores = useSelector((state: RootState) => state.attributes.colores);
+  const categories = useSelector(
+    (state: RootState) => state.attributes.categories
+  );
   const [localProduct, setLocalProduct] = useState<Product>(product);
   const [isDisabled, setDisabled] = useState<boolean>(true);
-  const [imageUrls, setImageUrls] = useState<string[]>(product?.imgGenerica);
+  const [imageUrls, setImageUrls] = useState<string[]>(product?.Images);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Update", product);
     setLocalProduct(product);
-    setImageUrls(product?.imgGenerica);
+    setImageUrls(product?.Images);
   }, [product]);
 
   function handleDisabled(): void {
@@ -125,11 +129,26 @@ export default function Details({ product, handleDetails }: Props) {
     });
   }
 
+  function handleSelectedCategories(selected: string) {
+    setLocalProduct({ ...product, CategoryId: selected });
+  }
+
+  function handleCloseCategories(): void {
+    setCategoriesForm(!categoriesForm);
+  }
+
   return (
     <div className={style.container}>
+      {categoriesForm ? (
+        <CategoriesTree
+          categories={categories}
+          handleSelected={handleSelectedCategories}
+          handleClose={handleCloseCategories}
+        />
+      ) : null}
       <div className={style.details}>
         <div className={style.btnClose}>
-          <button className="btn btn-danger" onClick={handleDetails}>
+          <button className="btn btn-danger" type="button" onClick={handleDetails}>
             x
           </button>
         </div>
@@ -239,20 +258,34 @@ export default function Details({ product, handleDetails }: Props) {
               <label htmlFor="descCorta">Descripcion corta</label>
             </div>
 
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="categoria"
-                type="text"
-                value={localProduct?.CategoryId}
-                onChange={handleChange}
-                disabled={isDisabled}
-              />
-              <label htmlFor="categoria">Familia</label>
-            </div>
+            {isDisabled ? (
+              <div className="form-floating mb-3">
+                <input
+                  className="form-control"
+                  id="categoria"
+                  type="text"
+                  value={localProduct?.CategoryId}
+                  onChange={handleChange}
+                  disabled={isDisabled}
+                />
+                <label htmlFor="categoria">Categoria</label>
+              </div>)
+              : (
+                <div className={style.categoria}>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={handleCloseCategories}
+                  >
+                    Cambiar
+                  </button>
+                  <label htmlFor="categoria">{localProduct.CategoryId}</label>
+                </div>
+              )}
           </div>
           <div className={style.rightData}>
             <ImageEditor
+              isDisabled={isDisabled}
               imageUrls={imageUrls}
               setImageUrls={setImageUrls}
               imageFiles={imageFiles}

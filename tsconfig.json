@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "types": ["xlsx"],
     "lib": [
       "es6",
       "dom",

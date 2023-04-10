@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Supplier } from ".././../../../../interfaces";
-import { postSupplier } from "../../../../../redux/actions/suppliers";
+import { Client } from ".././../../../../interfaces";
+import { postClient } from "../../../../../redux/actions/clients";
 import swal from "sweetalert";
 
 import style from "./Form.module.css";
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function Form({ handleForm }: Props) {
-  const initialState: Supplier = {
+  const initialState: Client = {
     id: "",
     numero: 0,
     nombre: "",
@@ -26,32 +26,32 @@ export default function Form({ handleForm }: Props) {
     telefono: "",
   };
 
-  const [supplier, setSupplier] = useState(initialState);
+  const [client, setClient] = useState(initialState);
   const dispatch = useDispatch();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setSupplier({ ...supplier, [event.target.name]: event.target.value });
+    setClient({ ...client, [event.target.name]: event.target.value });
   }
 
   function handleClose(): void {
-    setSupplier(initialState);
+    setClient(initialState);
     handleForm();
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-/*     dispatch(loading());
-    dispatch<any>(postSupplier(supplier))
+    dispatch(loading());
+    dispatch<any>(postClient(client))
       .then(() => {
         handleClose();
         dispatch(closeLoading());
-        swal("Guardado", "Su proveedor se guardo correctamente", "success");
+        swal("Guardado", "Se guardo el cliente correctamente", "success");
       })
       .catch((err: any) => {
         dispatch(closeLoading());
-        swal("Error", "Hubo un error al guardar el nuevo proveedor", "error");
+        swal("Error", "Hubo un error al guardar el nuevo ", "error");
         console.log(err);
-      }); */
+      });
   }
 
   return (
@@ -74,7 +74,7 @@ export default function Form({ handleForm }: Props) {
               name="numero"
               type="text"
               className="form-control"
-              value={supplier.numero}
+              value={client.numero}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="numero">
@@ -88,7 +88,7 @@ export default function Form({ handleForm }: Props) {
               name="nombre"
               type="text"
               className="form-control"
-              value={supplier.nombre}
+              value={client.nombre}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="nombre">
@@ -102,7 +102,7 @@ export default function Form({ handleForm }: Props) {
               name="direccion"
               type="text"
               className="form-control"
-              value={supplier.direccion}
+              value={client.direccion}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="direccion">
@@ -116,7 +116,7 @@ export default function Form({ handleForm }: Props) {
               name="postal"
               type="text"
               className="form-control"
-              value={supplier.postal}
+              value={client.postal}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="postal">
@@ -130,7 +130,7 @@ export default function Form({ handleForm }: Props) {
               name="poblacion"
               type="text"
               className="form-control"
-              value={supplier.poblacion}
+              value={client.poblacion}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="poblacion">
@@ -144,7 +144,7 @@ export default function Form({ handleForm }: Props) {
               name="cifNif"
               type="text"
               className="form-control"
-              value={supplier.cifNif}
+              value={client.cifNif}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="cifNif">
@@ -158,7 +158,7 @@ export default function Form({ handleForm }: Props) {
               name="telefono"
               type="text"
               className="form-control"
-              value={supplier.telefono}
+              value={client.telefono}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="telefono">
