@@ -27,7 +27,8 @@ export default function calcularIVA(
         prices = {
           precioSinIVA: value,
           precioIVA: (Number(value) * 0.21).toFixed(2),
-          recargo: (Number(value) * 0.052).toFixed(2),
+          recargo: (Number(value) * 0.052).toFixed(2),  
+          total: value + (Number(value) * 0.21).toFixed(2) + (Number(value) * 0.052).toFixed(2),
         };
       }
       if (name === "precioIVA") {
@@ -35,6 +36,7 @@ export default function calcularIVA(
           precioSinIVA: (Number(value) / 0.21).toFixed(2),
           precioIVA: value,
           recargo: ((Number(value) / 0.21) * 0.052).toFixed(2),
+          total: (Number(value) / 0.21).toFixed(2) + value + ((Number(value) / 0.21) * 0.052).toFixed(2),
         };
       }
       break;
