@@ -19,8 +19,6 @@ export function postTransactions(
         transactions.push(response.data);
       }
 
-      console.log(transactions);
-
       dispatch({
         type: POST_TRANSACTIONS,
         payload: transactions,
@@ -41,8 +39,6 @@ export function getTransactions(): ThunkAction<
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
       const transactions = await axios.get("/transactions");
-
-      console.log(transactions);
 
       dispatch({
         type: GET_TRANSACTIONS,

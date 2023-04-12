@@ -7,8 +7,9 @@
 }
 
 .table{
+  flex-grow: 1;
   display: flex;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   width: 100%;
 }
 
@@ -64,6 +65,12 @@ input[type="search"]:active{
   border-radius: 10px;
   outline: 1px solid var(--border);
   overflow: hidden;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .contentCard {

@@ -22,14 +22,20 @@ import {
   GET_TRANSACTIONS,
   DELETE_TRANSACTION,
 } from "../actions/transactions";
+import {
+  GET_CONFIGURATIONS,
+  UPDATE_CONFIGURATIONS,
+} from "../actions/configurations";
 import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
 import { LOGIN, LOG_OUT } from "../actions/login/login";
 
 const initialState: RootState = {
-  currentUser: {
+  profile: {
     name: "",
+    user: "",
+    email: "",
   },
   users: [],
   attributes: {
@@ -53,6 +59,10 @@ const initialState: RootState = {
       InvoiceId: "",
     },
   ],
+  config: {
+    iva: 0,
+    recargo: 0,
+  },
   loading: false,
 };
 
@@ -61,6 +71,15 @@ export default function Reducer(
   action: AnyAction
 ) {
   switch (action.type) {
+    case LOGIN:
+      return {
+        ...state,
+        profile: {
+          name: action.payload.name,
+          user: action.payload.user,
+          email: action.payload.email,
+        },
+      };
     /* LOADING */
     case LOADING:
       return {
@@ -163,6 +182,15 @@ export default function Reducer(
         transactions: action.payload,
       };
 
+    case GET_CONFIGURATIONS:
+      return {
+        ...state,
+        config: {
+          iva: action.payload.iva,
+          recargo: action.payload.recargo,
+        },
+      };
+
     /* UPDATE METHOD*/
     case UPDATE_PRODUCT:
       return {
@@ -186,6 +214,12 @@ export default function Reducer(
         stock: state.stock.map((s) =>
           s.id === action.payload.id ? action.payload : s
         ),
+      };
+
+    case UPDATE_CONFIGURATIONS:
+      return {
+        ...state,
+        config: action.payload,
       };
 
     case DELETE_PRODUCT:

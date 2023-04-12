@@ -3,8 +3,10 @@ export interface Login {
   password: string;
 }
 
-export interface User {
+export interface Profile {
   name: string;
+  user: string;
+  email: string;
 }
 
 export interface Product {
@@ -85,9 +87,14 @@ export enum BarCode {
   EAN13,
 }
 
+export interface Config {
+  iva: number;
+  recargo: number;
+}
+
 export interface RootState {
-  currentUser: User;
-  users: User[];
+  profile: Profile;
+  users: Profile[];
   attributes: {
     capacidades: Array<string>;
     colores: Array<string>;
@@ -98,5 +105,6 @@ export interface RootState {
   stock: Array<Stock>;
   invoices: Array<Invoices>;
   transactions: Array<Transactions>;
+  config: Config;
   loading: boolean;
 }

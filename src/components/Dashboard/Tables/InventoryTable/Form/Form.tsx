@@ -57,12 +57,11 @@ const initialStock: Stock = {
 
 export default function Form({ handleClose }: Props) {
   const invoices = useSelector((state: RootState) => state.invoices);
-
+  const config = useSelector((state: RootState) => state.config);
   const [productsSelected, setProduct] = useState<string[]>([]);
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);
   const [stock, setStock] = useState<Stock[]>([]); // Datos de los productos seleccionados
   const [invoice, setInvoice] = useState<Invoices>(initialState); // Datos de la factura
-
   const [addProducts, setFormProducts] = useState<boolean>(false);
   const [addSupplier, setFormSuppliers] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -113,12 +112,24 @@ export default function Form({ handleClose }: Props) {
           case "precioSinIVA":
             return {
               ...s,
-              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
+              ...calcularIVA(
+                invoice.tipoImpositivo,
+                name,
+                Number(value),
+                config.iva,
+                config.recargo
+              ),
             };
           case "precioIVA":
             return {
               ...s,
-              ...calcularIVA(invoice.tipoImpositivo, name, Number(value)),
+              ...calcularIVA(
+                invoice.tipoImpositivo,
+                name,
+                Number(value),
+                config.iva,
+                config.recargo
+              ),
             };
           default:
             return {

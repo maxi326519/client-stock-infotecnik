@@ -1,0 +1,127 @@
+import { useDispatch, useSelector } from "react-redux";
+import { Config, RootState } from "../../../interfaces";
+import styles from "./Configuration.module.css";
+import { useEffect, useState } from "react";
+import { updateConfig } from "../../../redux/actions/configurations";
+import { closeLoading, loading } from "../../../redux/actions/loading/loading";
+import swal from "sweetalert";
+
+interface Props {
+  handleClose: () => void;
+}
+
+export default function Configuration({ handleClose }: Props) {
+  const dispatch = useDispatch();
+  const config: Config = useSelector((state: RootState) => state.config);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [editConfig, setEditConfig] = useState<Config>({
+    iva: 0,
+    recargo: 0,
+  });
+
+  useEffect(() => {
+    setEditConfig(config);
+  }, [config]);
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEditConfig({ ...editConfig, [event.target.name]: event.target.value });
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    dispatch(loading());
+    dispatch<any>(updateConfig(editConfig))
+      .then(() => {
+        dispatch(closeLoading());
+        setEdit(!edit);
+        swal(
+          "Actualizado",
+          "Se actualizó correctamente la configuración",
+          "success"
+        );
+      })
+      .catch((err: any) => {
+        console.log(err);
+        swal(
+          "Error",
+          "Ocurrió un error al actualizar la configuración, inténtelo más tarde",
+          "error"
+        );
+      });
+  }
+
+  function handleEdit() {
+    setEdit(!edit);
+  }
+
+  function handleCancel() {
+    setEditConfig(config);
+    setEdit(!edit);
+  }
+
+  return (
+    <div className={styles.background}>
+      <form className={styles.container} onSubmit={handleSubmit}>
+        <div className={styles.close}>
+          <h4>Configuracion</h4>
+          <button
+            className="btn btn-danger"
+            type="button"
+            onClick={handleClose}
+          >
+            x
+          </button>
+        </div>
+        <div>
+          <div className="form-floating mb-3">
+            <input
+              id="iva"
+              name="iva"
+              value={editConfig.iva}
+              type="number"
+              className="form-control"
+              onChange={handleChange}
+              disabled={!edit}
+            />
+            <label htmlFor="iva">I.V.A:</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              id="recargo"
+              name="recargo"
+              value={editConfig.recargo}
+              type="number"
+              className="form-control"
+              onChange={handleChange}
+              disabled={!edit}
+            />
+            <label htmlFor="recargo">Recargo:</label>
+          </div>
+        </div>
+        {edit ? (
+          <div className={styles.bntContainer}>
+            <button className="btn btn-primary" type="submit">
+              Guardar
+            </button>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleCancel}
+            >
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={handleEdit}
+          >
+            Editar
+          </button>
+        )}
+      </form>
+    </div>
+  );
+}
