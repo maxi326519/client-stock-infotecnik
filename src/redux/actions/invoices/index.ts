@@ -30,8 +30,12 @@ export function postInvoice(
       }
 
       const formatInvoice = {
-        ...newInventory,
+        fecha: newInventory.fecha,
+        numero: newInventory.numero,
+        pendiente: newInventory.pendiente,
+        archivo: newInventory.archivo,
         tipoImpositivo: impositivo,
+        supplier: newInventory.SupplierId,
         detalles: newInventory.detalles.map((stock: any) => {
           let tipoCodigoDeBarras = "";
 
@@ -42,48 +46,50 @@ export function postInvoice(
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code39) {
             tipoCodigoDeBarras = "Code39";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCA) {
-            tipoCodigoDeBarras = "UPCA";
+            tipoCodigoDeBarras = "UPC-A";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCE) {
-            tipoCodigoDeBarras = "UPCE";
+            tipoCodigoDeBarras = "UPC-E";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN8) {
             tipoCodigoDeBarras = "EAN8";
           } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN13) {
             tipoCodigoDeBarras = "EAN13";
           }
 
-          console.log(tipoCodigoDeBarras);
-          console.log(stock);
-          console.log(stock.tipoCodigoDeBarras);
-          console.log(Number(stock.tipoCodigoDeBarras));
+          console.log(stock.Images);
 
           return {
             estado: stock.estado,
             fechaAlta: stock.fechaAlta,
+            cantidad: stock.cantidad,
             catalogo: stock.catalogo,
             IMEISerie: stock.IMEISerie,
             tipoCodigoDeBarras,
             codigoDeBarras: stock.codigoDeBarras,
-            precioSinIVA: stock.precioSinIVA,
-            precioIVA: stock.precioIVA,
-            precioIVAINC: stock.precioIVAINC,
-            recargo: stock.recargo,
+            precioSinIVA: Number(stock.precioSinIVA),
+            precioIVA: Number(stock.precioIVA),
+            precioIVAINC: Number(stock.precioIVAINC),
+            recargo: Number(stock.recargo),
+            total: Number(stock.total),
             detalles: stock.detalles,
-            imagenes: [],
-            product: stock.ProductId,
+            Images: stock.Images || [],
+            productId: stock.ProductId,
+            supplierId: newInventory.SupplierId,
           };
         }),
       };
 
-      console.log(formatInvoice);
+      console.log("POST - Invoice", formatInvoice);
 
-      /*       const response = await axios.post("/invoices", formatInvoice); */
+      const response = await axios.post("/invoices", formatInvoice);
 
-      /*       dispatch({
+      console.log("POST response - Invoice", response.data);
+
+      dispatch({
         type: POST_INVOICE,
         payload: response.data,
-      }); */
+      });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error.message);
     }
   };
 }
@@ -103,7 +109,7 @@ export function getInvoice(): ThunkAction<
         payload: invoices.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -120,7 +126,7 @@ export function updateInvoice(
         payload: updateInventory,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

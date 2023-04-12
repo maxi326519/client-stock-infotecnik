@@ -1,6 +1,11 @@
 import { RootState } from "../../interfaces";
 import { AnyAction } from "redux";
-
+import {
+  POST_USER,
+  GET_USERS,
+  UPDATE_USER,
+  DELETE_USER,
+} from "../actions/user";
 import {
   POST_PRODUCT,
   GET_PRODUCT,
@@ -18,6 +23,12 @@ import {
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
 import {
+  POST_CLIENT,
+  GET_CLIENT,
+  UPDATE_CLIENT,
+  DELETE_CLIENT,
+} from "../actions/clients";
+import {
   POST_TRANSACTIONS,
   GET_TRANSACTIONS,
   DELETE_TRANSACTION,
@@ -33,8 +44,10 @@ import { LOGIN, LOG_OUT } from "../actions/login/login";
 
 const initialState: RootState = {
   profile: {
+    id: "",
+    rol: "",
+    userName: "",
     name: "",
-    user: "",
     email: "",
   },
   users: [],
@@ -45,20 +58,10 @@ const initialState: RootState = {
   },
   products: [],
   suppliers: [],
+  clients: [],
   stock: [],
   invoices: [],
-  transactions: [
-    {
-      id: "",
-      fecha: "15/03/2023",
-      fechaValor: "15/03/2023",
-      movimiento: "PRCU-2023-2279",
-      datos: "AXARNET COMUNICACIONES SL",
-      importe: -241.95,
-      saldo: 4144.48,
-      InvoiceId: "",
-    },
-  ],
+  transactions: [],
   config: {
     iva: 0,
     recargo: 0,
@@ -72,14 +75,12 @@ export default function Reducer(
 ) {
   switch (action.type) {
     case LOGIN:
+      localStorage.setItem("user", JSON.stringify(action.payload))
       return {
         ...state,
-        profile: {
-          name: action.payload.name,
-          user: action.payload.user,
-          email: action.payload.email,
-        },
-      };
+        profile: action.payload.name
+      }
+      
     /* LOADING */
     case LOADING:
       return {
@@ -105,11 +106,17 @@ export default function Reducer(
         suppliers: [...state.suppliers, action.payload],
       };
 
+    case POST_CLIENT:
+      return {
+        ...state,
+        clients: [...state.clients, action.payload],
+      };
+
     case POST_INVOICE:
       return {
         ...state,
         stock: [...state.stock, ...action.payload.inventory],
-        invoices: [...state.invoices, action.payload.invoce],
+        invoices: [...state.invoices, action.payload.invoice],
       };
 
     case POST_CATEGORIES:
@@ -145,6 +152,12 @@ export default function Reducer(
         transactions: action.payload,
       };
 
+    case POST_USER:
+      return {
+        ...state,
+        users: [...state.users, action.payload],
+      };
+
     /* GET METHOD*/
     case GET_PRODUCT:
       return {
@@ -156,6 +169,12 @@ export default function Reducer(
       return {
         ...state,
         suppliers: action.payload,
+      };
+
+    case GET_CLIENT:
+      return {
+        ...state,
+        clients: action.payload,
       };
 
     case GET_INVOICE:
@@ -222,6 +241,14 @@ export default function Reducer(
         config: action.payload,
       };
 
+    case UPDATE_USER:
+      return {
+        ...state,
+        users: state.users.map((user) =>
+          user.id === action.payload.id ? action.payload : user
+        ),
+      };
+
     case DELETE_PRODUCT:
       return {
         ...state,
@@ -232,6 +259,12 @@ export default function Reducer(
       return {
         ...state,
         suppliers: state.suppliers.filter((s) => s.id !== action.payload),
+      };
+
+    case DELETE_USER:
+      return {
+        ...state,
+        users: state.users.filter((user) => user.id !== action.payload),
       };
 
     default:

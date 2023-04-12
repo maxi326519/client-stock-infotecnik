@@ -1,14 +1,38 @@
-import { Product, Stock } from "../../../../../interfaces";
+import { useEffect, useState } from "react";
+import { Invoices, Product, Stock } from "../../../../../interfaces";
 
 import style from "./Details.module.css";
+import ImageEditor from "./ImageEditor/ImageEditor";
 
 interface Props {
   product: Product | undefined;
   stock: Stock | undefined;
+  invoice: Invoices | undefined;
   handleClose: (stock: Stock | null) => void;
 }
 
-export default function Details({ product, stock, handleClose }: Props) {
+export default function Details({ product, stock, invoice, handleClose }: Props) {
+
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    let imagesUrl: string[] = [];
+
+    console.log(product?.Images);
+    console.log(stock?.Images);
+
+    if (product) {
+      imagesUrl = product.Images
+    }
+    if (stock) {
+      imagesUrl = [...imagesUrl, ...stock.Images];
+    }
+
+    console.log(imagesUrl);
+
+    setImages(imagesUrl);
+  }, [product, stock])
+
   return (
     <div className={style.container}>
       <div className={style.details}>
@@ -90,7 +114,15 @@ export default function Details({ product, stock, handleClose }: Props) {
               <span className={style.title}>Precio IVA INC:</span>
               <span>{stock?.precioIVAINC}</span>
             </div>
+
+            {invoice?.archivo ?
+              <div className={style.dataContainer}>
+                <span className={style.title}>Factura:</span>
+                <a href={`${process.env.REACT_APP_API_URL}${invoice?.archivo}`}>Ver factura</a>
+              </div>
+              : null}
           </div>
+          <ImageEditor imageUrls={images} />
         </div>
       </div>
     </div>

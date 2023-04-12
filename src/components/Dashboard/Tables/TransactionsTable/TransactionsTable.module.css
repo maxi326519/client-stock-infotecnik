@@ -1,3 +1,7 @@
+.card{
+  overflow-y: scroll;
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat(2, 100px) repeat(2, 1fr) repeat(1, 100px) repeat(3, 80px);

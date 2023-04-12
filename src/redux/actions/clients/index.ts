@@ -1,32 +1,32 @@
 import { Dispatch, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { RootState, Supplier } from "../../../interfaces";
+import { RootState, Client } from "../../../interfaces";
 import axios from "axios";
 
-export const POST_SUPPLIER = "POST_SUPPLIER";
-export const GET_SUPPLIER = "GET_SUPPLIER";
-export const UPDATE_SUPPLIER = "UPDATE_SUPPLIER";
-export const DELETE_SUPPLIER = "DELETE_SUPPLIER";
+export const POST_CLIENT = "POST_CLIENT";
+export const GET_CLIENT = "GET_CLIENT";
+export const UPDATE_CLIENT = "UPDATE_CLIENT";
+export const DELETE_CLIENT = "DELETE_CLIENT";
 
-export function postSupplier(
-  newSupplier: Supplier
+export function postClient(
+  newClient: Client
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const supplier = {
-        numero: newSupplier.numero,
-        nombre: newSupplier.nombre,
-        direccion: newSupplier.direccion,
-        poblacion: newSupplier.poblacion,
-        postal: newSupplier.postal,
-        cifNif: newSupplier.cifNif,
-        telefono: newSupplier.telefono,
+      const client = {
+        numero: newClient.numero,
+        nombre: newClient.nombre,
+        direccion: newClient.direccion,
+        poblacion: newClient.poblacion,
+        postal: newClient.postal,
+        cifNif: newClient.cifNif,
+        telefono: newClient.telefono,
       };
 
-      const response = await axios.post("/suppliers", supplier);
+      const response = await axios.post("/clients", client);
 
       dispatch({
-        type: POST_SUPPLIER,
+        type: POST_CLIENT,
         payload: response.data,
       });
     } catch (error: any) {
@@ -36,7 +36,7 @@ export function postSupplier(
   };
 }
 
-export function getSuppliers(): ThunkAction<
+export function getClients(): ThunkAction<
   Promise<void>,
   RootState,
   null,
@@ -44,11 +44,11 @@ export function getSuppliers(): ThunkAction<
 > {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const suppliers = await axios.get("/suppliers");
+      const clients = await axios.get("/clients");
 
       dispatch({
-        type: GET_SUPPLIER,
-        payload: suppliers.data,
+        type: GET_CLIENT,
+        payload: clients.data,
       });
     } catch (error: any) {
       throw new Error(error.response ? error.response.data.error : error);
@@ -56,16 +56,16 @@ export function getSuppliers(): ThunkAction<
   };
 }
 
-export function updateSuppllier(
-  updateSupplier: Supplier
+export function updateClient(
+  updateClient: Client
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      await axios.patch("/suppliers", updateSupplier);
+      await axios.patch("/clients", updateClient);
 
       dispatch({
-        type: UPDATE_SUPPLIER,
-        payload: updateSupplier,
+        type: UPDATE_CLIENT,
+        payload: updateClient,
       });
     } catch (error: any) {
       throw new Error(error.response ? error.response.data.error : error);
@@ -73,17 +73,17 @@ export function updateSuppllier(
   };
 }
 
-export function deleteSuppllier(
-  supplierId: string
+export function deleteClient(
+  clientId: string
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      console.log("Supplier ID:", supplierId);
-      await axios.delete(`/suppliers/${supplierId}`);
+      console.log("Client ID:", clientId);
+      await axios.delete(`/clients/${clientId}`);
 
       dispatch({
-        type: DELETE_SUPPLIER,
-        payload: supplierId,
+        type: DELETE_CLIENT,
+        payload: clientId,
       });
     } catch (error: any) {
       throw new Error(error.response ? error.response.data.error : error);

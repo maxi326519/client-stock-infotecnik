@@ -3,10 +3,25 @@ export interface Login {
   password: string;
 }
 
-export interface Profile {
+export interface User {
+  id: string;
+  rol: string;
   name: string;
-  user: string;
+  userName: string;
   email: string;
+}
+
+export interface PostUser {
+  rol: string;
+  name: string;
+  userName: string;
+  email: string;
+  password: string;
+}
+
+export enum Rol {
+  Admin = "Admin",
+  Contador = "Contador",
 }
 
 export interface Product {
@@ -18,7 +33,7 @@ export interface Product {
   capacidad: string;
   descLarga: string;
   descCorta: string;
-  imgGenerica: string[];
+  Images: string[];
   CategoryId: string;
 }
 
@@ -32,21 +47,25 @@ export interface Supplier {
   cifNif: string;
   telefono: string;
 }
+
 export interface Stock {
   id: string;
-  estado: string;
   fechaAlta: string;
+  estado: string;
+  cantidad: number;
   catalogo: boolean;
-  IMEISerie: string /* enum[IMEI, nroSerie] */;
+  IMEISerie: string;
   tipoCodigoDeBarras: string;
   codigoDeBarras: string;
   precioSinIVA: number;
   precioIVA: number;
   precioIVAINC: number;
   recargo: number;
+  total: number;
   detalles: string;
-  imagen: string;
+  Images: string[];
   ProductId: string;
+  SupplierId: string;
   InvoiceId: string;
 }
 
@@ -58,7 +77,18 @@ export interface Invoices {
   archivo: string;
   tipoImpositivo: TipoImpositivo;
   SuipplierId: string;
-  ProductId: Stock[];
+  StockId: Stock[];
+}
+
+export interface Client {
+  id: string;
+  numero: number;
+  nombre: string;
+  direccion: string;
+  poblacion: string;
+  postal: number;
+  cifNif: string;
+  telefono: string;
 }
 
 export enum TipoImpositivo {
@@ -72,7 +102,7 @@ export interface Transactions {
   fecha: string;
   fechaValor: string;
   movimiento: string;
-  datos: string;
+  masDatos: string;
   importe: number;
   saldo: number;
   InvoiceId: string;
@@ -93,8 +123,8 @@ export interface Config {
 }
 
 export interface RootState {
-  profile: Profile;
-  users: Profile[];
+  profile: User;
+  users: User[];
   attributes: {
     capacidades: Array<string>;
     colores: Array<string>;
@@ -102,6 +132,7 @@ export interface RootState {
   };
   products: Array<Product>;
   suppliers: Array<Supplier>;
+  clients: Array<Client>;
   stock: Array<Stock>;
   invoices: Array<Invoices>;
   transactions: Array<Transactions>;

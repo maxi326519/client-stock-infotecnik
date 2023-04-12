@@ -17,7 +17,7 @@ export function getInventory(): ThunkAction<Promise<void>, RootState, null, AnyA
         payload: inventory.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -36,7 +36,7 @@ export function updateStock(
         payload: updateStock,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

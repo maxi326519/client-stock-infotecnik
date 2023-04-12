@@ -19,7 +19,18 @@ export default function ImportExcel({ handleData, handleClose }: Props) {
         const worksheetData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
         });
-        handleData(worksheetData);
+        let newData = worksheetData.slice(3);
+        newData = newData.filter((d: any) => d.length > 0);
+        newData = newData.map((d: any) => ({
+          fecha: XLSX.SSF.format("dd/mm/yyyy", d[0]),
+          fechaValor: XLSX.SSF.format("dd/mm/yyyy", d[1]),
+          movimiento: d[2],
+          masDatos: d[3],
+          importe: d[4],
+          saldo: d[5],
+        }))
+        console.log(newData);
+        handleData(newData);
       };
       reader.readAsBinaryString(event.target.files[0]);
     }

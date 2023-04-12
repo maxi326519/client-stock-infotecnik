@@ -8,18 +8,17 @@ export default function calcularIVA(
   recargo: number
 ) {
   let prices = {};
-
   switch (tipoImpositivo) {
     case TipoImpositivo.IVA:
       if (name === "precioSinIVA") {
         prices = {
           precioSinIVA: value,
-          precioIVA: (Number(value) * (1 + iva)).toFixed(2),
+          precioIVA: (Number(value) * (1 + iva / 100)).toFixed(2),
         };
       }
       if (name === "precioIVA") {
         prices = {
-          precioSinIVA: (Number(value) / (1 + iva)).toFixed(2),
+          precioSinIVA: (Number(value) / (1 + iva / 100)).toFixed(2),
           precioIVA: value,
         };
       }
@@ -28,13 +27,23 @@ export default function calcularIVA(
       if (name === "precioSinIVA") {
         prices = {
           precioSinIVA: value,
-          precioIVA: (Number(value) * (1 + iva + recargo)).toFixed(2),
+          precioIVA: (Number(value) * (iva / 100)).toFixed(2),
+          recargo: (Number(value) * (recargo / 100)).toFixed(2),
+          total:
+            value +
+            (Number(value) * (iva / 100)).toFixed(2) +
+            (Number(value) * (recargo / 100)).toFixed(2),
         };
       }
       if (name === "precioIVA") {
         prices = {
-          precioSinIVA: (Number(value) / (1 + iva + recargo)).toFixed(2),
+          precioSinIVA: (Number(value) / (iva / 100)).toFixed(2),
           precioIVA: value,
+          recargo: ((Number(value) / (iva / 100)) * (recargo / 100)).toFixed(2),
+          total:
+            (Number(value) / (iva / 100)).toFixed(2) +
+            value +
+            ((Number(value) / (iva / 100)) * (recargo / 100)).toFixed(2),
         };
       }
       break;

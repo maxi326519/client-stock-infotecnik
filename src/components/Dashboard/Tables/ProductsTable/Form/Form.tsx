@@ -9,7 +9,7 @@ import {
 } from "../../../../../redux/actions/loading/loading";
 
 import AddImages from "./AddImages/AddImages";
-import CategoriesTree from "./CategoriesTree/CategoriesTree";
+import CategoriesTree from "../CategoriesTree/CategoriesTree";
 
 import style from "./Form.module.css";
 import axios from "axios";
@@ -38,8 +38,8 @@ export default function Form({
     capacidad: "",
     descLarga: "",
     descCorta: "",
-    imgGenerica: [],
     CategoryId: "",
+    Images: [],
   };
   const categories = useSelector(
     (state: RootState) => state.attributes.categories
@@ -53,7 +53,7 @@ export default function Form({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const imagesUrl: string[] = [];
+    let imagesUrl: string[] = [];
 
     for (let i = 0; i < imageFiles.length; i++) {
       const formData = new FormData();
@@ -74,7 +74,7 @@ export default function Form({
 
     const newProduct = {
       ...product,
-      imgGenerica: imagesUrl,
+      Images: imagesUrl,
     };
 
     console.log(newProduct);

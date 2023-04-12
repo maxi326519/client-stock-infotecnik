@@ -16,6 +16,7 @@ import img from "../../../../../../../assets/svg/image.svg";
 const initialStock: Stock = {
   id: "",
   estado: "Nuevo",
+  cantidad: 1,
   catalogo: true,
   fechaAlta: new Date().toISOString().split("T")[0],
   IMEISerie: "",
@@ -25,14 +26,28 @@ const initialStock: Stock = {
   precioIVA: 0,
   precioIVAINC: 0,
   recargo: 0,
+  total: 0,
   detalles: "",
-  imagen: "",
+  Images: [],
   ProductId: "",
+  SupplierId: "",
   InvoiceId: "",
 };
 
+interface ImagesData {
+  stockId: string;
+  imageUrls: string[];
+  imageFiles: File[];
+}
+
 interface Props {
   stock: Stock;
+  images: ImagesData | undefined;
+  handleSaveImages: (
+    stockId: string,
+    imageUrls: string[],
+    imageFiles: File[]
+  ) => void;
   tipoImpositivo: TipoImpositivo;
   handleChange: (
     productId: string,
@@ -44,6 +59,8 @@ interface Props {
 
 export default function Row({
   stock,
+  images,
+  handleSaveImages,
   tipoImpositivo,
   handleChange,
   handleDuplicate,
@@ -65,24 +82,28 @@ export default function Row({
   function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const name: string = event.target.name;
     const value: string = event.target.value;
-    handleChange(stock.ProductId, name, value);
+    handleChange(stock.id, name, value);
   }
 
   function handleChangeSelect(event: React.ChangeEvent<HTMLSelectElement>) {
     const name: string = event.target.name;
     const value: string = event.target.value;
 
-    handleChange(stock.ProductId, name, value);
+    handleChange(stock.id, name, value);
   }
 
   function handleChangeCheck(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
     const value = event.target.checked;
     if (name === "temporal") {
-      handleChange(stock.ProductId, "estado", value ? "Temporal" : "Nuevo");
+      handleChange(stock.id, "estado", value ? "Temporal" : "Nuevo");
     } else if (name === "catalogo") {
-      handleChange(stock.ProductId, name, value);
+      handleChange(stock.id, name, value);
     }
+  }
+
+  function handleSubmitImages(imageUrls: string[], imageFiles: File[]) {
+    handleSaveImages(stock.id, imageUrls, imageFiles);
   }
 
   return (
@@ -90,8 +111,9 @@ export default function Row({
       {imagesForm ? (
         <AddImages
           handleClose={handleClose}
-          newStock={newStock}
-          setStock={setStock}
+          handleSubmit={handleSubmitImages}
+          imageUrls={images?.imageUrls}
+          imageFiles={images?.imageFiles}
         />
       ) : null}
       <div className={styles.item}>
@@ -102,8 +124,8 @@ export default function Row({
           <div className={styles.image} onClick={handleClose}>
             <img
               src={
-                currentProduct?.imgGenerica[0]
-                  ? `http://localhost:3001/${currentProduct?.imgGenerica[0]}`
+                currentProduct?.Images?.[0]
+                  ? `http://localhost:3001/images/${currentProduct?.Images[0]}`
                   : img
               }
               alt="img"
@@ -111,27 +133,20 @@ export default function Row({
           </div>
         </div>
         <div className={styles.inputs}>
-          <div className={styles.check}>
-            <div>
-              <input
-                id="temporal"
-                name="temporal"
-                type="checkbox"
-                onChange={handleChangeCheck}
-              />
-              <label htmlFor="temporal">Temporal</label>
+          {stock.estado !== "Temporal" ? (
+            <div className={styles.check}>
+              <div>
+                <input
+                  id="catalogo"
+                  name="catalogo"
+                  type="checkbox"
+                  checked={stock.catalogo}
+                  onChange={handleChangeCheck}
+                />
+                <label htmlFor="catalogo">Vista en catalogo</label>
+              </div>
             </div>
-            <div>
-              <input
-                id="catalogo"
-                name="catalogo"
-                type="checkbox"
-                checked={stock.catalogo}
-                onChange={handleChangeCheck}
-              />
-              <label htmlFor="catalogo">Vista en catalogo</label>
-            </div>
-          </div>
+          ) : null}
           <div className={styles.codes}>
             <div className="form-floating ">
               <select
@@ -176,19 +191,23 @@ export default function Row({
             className={
               tipoImpositivo === TipoImpositivo.recargo
                 ? styles.recargo
+                : tipoImpositivo === TipoImpositivo.REBU
+                ? styles.rebu
                 : styles.price
             }
           >
-            <div className="form-floating">
-              <input
-                className="form-control"
-                id="precioSinIVA"
-                name="precioSinIVA"
-                value={stock.precioSinIVA}
-                onChange={handleLocalChange}
-              />
-              <label htmlFor="precioSinIVA">Precio </label>
-            </div>
+            {tipoImpositivo !== TipoImpositivo.REBU ? (
+              <div className="form-floating">
+                <input
+                  className="form-control"
+                  id="precioSinIVA"
+                  name="precioSinIVA"
+                  value={stock.precioSinIVA}
+                  onChange={handleLocalChange}
+                />
+                <label htmlFor="precioSinIVA">Precio </label>
+              </div>
+            ) : null}
             <div className="form-floating">
               <input
                 className="form-control"
@@ -227,6 +246,7 @@ export default function Row({
                   className="form-control"
                   id="total"
                   name="total"
+                  value={stock.total}
                   onChange={handleLocalChange}
                 />
                 <label htmlFor="total">Total</label>
@@ -252,6 +272,16 @@ export default function Row({
       >
         +
       </button>
+      <div className="form-floating">
+        <input
+          className="form-control"
+          id="cantidad"
+          name="cantidad"
+          value={stock.cantidad}
+          onChange={handleLocalChange}
+        />
+        <label htmlFor="cantidad">Cantidad</label>
+      </div>
       <hr></hr>
     </div>
   );

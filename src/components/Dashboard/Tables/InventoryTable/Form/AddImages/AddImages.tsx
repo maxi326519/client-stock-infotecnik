@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Stock } from "../../../../../../interfaces";
+import { useEffect, useState } from "react";
 
 import img from "../../../../../../assets/svg/image.svg";
 
@@ -7,48 +6,124 @@ import styles from "./AddImages.module.css";
 
 interface Props {
   handleClose: () => void;
-  newStock: Stock;
-  setStock: (stock: Stock) => void;
+  handleSubmit: (urls: string[], files: File[]) => void;
+  imageUrls: string[] | undefined;
+  imageFiles: File[] | undefined;
 }
 
-export default function AddImages({ handleClose, newStock, setStock }: Props) {
-  const [image, setImage] = useState<string[]>([]);
+export default function ImageEditor({
+  handleClose,
+  handleSubmit,
+  imageUrls,
+  imageFiles,
+}: Props) {
+  const [selectedImage, setSelectedImage] = useState<string>(img);
 
-  function handleSaveImage(event: React.ChangeEvent<HTMLInputElement>) {
+  const [localImageUrls, setImageUrls] = useState<string[]>([]);
+  const [localImageFiles, setImageFiles] = useState<File[]>([]);
+
+  // Set selected image
+  useEffect(() => {
+    if (localImageUrls.length === 0) {
+      setSelectedImage(img);
+    } else {
+      setSelectedImage(localImageUrls[0]);
+    }
+  }, [localImageUrls]);
+
+  useEffect(() => {
+    if (imageUrls && imageFiles) {
+      setImageUrls(imageUrls);
+      setImageFiles(imageFiles);
+    }
+  }, [imageUrls, imageFiles])
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    if (file) setImage([...image, URL.createObjectURL(file)]);
+    if (file) {
+      setImageFiles([...localImageFiles, file]);
+      const url = URL.createObjectURL(file);
+
+      if (!localImageUrls.some((image) => image === url)) {
+        setImageUrls([...localImageUrls, URL.createObjectURL(file)]);
+      } else {
+        setSelectedImage(url);
+      }
+    }
+  }
+
+  function handleSave() {
+    handleSubmit(localImageUrls, localImageFiles);
+    handleClose();
+  }
+
+  function handleCancel() {
+    handleClose();
+  }
+
+  function handleSelect(url: string) {
+    setSelectedImage(url);
+  }
+
+  function handleRemove() {
+    setImageUrls(localImageUrls.filter((url: string) => url !== selectedImage));
   }
 
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
-        <div className={styles.close}>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
-        </div>
+      <div className={styles.form}>
         <div>
-          <img className={styles.icon} src={img} alt="img" />
+          <div className={styles.close}>
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={handleClose}
+            >
+              X
+            </button>
+          </div>
+          <div className={styles.imageContainer}>
+            <button
+              className={`btn btn-outline-danger ${styles.delete}`}
+              type="button"
+              onClick={handleRemove}
+            >
+              X
+            </button>
+            <img
+              className={styles.icon}
+              src={selectedImage}
+              alt="img"
+            />
+          </div>
           <div className="mb-3 form-floating">
-            <label className="form-control" htmlFor="images">Agregar otra imagen</label>
-            <input className="form-control" id="images" type="file" onChange={handleSaveImage} />
+            <label className="form-control" htmlFor="images">
+              Agregar otra imagen
+            </label>
+            <input
+              className="form-control"
+              id="images"
+              type="file"
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className={styles.imgList}>
-          {image.map((url) => (
-            <div className={styles.image}>
+          {localImageUrls.map((url: string) => (
+            <div
+              key={url}
+              className={styles.image}
+              onClick={() => handleSelect(url)}
+            >
               <img src={url} alt="product" />
             </div>
           ))}
         </div>
-        <button className="btn btn-success" type="button">
-          Guardar
-        </button>
-      </form>
+        <div className={styles.btnContainer}>
+          <button className="btn btn-primary" type="button" onClick={handleSave}>Guardar</button>
+          <button className="btn btn-danger" type="button" onClick={handleCancel}>Cancelar</button>
+        </div>
+      </div>
     </div>
   );
 }
