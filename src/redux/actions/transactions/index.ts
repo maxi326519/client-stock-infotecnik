@@ -3,9 +3,9 @@ import { ThunkAction } from "redux-thunk";
 import { RootState, Transactions } from "../../../interfaces";
 import axios from "axios";
 
-export const POST_TRANSACTIONS = "POST_TRANSACTIONS";
-export const GET_TRANSACTIONS = "GET_TRANSACTIONS";
-export const DELETE_TRANSACTION = "DELETE_TRANSACTION";
+export const POST_TRANSACTIONS: string = "POST_TRANSACTIONS";
+export const GET_TRANSACTIONS: string = "GET_TRANSACTIONS";
+export const DELETE_TRANSACTION: string = "DELETE_TRANSACTION";
 
 export function postTransactions(
   newTransactions: any[]

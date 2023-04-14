@@ -1,6 +1,6 @@
 import { Dispatch, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { RootState, PostUser, User, Rol } from "../../../interfaces";
+import { RootState, PostUser, User } from "../../../interfaces";
 import axios from "axios";
 
 export const POST_USER = "POST_USER";
@@ -20,8 +20,6 @@ export function postUser(
         email: newUser.email,
         password: newUser.password,
       };
-
-      console.log(user);
 
       const response = await axios.post("/user", user);
 
@@ -60,7 +58,7 @@ export function updateUser(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const response = await axios.patch("/user", user);
+      await axios.patch("/user", user);
 
       dispatch({
         type: UPDATE_USER,

@@ -5,8 +5,8 @@ import { Supplier, RootState } from "../../../../../../interfaces";
 import style from "./AddSupplier.module.css";
 
 interface Props {
-  supplierSelected: Supplier|null;
-  setSupplier: (selected: Supplier|null) => void;
+  supplierSelected: Supplier | null;
+  setSupplier: (selected: Supplier | null) => void;
   handleClose: () => void;
 }
 
@@ -15,20 +15,21 @@ export default function AddSupplier({
   setSupplier,
   handleClose,
 }: Props) {
-  const suppliers: Supplier[] = useSelector((state: RootState) => state.suppliers);
+  const suppliers: Supplier[] = useSelector(
+    (state: RootState) => state.suppliers
+  );
   const [rows, setRows] = useState<Supplier[]>([]);
-  const [selected, setSelected] = useState<Supplier|null>(null);
+  const [selected, setSelected] = useState<Supplier | null>(null);
 
   useEffect(() => {
     setSelected(supplierSelected);
-  }, []);
+  }, [supplierSelected]);
 
   useEffect(() => {
     setRows(suppliers);
   }, [suppliers]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+  function handleSubmit(): void {
     setSupplier(selected);
     handleClose();
     console.log(selected);
@@ -42,7 +43,8 @@ export default function AddSupplier({
         if (value === "") return true;
         if (p.id.toString() === value) return true;
         if (p.nombre.toLowerCase().includes(value.toLowerCase())) return true;
-        if (p.direccion.toLowerCase().includes(value.toLowerCase())) return true;
+        if (p.direccion.toLowerCase().includes(value.toLowerCase()))
+          return true;
         if (p.poblacion.toLowerCase().includes(value.toLowerCase()))
           return true;
         if (p.cifNif.toLowerCase().includes(value.toLowerCase())) return true;
@@ -67,16 +69,10 @@ export default function AddSupplier({
 
   return (
     <div className={style.container}>
-      <form className={style.window} onSubmit={handleSubmit}>
+      <div className={`toTop ${style.window}`}>
         <div className={style.close}>
-          <h4>Proveedor</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <h5>Seleccione un proveedor</h5>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.searchData}>
           <div>
@@ -114,10 +110,23 @@ export default function AddSupplier({
             </div>
           </div>
         </div>
-        <button className="btn btn-success" type="submit">
-          Agregar
-        </button>
-      </form>
+        <div className={style.btnContainer}>
+          <button
+            className="btn btn-success"
+            type="button"
+            onClick={handleSubmit}
+          >
+            Agregar
+          </button>
+          <button
+            className="btn btn-outline-success"
+            type="button"
+/*             onClick={handleOpenSupplierForm} */
+          >
+            Crear nuevo
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

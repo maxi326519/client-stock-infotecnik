@@ -1,12 +1,23 @@
-import users from "../../../assets/svg/users.svg";
-import inventory from "../../../assets/svg/inventory.svg";
-import products from "../../../assets/svg/products.svg";
-import supplier from "../../../assets/svg/supplier.svg";
-import clients from "../../../assets/svg/clients.svg";
-import invoices from "../../../assets/svg/invoices.svg";
-import bank from "../../../assets/svg/bank.svg";
+import users from "../../../assets/svg/sideBar/users.svg";
+import inventory from "../../../assets/svg/sideBar/inventory.svg";
+import product from "../../../assets/svg/sideBar/product.svg";
+import supplier from "../../../assets/svg/sideBar/supplier.svg";
+import clients from "../../../assets/svg/sideBar/clients.svg";
+import invoice from "../../../assets/svg/sideBar/invoice.svg";
+import bank from "../../../assets/svg/sideBar/bank.svg";
+import logo from "../../../assets/img/Infotecnik-logo.png"
 
 import styles from "./SideBar.module.css";
+
+const items = [
+  { name: "Usuarios", icon: users },
+  { name: "Inventario", icon: inventory },
+  { name: "Productos", icon: product },
+  { name: "Proveedores", icon: supplier },
+  { name: "Clientes", icon: clients },
+  { name: "Facturas", icon: invoice },
+  { name: "Movimientos", icon: bank },
+];
 
 interface Props {
   table: number;
@@ -16,67 +27,19 @@ interface Props {
 export default function SideBar({ table, changeTable }: Props) {
   return (
     <div className={styles.sideBar}>
-      <div className={styles.user}>
-        <div className={styles.containerImg}>
-          <img src={users} alt="user" />
-        </div>
+      <div className={styles.head}>
+        <img src={logo} alt="logo"/>
       </div>
-      <button
-        className={table === 1 ? styles.selected : "1"}
-        type="button"
-        onClick={() => changeTable(1)}
-      >
-        <img src={users} alt="users" />
-        Usuarios
-      </button>
-      <button
-        className={table === 2 ? styles.selected : "2"}
-        type="button"
-        onClick={() => changeTable(2)}
-      >
-        <img src={inventory} alt="inventory" />
-        Inventario
-      </button>
-      <button
-        className={table === 3 ? styles.selected : "3"}
-        type="button"
-        onClick={() => changeTable(3)}
-      >
-        <img src={products} alt="products" />
-        Productos
-      </button>
-      <button
-        className={table === 4 ? styles.selected : "4"}
-        type="button"
-        onClick={() => changeTable(4)}
-      >
-        <img src={supplier} alt="supplier" />
-        Proveedores
-      </button>
-      <button
-        className={table === 5 ? styles.selected : "5"}
-        type="button"
-        onClick={() => changeTable(5)}
-      >
-        <img src={clients} alt="clients" />
-        Clientes
-      </button>
-      <button
-        className={table === 6 ? styles.selected : "6"}
-        type="button"
-        onClick={() => changeTable(6)}
-      >
-        <img src={invoices} alt="invoices" />
-        Facturas
-      </button>
-      <button
-        className={table === 7 ? styles.selected : "7"}
-        type="button"
-        onClick={() => changeTable(7)}
-      >
-        <img src={bank} alt="movimientos" />
-        Movimientos
-      </button>
+      {items.map((item, i) => (
+        <button
+          className={table === i ? styles.selected : ""}
+          type="button"
+          onClick={() => changeTable(i)}
+        >
+          <img src={item.icon} alt="users" />
+          {item.name}
+        </button>
+      ))}
     </div>
   );
 }

@@ -2,7 +2,6 @@ import { RootState } from "../../interfaces";
 import { AnyAction } from "redux";
 import {
   POST_USER,
-  GET_USERS,
   UPDATE_USER,
   DELETE_USER,
 } from "../actions/user";
@@ -19,19 +18,15 @@ import {
 import {
   POST_SUPPLIER,
   GET_SUPPLIER,
-  UPDATE_SUPPLIER,
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
 import {
   POST_CLIENT,
   GET_CLIENT,
-  UPDATE_CLIENT,
-  DELETE_CLIENT,
 } from "../actions/clients";
 import {
   POST_TRANSACTIONS,
   GET_TRANSACTIONS,
-  DELETE_TRANSACTION,
 } from "../actions/transactions";
 import {
   GET_CONFIGURATIONS,
@@ -40,7 +35,7 @@ import {
 import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
-import { LOGIN, LOG_OUT } from "../actions/login/login";
+import { LOGIN, LOG_OUT, PRESISTENCE } from "../actions/login";
 
 const initialState: RootState = {
   profile: {
@@ -75,12 +70,42 @@ export default function Reducer(
 ) {
   switch (action.type) {
     case LOGIN:
-      localStorage.setItem("user", JSON.stringify(action.payload))
+      localStorage.setItem("user", JSON.stringify(action.payload));
       return {
         ...state,
-        profile: action.payload.name
-      }
-      
+        profile: {
+          id: action.payload.id,
+          rol: action.payload.rol,
+          userName: action.payload.userName,
+          name: action.payload.name,
+          email: action.payload.email,
+        },
+      };
+
+    case PRESISTENCE:
+      return {
+        ...state,
+        profile: {
+          id: action.payload.id,
+          rol: action.payload.rol,
+          userName: action.payload.userName,
+          name: action.payload.name,
+          email: action.payload.email,
+        },
+      };
+
+    case LOG_OUT:
+      return {
+        ...state,
+        profile: {
+          id: "",
+          rol: "",
+          userName: "",
+          name: "",
+          email: "",
+        },
+      };
+
     /* LOADING */
     case LOADING:
       return {

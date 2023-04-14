@@ -2,6 +2,8 @@
   display: flex;
   justify-content: right;
   padding: 10px 20px;
+  padding-bottom: 0;
+  background: var(--background);
 }
 
 .imgContainer{
@@ -22,14 +24,10 @@
   position: fixed;
   top: 60px;
   display: none;
-  border-radius: 5px;
-  background-color: grey;
-}
-
-.menuActive{
-  display: block;
   padding: 10px 0;
   list-style: none;
+  border-radius: 5px;
+  background-color: grey;
 }
 
 .menu li{
@@ -37,5 +35,9 @@
 }
 
 .menu li:hover{
-background-color: #2222;
+  background-color: #2222;
+}
+
+.backMenu{
+  display: block;
 }

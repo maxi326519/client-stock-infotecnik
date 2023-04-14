@@ -13,27 +13,6 @@ import AddImages from "../../AddImages/AddImages";
 import styles from "./Row.module.css";
 import img from "../../../../../../../assets/svg/image.svg";
 
-const initialStock: Stock = {
-  id: "",
-  estado: "Nuevo",
-  cantidad: 1,
-  catalogo: true,
-  fechaAlta: new Date().toISOString().split("T")[0],
-  IMEISerie: "",
-  tipoCodigoDeBarras: "",
-  codigoDeBarras: "",
-  precioSinIVA: 0,
-  precioIVA: 0,
-  precioIVAINC: 0,
-  recargo: 0,
-  total: 0,
-  detalles: "",
-  Images: [],
-  ProductId: "",
-  SupplierId: "",
-  InvoiceId: "",
-};
-
 interface ImagesData {
   stockId: string;
   imageUrls: string[];
@@ -55,6 +34,7 @@ interface Props {
     value: string | number | boolean
   ) => void;
   handleDuplicate: (stock: Stock) => void;
+  handleRemove: (stockId: string) => void;
 }
 
 export default function Row({
@@ -64,10 +44,10 @@ export default function Row({
   tipoImpositivo,
   handleChange,
   handleDuplicate,
+  handleRemove,
 }: Props) {
   const products = useSelector((state: RootState) => state.products);
   const [currentProduct, setCurrentProduct] = useState<Product>();
-  const [newStock, setStock] = useState<Stock>(initialStock);
   const [imagesForm, setImagesForm] = useState(false);
 
   useEffect(() => {
@@ -131,10 +111,20 @@ export default function Row({
               alt="img"
             />
           </div>
+          <div className="form-floating">
+            <input
+              className="form-control"
+              id="cantidad"
+              name="cantidad"
+              value={stock.cantidad}
+              onChange={handleLocalChange}
+            />
+            <label htmlFor="cantidad">Cantidad</label>
+          </div>
         </div>
         <div className={styles.inputs}>
           {stock.estado !== "Temporal" ? (
-            <div className={styles.check}>
+            <div className={styles.top}>
               <div>
                 <input
                   id="catalogo"
@@ -144,6 +134,19 @@ export default function Row({
                   onChange={handleChangeCheck}
                 />
                 <label htmlFor="catalogo">Vista en catalogo</label>
+              </div>
+              <button
+                className="btn btn-outline-success"
+                type="button"
+                onClick={() => handleDuplicate(stock)}
+              >
+                Duplicar
+              </button>
+              <div className={styles.btnClose}>
+                <div
+                  className="btn-close"
+                  onClick={() => handleRemove(stock.id)}
+                />
               </div>
             </div>
           ) : null}
@@ -264,23 +267,6 @@ export default function Row({
             <label htmlFor="detalles">Detalles</label>
           </div>
         </div>
-      </div>
-      <button
-        className="btn btn-primary"
-        type="button"
-        onClick={() => handleDuplicate(stock)}
-      >
-        +
-      </button>
-      <div className="form-floating">
-        <input
-          className="form-control"
-          id="cantidad"
-          name="cantidad"
-          value={stock.cantidad}
-          onChange={handleLocalChange}
-        />
-        <label htmlFor="cantidad">Cantidad</label>
       </div>
       <hr></hr>
     </div>

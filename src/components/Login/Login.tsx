@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Login } from "../../interfaces";
-import { login } from "../../redux/actions/login/login";
+import { login } from "../../redux/actions/login";
 import { loading, closeLoading } from "../../redux/actions/loading/loading";
 
 import "./Login.css";
 import { getAttributes, getProduct } from "../../redux/actions/products";
 import { getSuppliers } from "../../redux/actions/suppliers";
-import { getInvoice } from "../../redux/actions/invoices";
+/* import { getInvoice } from "../../redux/actions/invoices"; */
 import { getInventory } from "../../redux/actions/inventory";
 import swal from "sweetalert";
 import { getClients } from "../../redux/actions/clients";
 import { getTransactions } from "../../redux/actions/transactions";
 import { getUsers } from "../../redux/actions/user";
+import { getConfig } from "../../redux/actions/configurations";
 
 interface Error {
   email: string | null;
@@ -76,6 +77,7 @@ export default function Signin() {
             dispatch<any>(getInventory()),
             dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
+            dispatch<any>(getConfig()),
           ])
             .then(() => {
               dispatch(closeLoading());
@@ -122,7 +124,7 @@ export default function Signin() {
             id={error.email ? "floatingInputInvalid" : "user"}
             placeholder="name"
             onChange={handleChange}
-          /*             required */
+            /*             required */
           />
           <label htmlFor="floatingInput">Email</label>
           {!error.email ? null : <small>{error.email}</small>}
@@ -138,7 +140,7 @@ export default function Signin() {
             id={error.password ? "floatingInputInvalid" : "pass"}
             placeholder="Contraseña"
             onChange={handleChange}
-          /*             required */
+            /*             required */
           />
           <label htmlFor="floatingInput">Contraseña</label>
           {!error.password ? null : <small>{error.password}</small>}

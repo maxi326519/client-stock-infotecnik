@@ -1,19 +1,27 @@
 .productAdd {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px;
   margin-left: 20px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header button{
+  margin-left: 20px;
+  padding: 5px 10px;
 }
 
 .list{
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 600px;
   overflow-y: scroll;
-  border-radius: 10px;
+  border-radius: 5px;
   outline: 1px solid var(--border);
 }
 

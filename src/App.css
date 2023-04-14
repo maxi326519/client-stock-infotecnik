@@ -1,16 +1,20 @@
 :root {
-  --primary-color: #6433cc;
-  --primary-color--transp: #6433cc44;
+  --primary-color: #b3071b;
+  --primary-color--transp: #b3071b44;
 
-  /*   --background: #0d1117;
-  --panel: #21262d;
-  --border: #445566;
-  --font: white;
- */
-  --background: #ccc;
-  --panel: #fff;
+  --background: #fff;
+  --panel: #ccc;
   --border: #aaa;
   --font: black;
+
+  --dark-background: #0d1117;
+  --dark-panel: #21262d;
+  --dark-border: #445566;
+  --dark-font: white;
+}
+
+.App{
+  background-color: var(--background);
 }
 
 .btn-primary {
@@ -29,6 +33,8 @@
 }
 
 .btn-primary:focus {
+  position: relative;
+  z-index: 0px;
   background-color: var(--primary-color);
 }
 

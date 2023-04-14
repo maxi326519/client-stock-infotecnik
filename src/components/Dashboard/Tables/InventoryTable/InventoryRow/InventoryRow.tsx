@@ -25,7 +25,7 @@ export default function InventoryRow({
     if (product) {
       setProduct(product);
     }
-  }, [product]);
+  }, [products, stock]);
 
   return (
     <div className={style.row}>

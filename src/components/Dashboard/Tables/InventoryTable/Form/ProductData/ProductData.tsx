@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Stock, RootState, TipoImpositivo } from "../../../../../../interfaces";
+import { Stock, TipoImpositivo } from "../../../../../../interfaces";
 
 import Row from "./Row/Row";
 
@@ -15,7 +13,11 @@ interface ImagesData {
 interface Props {
   stock: Stock[];
   images: ImagesData[];
-  handleSaveImages: (stockId: string, imageUrls: string[], imageFiles: File[]) => void;
+  handleSaveImages: (
+    stockId: string,
+    imageUrls: string[],
+    imageFiles: File[]
+  ) => void;
   tipoImpositivo: TipoImpositivo;
   handleChange: (
     productId: string,
@@ -23,6 +25,8 @@ interface Props {
     value: string | number | boolean
   ) => void;
   handleDuplicate: (stock: Stock) => void;
+  handleRemove: (stockId: string) => void;
+  handleFormProduct: () => void;
 }
 
 export default function ProductData({
@@ -32,12 +36,21 @@ export default function ProductData({
   tipoImpositivo,
   handleChange,
   handleDuplicate,
+  handleRemove,
+  handleFormProduct,
 }: Props) {
-
-
   return (
     <div className={styles.productAdd}>
-      <h5>Productos</h5>
+      <div className={styles.header}>
+        <h5>Productos</h5>
+        <button
+          className="btn btn-outline-success"
+          type="button"
+          onClick={handleFormProduct}
+        >
+          Agregar
+        </button>
+      </div>
       <div className={styles.list}>
         {stock.map((s) => {
           return (
@@ -48,6 +61,7 @@ export default function ProductData({
               tipoImpositivo={tipoImpositivo}
               handleChange={handleChange}
               handleDuplicate={handleDuplicate}
+              handleRemove={handleRemove}
             />
           );
         })}

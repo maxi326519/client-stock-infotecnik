@@ -7,9 +7,8 @@ import Details from "./Details/Details";
 import SupplierDetails from "./SupplierDetails/SupplierDetails";
 import InventoryRow from "./InventoryRow/InventoryRow";
 
-import styles from "../../Dashboard.module.css";
 import style from "./InventoryTable.module.css";
-
+import add from "../../../../assets/svg/add.svg";
 interface Selection {
   product: Product;
   stock: Stock;
@@ -50,16 +49,22 @@ export default function InventoryTable() {
     if (stock === null) {
       setSelection(null);
     } else {
-      const product: Product = products.find((p: Product) => p.id === stock.ProductId);
-      const supplier: Supplier = suppliers.find((s: Supplier) => s.id === stock.SupplierId);
-      const invoice: Invoices = invoices.find((i: Invoices) => i.id === stock.InvoiceId);
+      const product: Product = products.find(
+        (p: Product) => p.id === stock.ProductId
+      );
+      const supplier: Supplier = suppliers.find(
+        (s: Supplier) => s.id === stock.SupplierId
+      );
+      const invoice: Invoices = invoices.find(
+        (i: Invoices) => i.id === stock.InvoiceId
+      );
 
       const selection: Selection = {
         product,
         stock,
         supplier,
         invoice,
-      }
+      };
       setSelection(selection);
     }
   }
@@ -75,7 +80,7 @@ export default function InventoryTable() {
   }
 
   return (
-    <div className={styles.dashboardList}>
+    <div className={`toLeft ${style.dashboardList}`}>
       {form ? <Form handleClose={handleCloseForm} /> : null}
       {details ? (
         <Details
@@ -92,18 +97,23 @@ export default function InventoryTable() {
         />
       ) : null}
       <h3>Inventario</h3>
-      <div className={styles.dashboardList__searchBar}>
+      <div className={style.dashboardList__searchBar}>
         <input
           className="form-control"
           type="search"
           placeholder="Buscar inventario"
           onChange={handleChangeSearch}
         />
-        <button className="btn btn-primary" type="button" onClick={handleCloseForm}>
-          Agregar inventario
+        <button
+          className="btn btn-success"
+          type="button"
+          onClick={handleCloseForm}
+        >
+          <img src={add} alt="add" />
+          <span>Nuevo inventario</span>
         </button>
       </div>
-      <div className={styles.dashboardList__grid}>
+      <div className={style.dashboardList__grid}>
         <div className={`${style.card} ${style.firstrow}`}>
           <span>Codigo de barras</span>
           <span>Nro de Serie</span>
@@ -116,14 +126,10 @@ export default function InventoryTable() {
           <span>Proveedor</span>
           <span>Detalle</span>
         </div>
-        <div className={styles.contentCard}>
+        <div className={style.contentCard}>
           {rows.length <= 0 ? (
-            <div className={styles.listEmpty}>
+            <div className={style.listEmpty}>
               <span>No hay inventario</span>
-              <span>¿Quieres agregar uno?</span>
-              <button className="btn btn-primary" onClick={handleCloseForm}>
-                Agregar Inventario
-              </button>
             </div>
           ) : (
             rows?.map((stock: Stock) => (

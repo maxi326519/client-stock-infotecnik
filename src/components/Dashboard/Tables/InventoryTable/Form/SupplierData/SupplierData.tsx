@@ -4,36 +4,55 @@ import styles from "./SupplierData.module.css";
 
 interface Props {
   supplier: Supplier | null;
+  handleFormSuppliers: () => void;
 }
 
-export default function SupplierData({ supplier }: Props) {
+export default function SupplierData({ supplier, handleFormSuppliers }: Props) {
   return (
     <div className={styles.container}>
       <hr></hr>
-      <h5>Proveedor</h5>
-      <div className={styles.data}>
-        <div>
-          <div className="form-floating">
-            <input className="form-control" id="nombre" value={supplier?.nombre}/>
-            <label className="form-label" htmlFor="nombre">Nombre</label>
-          </div>
-          <div className="form-floating">
-            <input className="form-control" id="direccion" type="text" value={supplier?.direccion}/>
-            <label className="form-label" htmlFor="direccion">Direccion</label>
-          </div>
-        </div>
-
-        <div>
-          <div className="form-floating">
-            <input className="form-control" id="telefono" value={supplier?.telefono}/>
-            <label className="form-label" htmlFor="telefono">Telefono</label>
-          </div>
-          <div className="form-floating">
-            <input className="form-control" id="cifNif" type="text" value={supplier?.cifNif}/>
-            <label className="form-label" htmlFor="cifNif">CIF / NIF</label>
-          </div>
-        </div>
+      <div className={styles.header}>
+        <h5>Proveedor</h5>
+        {supplier ? (
+          <button
+            className="btn btn-outline-success"
+            type="button"
+            onClick={handleFormSuppliers}
+          >
+            Cambiar
+          </button>
+        ) : null}
       </div>
+      {!supplier ? (
+        <div className={styles.panelAdd}>
+          <button
+            className="btn btn-outline-success"
+            type="button"
+            onClick={handleFormSuppliers}
+          >
+            Seleccionar
+          </button>
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          <div className={styles.container}>
+            <span className={styles.tittle}>Nombre:</span>
+            <span className={styles.data}>{supplier?.nombre}</span>
+          </div>
+          <div className={styles.container}>
+            <span className={styles.tittle}>Direccion:</span>
+            <span className={styles.data}>{supplier?.direccion}</span>
+          </div>
+          <div className={styles.container}>
+            <span className={styles.tittle}>Telefono:</span>
+            <span className={styles.data}>{supplier?.telefono}</span>
+          </div>
+          <div className={styles.container}>
+            <span className={styles.tittle}>CIF / NIF:</span>
+            <span className={styles.data}>{supplier?.cifNif}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

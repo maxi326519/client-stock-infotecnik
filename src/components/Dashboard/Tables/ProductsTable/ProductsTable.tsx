@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, Product } from "../../../../interfaces";
+import {
+  postCapacidades,
+  postColores,
+} from "../../../../redux/actions/products";
 
 import Form from "./Form/Form";
 import Details from "./Details/Details";
 import ProductRow from "./ProductRow/ProductRow";
-
-import styles from "../../Dashboard.module.css";
-import style from "./ProductsTable.module.css";
 import Capacidades from "./Capacidades/Capacidades";
 import Colores from "./Colores/Colores";
-import { postCapacidades, postColores } from "../../../../redux/actions/products";
+
+import style from "./ProductsTable.module.css";
+import add from "../../../../assets/svg/add.svg";
 
 export default function ProductTable() {
   const dispatch = useDispatch();
   const products: Product[] = useSelector((state: RootState) => state.products);
-  const capacidades = useSelector((state: RootState) => state.attributes.capacidades);
+  const capacidades = useSelector(
+    (state: RootState) => state.attributes.capacidades
+  );
   const colores = useSelector((state: RootState) => state.attributes.colores);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
@@ -52,7 +57,7 @@ export default function ProductTable() {
   }
 
   return (
-    <div className={styles.dashboardList}>
+    <div className={`toLeft ${style.dashboardList}`}>
       {form ? (
         <Form
           capacidades={capacidades}
@@ -80,35 +85,28 @@ export default function ProductTable() {
         />
       ) : null}
       <h3>Poductos</h3>
-      <div className={styles.dashboardList__searchBar}>
+      <div className={style.dashboardList__searchBar}>
         <input
           className="form-control"
           type="search"
           placeholder="Buscar producto"
         />
-        <button className="btn btn-primary" type="button" onClick={handleForm}>
-          Agregar producto
+        <button className="btn btn-success" type="button" onClick={handleForm}>
+          <img src={add} alt="add" />
+          <span>Nuevo producto</span>
         </button>
       </div>
-      <div className={styles.dashboardList__grid}>
-        <div className={`${style.row} ${styles.firstrow}`}>
+      <div className={style.dashboardList__grid}>
+        <div className={`${style.row} ${style.firstRow}`}>
           <span>Codigo</span>
           <span>Descripcion</span>
           <span>Cateogria</span>
           <span>Detalle</span>
         </div>
-        <div className={styles.contentCard}>
+        <div className={style.contentCard}>
           {rows.length <= 0 ? (
-            <div className={styles.listEmpty}>
+            <div className={style.listEmpty}>
               <span>No hay productos</span>
-              <span>¿Quieres agregar uno?</span>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleForm}
-              >
-                Agregar producto
-              </button>
             </div>
           ) : (
             rows?.map((product: Product) => (

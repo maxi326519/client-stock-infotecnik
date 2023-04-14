@@ -7,13 +7,12 @@ import {
   closeLoading,
   loading,
 } from "../../../../redux/actions/loading/loading";
+import swal from "sweetalert";
 
 import TransactionsRow from "./TransactionsRow/TransactionsRow";
 import ImportExcel from "./ImportExcel/ImportExcel";
 
-import styles from "../../Dashboard.module.css";
 import style from "./TransactionsTable.module.css";
-import swal from "sweetalert";
 
 export default function TransactionsTable() {
   const dispatch = useDispatch();
@@ -61,12 +60,12 @@ export default function TransactionsTable() {
   }
 
   return (
-    <div className={styles.dashboardList}>
+    <div className={`toLeft ${style.dashboardList}`}>
       {transactionForm ? (
         <ImportExcel handleData={handleData} handleClose={handleClose} />
       ) : null}
       <h3>Movimientos</h3>
-      <div className={styles.dashboardList__searchBar}>
+      <div className={style.dashboardList__searchBar}>
         <input
           className="form-control"
           type="search"
@@ -77,7 +76,7 @@ export default function TransactionsTable() {
           Importar
         </button>
       </div>
-      <div className={styles.dashboardList__grid}>
+      <div className={style.dashboardList__grid}>
         <div className={style.row}>
           <span>Fecha</span>
           <span>Fecha Valor</span>
@@ -88,9 +87,9 @@ export default function TransactionsTable() {
           <span className={style.buttons}>Vincular</span>
           <span className={style.buttons}>Eliminar</span>
         </div>
-        <div className={styles.contentCard}>
+        <div className={style.contentCard}>
           {rows.length <= 0 ? (
-            <div className={styles.listEmpty}>
+            <div className={style.listEmpty}>
               <span>No hay productos</span>
             </div>
           ) : (

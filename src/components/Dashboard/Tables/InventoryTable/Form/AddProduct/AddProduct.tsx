@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Product, RootState } from "../../../../../../interfaces";
 
-import Temporal from "../Temporal/Temporal";
-
 import style from "./AddProduct.module.css";
 
 interface Props {
@@ -17,23 +15,21 @@ export default function AddProduct({
   productsSelected,
   setProduct,
   handleClose,
-  handleTemporal
+  handleTemporal,
 }: Props) {
   const products: Product[] = useSelector((state: RootState) => state.products);
   const [rows, setRows] = useState<Product[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [temporal, setTemporal] = useState<boolean>(false);
 
   useEffect(() => {
     setSelected(productsSelected);
-  }, []);
+  }, [productsSelected]);
 
   useEffect(() => {
     setRows(products);
   }, [products]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+  function handleSubmit(): void {
     setProduct(selected);
     handleClose();
   }
@@ -75,16 +71,10 @@ export default function AddProduct({
 
   return (
     <div className={style.container}>
-      <form className={style.window} onSubmit={handleSubmit}>
+      <div className={`toTop ${style.window}`}>
         <div className={style.close}>
-          <h4>Productos</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <h5>Seleccione los productos</h5>
+          <div className="btn-close" onClick={handleClose}/>
         </div>
         <div className={style.searchData}>
           <div className={style.search}>
@@ -96,9 +86,6 @@ export default function AddProduct({
               placeholder="Buscar un producto"
               onChange={handleSearch}
             />
-            <button className="btn btn-success" type="button" onClick={handleTemporal}>
-              Temporal
-            </button>
           </div>
 
           <div className={style.table}>
@@ -117,7 +104,7 @@ export default function AddProduct({
                   }`}
                   onClick={() => handleSelect(p.id)}
                 >
-                  <span>{p.id}</span>
+                  <span>{p.codigo}</span>
                   <span>{p.marca}</span>
                   <span>{p.modelo}</span>
                   <span>{p.color}</span>
@@ -127,10 +114,30 @@ export default function AddProduct({
             </div>
           </div>
         </div>
-        <button className="btn btn-success" type="submit">
-          Agregar
-        </button>
-      </form>
+        <div className={style.btnContainer}>
+          <button
+            className="btn btn-success"
+            type="button"
+            onClick={handleSubmit}
+          >
+            Agregar
+          </button>
+          <button
+            className="btn btn-outline-success"
+            type="button"
+            onClick={handleTemporal}
+          >
+            Temporal
+          </button>
+          <button
+            className="btn btn-outline-success"
+            type="button"
+            /*             onClick={handleOpenProductForm} */
+          >
+            Crear nuevo
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

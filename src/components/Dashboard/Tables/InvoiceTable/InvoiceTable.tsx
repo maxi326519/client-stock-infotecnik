@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-
-import styles from "../../Dashboard.module.css";
-import style from "./InvoiceTable.module.css";
 import { Invoices, RootState } from "../../../../interfaces";
 import { useSelector } from "react-redux";
+
 import InvoiceRow from "./InvoiceRow/InvoiceRow";
+
+import style from "./InvoiceTable.module.css";
 
 export default function InvoiceTable() {
   const invoices = useSelector((state: RootState) => state.invoices);
@@ -30,9 +30,9 @@ export default function InvoiceTable() {
   function handleSupplier() {}
 
   return (
-    <div className={styles.dashboardList}>
+    <div className={`toLeft ${style.dashboardList}`}>
       <h3>Facturas</h3>
-      <div className={styles.dashboardList__searchBar}>
+      <div className={style.dashboardList__searchBar}>
         <input
           className="form-control"
           type="search"
@@ -43,7 +43,7 @@ export default function InvoiceTable() {
           <span>Facturas</span>
         </button>
       </div>
-      <div className={styles.dashboardList__grid}>
+      <div className={style.dashboardList__grid}>
         <div className={style.row}>
           <span>Fecha</span>
           <span>Numero</span>
@@ -56,7 +56,7 @@ export default function InvoiceTable() {
         </div>
         <div className={style.card}>
           {rows.length <= 0 ? (
-            <div className={styles.listEmpty}>
+            <div className={style.listEmpty}>
               <span>No hay productos</span>
             </div>
           ) : (

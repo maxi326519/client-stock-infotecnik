@@ -9,7 +9,7 @@ import NavBar from "./NavBar/NavBar";
 import Profile from "./Profile/Profile";
 
 export default function Dashboad() {
-  const [table, setTable] = useState(0);
+  const [table, setTable] = useState(1);
   const [configuration, setConfiguration] = useState<boolean>(false);
   const [profile, setProfile] = useState<boolean>(false);
 

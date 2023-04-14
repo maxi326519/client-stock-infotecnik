@@ -30,7 +30,9 @@ export default function Form({ handleForm }: Props) {
     setUser({ ...user, [event.target.name]: event.target.value });
   }
 
-  function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>): void {
+  function handleSelectChange(
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void {
     console.log(event.target.name, event.target.value);
     setUser({ ...user, [event.target.name]: event.target.value });
   }
@@ -61,13 +63,7 @@ export default function Form({ handleForm }: Props) {
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
           <h4>Nuevo usuario</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.inputs}>
           <div className="form-floating">

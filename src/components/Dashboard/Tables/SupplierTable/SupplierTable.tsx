@@ -4,7 +4,6 @@ import { RootState, Supplier } from "../../../../interfaces";
 import SupplierRows from "./SupplierRows/SupplierRows";
 import Form from "./Form/Form";
 
-import styles from "../../Dashboard.module.css";
 import style from "./SupplierTable.module.css";
 import { useSelector } from "react-redux";
 
@@ -26,10 +25,10 @@ export default function SupplierTable() {
   }
 
   return (
-    <div className={styles.dashboardList}>
+    <div className={`toLeft ${style.dashboardList}`}>
       {form ? <Form handleForm={handleForm} /> : null}
       <h3>Proveedores</h3>
-      <div className={styles.dashboardList__searchBar}>
+      <div className={style.dashboardList__searchBar}>
         <input
           className="form-control"
           type="search"
@@ -39,7 +38,7 @@ export default function SupplierTable() {
           <span>Agregar proveedor</span>
         </button>
       </div>
-      <div className={styles.dashboardList__grid}>
+      <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>
           <span>Numero</span>
           <span>Nombre</span>
@@ -51,9 +50,9 @@ export default function SupplierTable() {
           <span>Editar</span>
           <span>Eliminar</span>
         </div>
-        <div className={styles.contentCard}>
+        <div className={style.contentCard}>
           {rows.length <= 0 ? (
-            <div className={styles.listEmpty}>
+            <div className={style.listEmpty}>
               <span>No hay Proveedores</span>
               <span>¿Quieres agregar uno?</span>
               <button className="btn btn-primary" onClick={handleForm}>

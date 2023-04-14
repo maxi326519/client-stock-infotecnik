@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { postInvoice } from "../../../../../redux/actions/invoices";
 import { Supplier, TipoImpositivo } from "../../../../../interfaces";
 import { Stock, RootState, Invoices } from "../../../../../interfaces";
-import isBarCodeValid from "../../../../../functions/barCodes";
-import isValidIMEI from "../../../../../functions/IMEI";
+/* import isBarCodeValid from "../../../../../functions/barCodes";
+import isValidIMEI from "../../../../../functions/IMEI"; */
 import calcularIVA from "../../../../../functions/IVA";
 
 import AddProduct from "./AddProduct/AddProduct";
@@ -12,8 +12,6 @@ import AddSupplier from "./AddSupplier/AddSupplier";
 import ProductData from "./ProductData/ProductData";
 import InvoiceData from "./InvoiceData/InvoiceData";
 import SupplierData from "./SupplierData/SupplierData";
-import products from "../../../../../assets/svg/products.svg";
-import supplier from "../../../../../assets/svg/supplier.svg";
 
 import style from "./Form.module.css";
 import swal from "sweetalert";
@@ -66,7 +64,6 @@ const initialStock: Stock = {
 };
 
 export default function Form({ handleClose }: Props) {
-  const invoices = useSelector((state: RootState) => state.invoices);
   const config = useSelector((state: RootState) => state.config);
   const [images, setImages] = useState<ImagesData[]>([]);
   const [productsSelected, setProduct] = useState<string[]>([]);
@@ -89,7 +86,7 @@ export default function Form({ handleClose }: Props) {
     event.preventDefault();
 
     let invoiceURL: string = "";
-    let imagesList: Array<{ stockId: string, imagesUrls: string[] }> = [];
+    let imagesList: Array<{ stockId: string; imagesUrls: string[] }> = [];
 
     if (!invoice.pendiente && file) {
       const formData = new FormData();
@@ -128,23 +125,20 @@ export default function Form({ handleClose }: Props) {
 
       imagesList.push({
         stockId: image.stockId,
-        imagesUrls: url
+        imagesUrls: url,
       });
     }
-
-    console.log(imagesList);
 
     const newInvoice = {
       ...invoice,
       detalles: stock.map((stock: Stock) => ({
         ...stock,
-        Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)?.imagesUrls,
+        Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)
+          ?.imagesUrls,
       })),
       archivo: invoiceURL,
       SupplierId: supplierSelected?.id,
     };
-
-    console.log(newInvoice);
 
     dispatch(loading());
     dispatch<any>(postInvoice(newInvoice))
@@ -156,7 +150,11 @@ export default function Form({ handleClose }: Props) {
       .catch((err: any) => {
         console.log(err);
         dispatch(closeLoading());
-        swal("Error", `Hubo un error al guardar el nuevo inventario: ${err.message}`, "error");
+        swal(
+          "Error",
+          `Hubo un error al guardar el nuevo inventario: ${err.message}`,
+          "error"
+        );
       });
   }
 
@@ -213,22 +211,34 @@ export default function Form({ handleClose }: Props) {
     setStock(newStock);
   }
 
-  function handleValidation(stock: Stock, name: string, value: any) {
+  /*   function handleValidation(stock: Stock, name: string, value: any) {
     if (name === "codigoDeBarras") {
       console.log(isBarCodeValid(stock.tipoCodigoDeBarras, value));
     }
     if (name === "IMEISerie") {
       console.log(isValidIMEI(value));
     }
-  }
+  } */
 
   function handleDuplicate(newStock: Stock) {
-    const newStockList = [...stock, { ...newStock, id: (stock.length + 1).toString() }];
+    const newStockList = [
+      ...stock,
+      { ...newStock, id: (stock.length + 1).toString() },
+    ];
     setStock(newStockList);
   }
 
+  function handleRemove(stockId: string) {}
+
   function handleTemporal() {
-    const newStockList = [...stock, { ...initialStock, id: (stock.length + 1).toString(), estado: "Temporal" }];
+    const newStockList = [
+      ...stock,
+      {
+        ...initialStock,
+        id: (stock.length + 1).toString(),
+        estado: "Temporal",
+      },
+    ];
     setStock(newStockList);
     handleFormProduct();
   }
@@ -241,25 +251,35 @@ export default function Form({ handleClose }: Props) {
     setInvoice(initialState);
   }
 
-  function handleSaveImages(stockId: string, imageUrls: string[], imageFiles: File[]) {
-    const imageSelected: ImagesData | undefined = images.find((i: ImagesData) => i.stockId === stockId);
+  function handleSaveImages(
+    stockId: string,
+    imageUrls: string[],
+    imageFiles: File[]
+  ) {
+    const imageSelected: ImagesData | undefined = images.find(
+      (i: ImagesData) => i.stockId === stockId
+    );
     if (imageSelected) {
-      setImages(images.map((i: ImagesData) => (
-        i.stockId === stockId ? {
-          imageUrls,
-          imageFiles,
-          stockId
-        } : i
-      )));
+      setImages(
+        images.map((i: ImagesData) =>
+          i.stockId === stockId
+            ? {
+                imageUrls,
+                imageFiles,
+                stockId,
+              }
+            : i
+        )
+      );
     } else {
       setImages([
         ...images,
         {
           imageUrls,
           imageFiles,
-          stockId
-        }
-      ])
+          stockId,
+        },
+      ]);
     }
   }
 
@@ -273,7 +293,7 @@ export default function Form({ handleClose }: Props) {
   }
 
   return (
-    <div className={style.container}>
+    <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
       {addProducts ? (
         <AddProduct
           productsSelected={productsSelected}
@@ -289,64 +309,38 @@ export default function Form({ handleClose }: Props) {
           handleClose={handleFormSuppliers}
         />
       ) : null}
-      <form className={style.form} onSubmit={handleSubmit}>
-        <div className={style.close}>
-          <h4>Agregar inventario</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleLocalClose}
-          >
-            X
+      <div className={style.close}>
+        <h4>Agregar inventario</h4>
+        <div className="btn-close" onClick={handleLocalClose} />
+      </div>
+      <div className={style.flex}>
+        <div className={style.dataRight}>
+          <InvoiceData
+            invoice={invoice}
+            handleChange={handleChangeInvoice}
+            file={file}
+            setFile={setFile}
+          />
+          <SupplierData
+            supplier={supplierSelected}
+            handleFormSuppliers={handleFormSuppliers}
+          />
+          <button type="submit" className="btn btn-success">
+            Agregar inventario
           </button>
         </div>
-        <div className={style.data}>
-          <div className={style.flex}>
-            <div className={style.dataRight}>
-              <div className={style.containerButton}>
-                <button
-                  className="btn btn-outline-primary"
-                  type="button"
-                  onClick={handleFormProduct}
-                >
-                  <img src={products} alt="products" />
-                  <span>Productos</span>
-                </button>
-                <button
-                  className="btn btn-outline-primary"
-                  type="button"
-                  onClick={handleFormSuppliers}
-                >
-                  <img src={supplier} alt="supplier" />
-                  <span>Proveedor</span>
-                </button>
-              </div>
-
-              <InvoiceData
-                invoice={invoice}
-                handleChange={handleChangeInvoice}
-                file={file}
-                setFile={setFile}
-              />
-              <SupplierData supplier={supplierSelected} />
-              <button type="submit" className="btn btn-success">
-                Agregar inventario
-              </button>
-            </div>
-            {/* Products */}
-            {productsSelected.length > 0 ? (
-              <ProductData
-                stock={stock}
-                images={images}
-                handleSaveImages={handleSaveImages}
-                tipoImpositivo={invoice.tipoImpositivo}
-                handleChange={handleChangeProduct}
-                handleDuplicate={handleDuplicate}
-              />
-            ) : null}
-          </div>
-        </div>
-      </form>
-    </div>
+        {/* Products */}
+        <ProductData
+          stock={stock}
+          images={images}
+          handleSaveImages={handleSaveImages}
+          tipoImpositivo={invoice.tipoImpositivo}
+          handleChange={handleChangeProduct}
+          handleDuplicate={handleDuplicate}
+          handleRemove={handleRemove}
+          handleFormProduct={handleFormProduct}
+        />
+      </div>
+    </form>
   );
 }

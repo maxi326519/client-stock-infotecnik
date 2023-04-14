@@ -32,15 +32,17 @@ export default function NavBar({
   function handleLogOut() {}
 
   return (
-    <div className={styles.navBar}>
+    <div className={`toLeft ${styles.navBar}`}>
       <div className={styles.imgContainer} onClick={handleMenuActive}>
         <img src={user} alt="user" />
       </div>
-      <ul className={`${styles.menu} ${menu ? styles.menuActive : null}`}>
-        <li onClick={handleProfile}>Perfil</li>
-        <li onClick={handleConfiguration}>Configuracion</li>
-        <li onClick={handleLogOut}>Salir</li>
-      </ul>
+      <div className={`${styles.backMenu} ${menu ? styles.backActive : null}`}>
+        <ul className={styles.menu}>
+          <li onClick={handleProfile}>Perfil</li>
+          <li onClick={handleConfiguration}>Configuracion</li>
+          <li onClick={handleLogOut}>Salir</li>
+        </ul>
+      </div>
     </div>
   );
 }

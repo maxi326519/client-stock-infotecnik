@@ -115,16 +115,13 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
   }
 
   function getID(length: number) {
-    let id = length - 1;
-    while (true) {
+    for (let id = length - 1; ; id++) {
       if (data.some((node: any) => node[0] === id)) {
-        id++;
         continue;
       } else {
-        break;
+        return id;
       }
     }
-    return id;
   }
 
   function handleRemove() {

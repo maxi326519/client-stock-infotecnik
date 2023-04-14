@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as XLSX from "xlsx";
 
 import styles from "./ImportExcel.module.css";

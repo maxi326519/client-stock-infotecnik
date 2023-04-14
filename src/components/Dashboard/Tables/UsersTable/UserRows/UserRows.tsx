@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteSuppllier } from "../../../../../redux/actions/suppliers";
-import { PostUser, Rol, User } from "../../../../../interfaces";
-import swal from "sweetalert";
+import { deleteUser, updateUser } from "../../../../../redux/actions/user";
+import { Rol, User } from "../../../../../interfaces";
 import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
+import swal from "sweetalert";
 
 import edit from "../../../../../assets/svg/edit.svg";
 import save from "../../../../../assets/svg/save.svg";
@@ -14,7 +14,6 @@ import cancel from "../../../../../assets/svg/cancel.svg";
 import deleteSvg from "../../../../../assets/svg/delete.svg";
 
 import style from "./UserRows.module.css";
-import { deleteUser, updateUser } from "../../../../../redux/actions/user";
 
 interface Props {
   user: User;
@@ -37,9 +36,7 @@ export default function SupplieRows({ user }: Props) {
     setEditUser({ ...editUser, [event.target.name]: event.target.value });
   }
 
-  function handleUpdatePassword(){
-    
-  }
+  function handleUpdatePassword() {}
 
   function handleUpdate() {
     swal({
@@ -53,7 +50,11 @@ export default function SupplieRows({ user }: Props) {
         dispatch(loading());
         dispatch<any>(updateUser(editUser))
           .then(() => {
-            swal("Actualizado", "Se actualizó el proveedor con exito", "success");
+            swal(
+              "Actualizado",
+              "Se actualizó el proveedor con exito",
+              "success"
+            );
             dispatch(closeLoading());
           })
           .catch((err: any) => {
@@ -99,7 +100,9 @@ export default function SupplieRows({ user }: Props) {
 
   return (
     <div className={style.row}>
-      <label className={style.rolLabel} htmlFor="rol">.</label>
+      <label className={style.rolLabel} htmlFor="rol">
+        .
+      </label>
       <select
         id="rol"
         name="rol"
@@ -142,14 +145,15 @@ export default function SupplieRows({ user }: Props) {
       >
         Cambiar
       </button>
-      {isDisabled ? <button
-        className="btn btn-primary"
-        type="button"
-        onClick={handleDisabled}
-      >
-        <img src={edit} alt="edit" />
-      </button>
-        :
+      {isDisabled ? (
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={handleDisabled}
+        >
+          <img src={edit} alt="edit" />
+        </button>
+      ) : (
         <div>
           <button
             className="btn btn-success"
@@ -166,7 +170,7 @@ export default function SupplieRows({ user }: Props) {
             <img src={cancel} alt="edit" />
           </button>
         </div>
-      }
+      )}
       <button className="btn btn-danger" type="button" onClick={handleRemove}>
         <img src={deleteSvg} alt="delete" />
       </button>

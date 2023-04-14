@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Invoices, TipoImpositivo } from "../../../../../../interfaces";
 
 import styles from "./InvoiceData.module.css";
@@ -10,17 +10,21 @@ interface Props {
   setFile: (file: File) => void;
 }
 
-export default function InvoiceData({ invoice, handleChange, file, setFile }: Props) {
-
+export default function InvoiceData({
+  invoice,
+  handleChange,
+  file,
+  setFile,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!file) {
       if (inputRef.current) {
-        inputRef.current.value = '';
+        inputRef.current.value = "";
       }
     }
-  }, [file])
+  }, [file]);
 
   function handleCheck(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
@@ -38,7 +42,6 @@ export default function InvoiceData({ invoice, handleChange, file, setFile }: Pr
 
   function handleLocalSelect(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value;
-    const name = event.target.name;
 
     if (Number(value) === TipoImpositivo.IVA) {
       handleChange("tipoImpositivo", TipoImpositivo.IVA);
@@ -57,19 +60,7 @@ export default function InvoiceData({ invoice, handleChange, file, setFile }: Pr
 
   return (
     <div className={styles.container}>
-      <hr></hr>
       <h5>Factura</h5>
-      <div className={styles.pending}>
-        <input
-          id="pendiente"
-          name="pendiente"
-          type="checkbox"
-          checked={invoice.pendiente}
-          className="btn btn-success"
-          onChange={handleCheck}
-        />
-        <label htmlFor="pendiente">Pendiente</label>
-      </div>
       <div className={styles.data}>
         <div className="form-floating">
           <input
@@ -115,6 +106,18 @@ export default function InvoiceData({ invoice, handleChange, file, setFile }: Pr
           <label htmlFor="tipoImpositivo" className="form-label">
             Tipo Impositivo:
           </label>
+        </div>
+
+        <div className={styles.pending}>
+          <input
+            id="pendiente"
+            name="pendiente"
+            type="checkbox"
+            checked={invoice.pendiente}
+            className="btn btn-success"
+            onChange={handleCheck}
+          />
+          <label htmlFor="pendiente">Pendiente</label>
         </div>
 
         <div className="form-floating">

@@ -8,28 +8,26 @@ import Transactions from "./TransactionsTable/TransactionsTable";
 
 import styles from "../Dashboard.module.css";
 
+const tables = [
+  Users,
+  Inventory,
+  Products,
+  Supplier,
+  Clients,
+  Invoice,
+  Transactions,
+]
+
 interface Props {
   table: number;
 }
 
 export default function Tables({ table }: Props) {
+  const TableComponent = tables[table];
+
   return (
     <div className={styles.table}>
-      {table === 1 ? (
-        <Users />
-      ) : table === 2 ? (
-        <Inventory />
-      ) : table === 3 ? (
-        <Products />
-      ) : table === 4 ? (
-        <Supplier />
-      ) : table === 5 ? (
-        <Clients />
-      ) : table === 6 ? (
-        <Invoice />
-      ) : (
-        <Transactions />
-      )}
+      <TableComponent />
     </div>
   );
 }
