@@ -1,11 +1,14 @@
 import { useState } from "react";
-
-import styles from "./NavBar.module.css";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../../../redux/actions/login";
 
 import user from "../../../assets/svg/user.svg";
 import profile from "../../../assets/svg/user.svg";
 import config from "../../../assets/svg/menu/config.svg";
 import logout from "../../../assets/svg/menu/logout.svg";
+
+import styles from "./NavBar.module.css";
 
 interface Props {
   handleCloseProfile: () => void;
@@ -16,6 +19,8 @@ export default function NavBar({
   handleCloseProfile,
   handleCloseConfiguration,
 }: Props) {
+  const dispatch = useDispatch();
+  const redirect = useNavigate();
   const [menu, setMenu] = useState<boolean>(false);
 
   function handleMenuActive() {
@@ -32,7 +37,10 @@ export default function NavBar({
     handleCloseConfiguration();
   }
 
-  function handleLogOut() {}
+  function handleLogOut() {
+    dispatch(logOut())
+    redirect("/login");
+  }
 
   return (
     <div className={`toLeft ${styles.navBar}`}>

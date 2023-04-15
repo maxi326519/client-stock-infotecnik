@@ -1,10 +1,6 @@
 import { RootState } from "../../interfaces";
 import { AnyAction } from "redux";
-import {
-  POST_USER,
-  UPDATE_USER,
-  DELETE_USER,
-} from "../actions/user";
+import { POST_USER, UPDATE_USER, DELETE_USER } from "../actions/user";
 import {
   POST_PRODUCT,
   GET_PRODUCT,
@@ -20,14 +16,8 @@ import {
   GET_SUPPLIER,
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
-import {
-  POST_CLIENT,
-  GET_CLIENT,
-} from "../actions/clients";
-import {
-  POST_TRANSACTIONS,
-  GET_TRANSACTIONS,
-} from "../actions/transactions";
+import { POST_CLIENT, GET_CLIENT } from "../actions/clients";
+import { POST_TRANSACTIONS, GET_TRANSACTIONS } from "../actions/transactions";
 import {
   GET_CONFIGURATIONS,
   UPDATE_CONFIGURATIONS,
@@ -35,7 +25,7 @@ import {
 import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
-import { LOGIN, LOG_OUT, PRESISTENCE } from "../actions/login";
+import { LOGIN, LOGOUT, PRESISTENCE } from "../actions/login";
 
 const initialState: RootState = {
   profile: {
@@ -82,6 +72,21 @@ export default function Reducer(
         },
       };
 
+    case LOGOUT:
+      console.log("logout");
+      localStorage.clear();
+      console.log(localStorage.getItem("user"));
+      return {
+        ...state,
+        profile: {
+          id: "",
+          rol: "",
+          userName: "",
+          name: "",
+          email: "",
+        },
+      };
+
     case PRESISTENCE:
       return {
         ...state,
@@ -91,18 +96,6 @@ export default function Reducer(
           userName: action.payload.userName,
           name: action.payload.name,
           email: action.payload.email,
-        },
-      };
-
-    case LOG_OUT:
-      return {
-        ...state,
-        profile: {
-          id: "",
-          rol: "",
-          userName: "",
-          name: "",
-          email: "",
         },
       };
 

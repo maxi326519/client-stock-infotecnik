@@ -16,9 +16,6 @@ export function getConfig(): ThunkAction<
     try {
       const configurations = await axios.get("/configurations");
 
-      console.log(configurations);
-      console.log(configurations.data);
-
       dispatch({
         type: GET_CONFIGURATIONS,
         payload: configurations.data,

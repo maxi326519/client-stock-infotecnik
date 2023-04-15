@@ -4,7 +4,7 @@ import { Login, RootState, User } from "../../../interfaces";
 import axios from "axios";
 
 export const LOGIN = "LOGIN";
-export const LOG_OUT = "LOG_OUT";
+export const LOGOUT = "LOGOUT";
 export const PRESISTENCE = "PRESISTENCE";
 
 export function login(
@@ -24,18 +24,9 @@ export function login(
   };
 }
 
-export function logOut(
-  user: Login
-): ThunkAction<Promise<void>, RootState, null, AnyAction> {
-  return async (dispatch: Dispatch<AnyAction>) => {
-    try {
-      dispatch({
-        type: LOG_OUT,
-        payload: null,
-      });
-    } catch (error: any) {
-      throw new Error(error.response ? error.response.data.error : error);
-    }
+export function logOut() {
+  return {
+    type: LOGOUT,
   };
 }
 
