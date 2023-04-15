@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import InvoiceRow from "./InvoiceRow/InvoiceRow";
 
 import style from "./InvoiceTable.module.css";
+import add from "../../../../assets/svg/add.svg";
 
 export default function InvoiceTable() {
   const invoices = useSelector((state: RootState) => state.invoices);
@@ -29,6 +30,10 @@ export default function InvoiceTable() {
 
   function handleSupplier() {}
 
+  function handleForm(){
+
+  }
+
   return (
     <div className={`toLeft ${style.dashboardList}`}>
       <h3>Facturas</h3>
@@ -39,12 +44,13 @@ export default function InvoiceTable() {
           placeholder="Buscar factura"
           onChange={handleSearchChange}
         />
-        <button className="btn btn-primary" type="button">
-          <span>Facturas</span>
+        <button className="btn btn-success" type="button" onClick={handleForm}>
+          <img src={add} alt="add" />
+          <span>Nuevo Facturas</span>
         </button>
       </div>
       <div className={style.dashboardList__grid}>
-        <div className={style.row}>
+        <div className={`${style.row} ${style.firstRow}`}>
           <span>Fecha</span>
           <span>Numero</span>
           <span>Archivo</span>
@@ -54,7 +60,7 @@ export default function InvoiceTable() {
           <span>Proveedor</span>
           <span>Eliminar</span>
         </div>
-        <div className={style.card}>
+        <div className={style.contentCard}>
           {rows.length <= 0 ? (
             <div className={style.listEmpty}>
               <span>No hay productos</span>

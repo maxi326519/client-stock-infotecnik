@@ -48,33 +48,29 @@
   height: 100%;
 }
 
-.edit-buttons .btn-primary{
+.edit-buttons .btn-primary {
   width: 100%;
 }
 
-.edit-buttons .btn-success{
+.edit-buttons .btn-success {
   width: 50%;
   margin-right: 5px;
 }
 
-.edit-buttons .btn-danger{
+.edit-buttons .btn-danger {
   width: 45%;
 }
 
-.row{
+.row {
   display: grid;
-  grid-template-columns:repeat(4, 1fr) repeat(3, 80px);
+  grid-template-columns: repeat(4, 1fr) repeat(3, 80px);
   grid-template-rows: 1fr;
   gap: 10px;
   padding: 10px;
   outline: 1px solid var(--border);
 }
 
-.row span{
-  border-right: 1px solid var(--border);
-}
-
-.firstRow{
+.firstRow {
   padding-right: 20px;
   color: white;
   background-color: var(--dark-panel);

@@ -16,12 +16,15 @@ export function getConfig(): ThunkAction<
     try {
       const configurations = await axios.get("/configurations");
 
+      console.log(configurations);
+      console.log(configurations.data);
+
       dispatch({
         type: GET_CONFIGURATIONS,
         payload: configurations.data,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }
@@ -38,7 +41,7 @@ export function updateConfig(
         payload: updateConfig,
       });
     } catch (error: any) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response ? error.response.data.error : error);
     }
   };
 }

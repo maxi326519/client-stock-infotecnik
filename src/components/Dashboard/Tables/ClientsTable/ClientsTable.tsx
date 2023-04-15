@@ -6,6 +6,7 @@ import ClientRows from "./ClientRows/ClientRows";
 import Form from "./Form/Form";
 
 import style from "./ClientsTable.module.css";
+import add from "../../../../assets/svg/add.svg";
 
 export default function ClientsTable() {
   const client = useSelector((state: RootState) => state.clients);
@@ -30,8 +31,9 @@ export default function ClientsTable() {
           type="search"
           placeholder="Buscar cliente"
         />
-        <button className="btn btn-primary" type="button" onClick={handleForm}>
-          <span>Agregar cliente</span>
+        <button className="btn btn-success" type="button" onClick={handleForm}>
+          <img src={add} alt="add" />
+          <span>Nuevo cliente</span>
         </button>
       </div>
       <div className={style.dashboardList__grid}>
@@ -50,10 +52,6 @@ export default function ClientsTable() {
           {rows.length <= 0 ? (
             <div className={style.listEmpty}>
               <span>No hay clientes</span>
-              <span>¿Quieres agregar uno?</span>
-              <button className="btn btn-primary" onClick={handleForm}>
-                <span>Agregar cliente</span>
-              </button>
             </div>
           ) : (
             rows?.map((client: Client) => (

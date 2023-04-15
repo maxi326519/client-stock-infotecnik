@@ -74,15 +74,8 @@
   outline: 1px solid var(--border);
 }
 
-.row span {
-  border-right: 1px solid var(--border);
-}
-
-.firstrow {
-  padding-right: 25px;
-}
-
-.buttons {
-  text-align: center;
-  padding: 0px !important;
+.firstRow {
+  padding-right: 20px;
+  color: white;
+  background-color: var(--dark-panel);
 }

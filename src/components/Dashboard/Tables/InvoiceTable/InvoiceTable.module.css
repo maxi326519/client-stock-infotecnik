@@ -30,7 +30,6 @@
 
 .dashboardList__grid {
   flex-grow: 1;
-  border-radius: 10px;
   outline: 1px solid var(--border);
   overflow: hidden;
 }
@@ -49,16 +48,16 @@
   height: 100%;
 }
 
-.edit-buttons .btn-primary{
+.edit-buttons .btn-primary {
   width: 100%;
 }
 
-.edit-buttons .btn-success{
+.edit-buttons .btn-success {
   width: 50%;
   margin-right: 5px;
 }
 
-.edit-buttons .btn-danger{
+.edit-buttons .btn-danger {
   width: 45%;
 }
 
@@ -71,11 +70,8 @@
   outline: 1px solid var(--border);
 }
 
-.row span {
-  border-right: 1px solid var(--border);
+.firstRow {
+  padding-right: 20px;
+  color: white;
+  background-color: var(--dark-panel);
 }
-
-.firstrow {
-  padding-right: 25px;
-}
-

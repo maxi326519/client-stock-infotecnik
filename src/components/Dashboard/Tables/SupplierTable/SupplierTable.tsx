@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { RootState, Supplier } from "../../../../interfaces";
+import { useSelector } from "react-redux";
 
 import SupplierRows from "./SupplierRows/SupplierRows";
 import Form from "./Form/Form";
 
 import style from "./SupplierTable.module.css";
-import { useSelector } from "react-redux";
+import add from "../../../../assets/svg/add.svg";
 
 /* interface Rows {
   suppliers: Array<[Supplier]>
@@ -34,8 +35,9 @@ export default function SupplierTable() {
           type="search"
           placeholder="Buscar proveedor"
         />
-        <button className="btn btn-primary" type="button" onClick={handleForm}>
-          <span>Agregar proveedor</span>
+        <button className="btn btn-success" type="button" onClick={handleForm}>
+          <img src={add} alt="add" />
+          <span>Nuevo proveedor</span>
         </button>
       </div>
       <div className={style.dashboardList__grid}>
@@ -54,10 +56,6 @@ export default function SupplierTable() {
           {rows.length <= 0 ? (
             <div className={style.listEmpty}>
               <span>No hay Proveedores</span>
-              <span>¿Quieres agregar uno?</span>
-              <button className="btn btn-primary" onClick={handleForm}>
-                <span>Agregar proveedor</span>
-              </button>
             </div>
           ) : (
             rows?.map((supplier: Supplier) => (

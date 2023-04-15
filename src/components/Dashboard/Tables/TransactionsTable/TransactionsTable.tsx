@@ -13,6 +13,7 @@ import TransactionsRow from "./TransactionsRow/TransactionsRow";
 import ImportExcel from "./ImportExcel/ImportExcel";
 
 import style from "./TransactionsTable.module.css";
+import importSvg from "../../../../assets/svg/import.svg";
 
 export default function TransactionsTable() {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ export default function TransactionsTable() {
     setSearch(value);
   }
 
-  function handleInvoice(): void { }
+  function handleInvoice(): void {}
 
   function handleData(data: any) {
     dispatch(loading());
@@ -72,25 +73,26 @@ export default function TransactionsTable() {
           placeholder="Buscar movimiento"
           onChange={handleSearchChange}
         />
-        <button className="btn btn-primary" type="button" onClick={handleClose}>
-          Importar
+        <button className="btn btn-success" type="button" onClick={handleClose}>
+          <img src={importSvg} alt="importSvg" />
+          <span>Importar</span>
         </button>
       </div>
       <div className={style.dashboardList__grid}>
-        <div className={style.row}>
+        <div className={`${style.row} ${style.firstRow}`}>
           <span>Fecha</span>
           <span>Fecha Valor</span>
           <span>Movimiento</span>
           <span>Mas datos</span>
           <span>Importe</span>
-          <span className={style.buttons}>Factura</span>
-          <span className={style.buttons}>Vincular</span>
-          <span className={style.buttons}>Eliminar</span>
+          <span>Factura</span>
+          <span>Vincular</span>
+          <span>Eliminar</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (
             <div className={style.listEmpty}>
-              <span>No hay productos</span>
+              <span>No hay movimientos</span>
             </div>
           ) : (
             rows?.map((transaction: Transactions) => (
