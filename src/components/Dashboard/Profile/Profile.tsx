@@ -16,7 +16,7 @@ export default function Profile({ handleClose }: Props) {
     userName: "",
     email: "",
   });
-  const [edit, setEdit] = useState();
+  const [isDisabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     setEditUser(profile);
@@ -32,27 +32,23 @@ export default function Profile({ handleClose }: Props) {
   }
 
   function handleEdit() {
-    setEdit(edit);
+    setDisabled(!isDisabled);
   }
 
   function handleCancel() {
-    setEdit(edit);
+    setDisabled(!isDisabled);
   }
+
+  function handleChangePassword() {}
 
   return (
     <div className={styles.background}>
-      <form className={styles.container} onSubmit={handleSubmit}>
+      <form className={`toTop ${styles.container}`} onSubmit={handleSubmit}>
         <div className={styles.close}>
-          <h4>Perfil</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            x
-          </button>
+          <h5>Perfil</h5>
+          <div className="btn-close" onClick={handleClose} />
         </div>
-        <div>
+        <div className={styles.inputs}>
           <div className="form-floating mb-3">
             <input
               id="name"
@@ -60,6 +56,7 @@ export default function Profile({ handleClose }: Props) {
               value={editUser.name}
               className="form-control"
               onChange={handleChange}
+              disabled={isDisabled}
             />
             <label htmlFor="name">Nombre:</label>
           </div>
@@ -70,6 +67,7 @@ export default function Profile({ handleClose }: Props) {
               value={editUser.userName}
               className="form-control"
               onChange={handleChange}
+              disabled={isDisabled}
             />
             <label htmlFor="userName">Usuario:</label>
           </div>
@@ -80,17 +78,27 @@ export default function Profile({ handleClose }: Props) {
               value={editUser.email}
               className="form-control"
               onChange={handleChange}
+              disabled={isDisabled}
             />
             <label htmlFor="email">Correo:</label>
           </div>
+          {!isDisabled ? (
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              onClick={handleChangePassword}
+            >
+              Cambiar contraseña
+            </button>
+          ) : null}
         </div>
-        {edit ? (
-          <div>
-            <button className="btn btn-primary" type="submit">
+        {!isDisabled ? (
+          <div className={styles.btnContainer}>
+            <button className="btn btn-success" type="submit">
               Guardar
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-danger"
               type="button"
               onClick={handleCancel}
             >
@@ -99,7 +107,7 @@ export default function Profile({ handleClose }: Props) {
           </div>
         ) : (
           <button
-            className="btn btn-primary"
+            className="btn btn-success"
             type="button"
             onClick={handleEdit}
           >

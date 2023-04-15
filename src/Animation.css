@@ -5,7 +5,7 @@
 
 .toTop{
   animation-name: to-top;
-  animation-duration: 0.5s;
+  animation-duration: 0.2s;
 }
 
 @keyframes to-left {

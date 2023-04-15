@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Config, RootState } from "../../../interfaces";
-import styles from "./Configuration.module.css";
 import { useEffect, useState } from "react";
 import { updateConfig } from "../../../redux/actions/configurations";
 import { closeLoading, loading } from "../../../redux/actions/loading/loading";
 import swal from "sweetalert";
+
+import styles from "./Configuration.module.css";
+import configSvg from "../../../assets/svg/menu/config.svg";
 
 interface Props {
   handleClose: () => void;
@@ -62,16 +64,11 @@ export default function Configuration({ handleClose }: Props) {
 
   return (
     <div className={styles.background}>
-      <form className={styles.container} onSubmit={handleSubmit}>
+      <form className={`toTop ${styles.container}`} onSubmit={handleSubmit}>
         <div className={styles.close}>
-          <h4>Configuracion</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            x
-          </button>
+          <img src={configSvg} alt="config"/>
+          <h5>Configuracion</h5>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div>
           <div className="form-floating mb-3">
@@ -101,11 +98,11 @@ export default function Configuration({ handleClose }: Props) {
         </div>
         {edit ? (
           <div className={styles.bntContainer}>
-            <button className="btn btn-primary" type="submit">
+            <button className="btn btn-success" type="submit">
               Guardar
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-danger"
               type="button"
               onClick={handleCancel}
             >
@@ -114,7 +111,7 @@ export default function Configuration({ handleClose }: Props) {
           </div>
         ) : (
           <button
-            className="btn btn-primary"
+            className="btn btn-success"
             type="button"
             onClick={handleEdit}
           >
