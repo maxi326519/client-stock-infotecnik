@@ -30,7 +30,6 @@
 
 .dashboardList__grid {
   flex-grow: 1;
-  border-radius: 10px;
   outline: 1px solid var(--border);
   overflow: hidden;
 }

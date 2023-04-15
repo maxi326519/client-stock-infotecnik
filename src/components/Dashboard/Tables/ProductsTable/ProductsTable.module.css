@@ -71,10 +71,6 @@
   background-color: #fff1;
 }
 
-.row span{
-  border-right: 1px solid var(--border);
-}
-
 .firstRow{
   padding-right: 25px;
   color: white;
