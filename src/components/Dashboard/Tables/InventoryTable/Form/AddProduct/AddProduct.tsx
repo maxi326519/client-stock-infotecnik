@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Product, RootState } from "../../../../../../interfaces";
 
+import ProductForm from "../../../ProductsTable/Form/Form";
+
 import style from "./AddProduct.module.css";
 
 interface Props {
@@ -20,6 +22,7 @@ export default function AddProduct({
   const products: Product[] = useSelector((state: RootState) => state.products);
   const [rows, setRows] = useState<Product[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
+  const [productForm, setProductForm] = useState<boolean>(false);
 
   useEffect(() => {
     setSelected(productsSelected);
@@ -69,12 +72,17 @@ export default function AddProduct({
     }
   }
 
+  function handleProductForm() {
+    setProductForm(!productForm);
+  }
+
   return (
     <div className={style.container}>
+      {productForm ? <ProductForm handleForm={handleProductForm} /> : null}
       <div className={`toTop ${style.window}`}>
         <div className={style.close}>
           <h5>Seleccione los productos</h5>
-          <div className="btn-close" onClick={handleClose}/>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.searchData}>
           <div className={style.search}>
@@ -132,7 +140,7 @@ export default function AddProduct({
           <button
             className="btn btn-outline-success"
             type="button"
-            /*             onClick={handleOpenProductForm} */
+            onClick={handleProductForm}
           >
             Crear nuevo
           </button>

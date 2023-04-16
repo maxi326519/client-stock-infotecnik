@@ -42,26 +42,14 @@ export default function Colores({ data, handleSubmit, handleClose }: Props) {
       <form className={styles.container} onSubmit={handleLocalSubmit}>
         <div className={styles.close}>
           <h4>Colores</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            x
-          </button>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={styles.categoriesList}>
           {localData.length > 0 ? (
             localData.map((data, index) => (
               <div key={index} className={styles.row}>
                 <span>{data}</span>
-                <button
-                  className="btn btn-danger"
-                  type="button"
-                  onClick={() => handleRemove(data)}
-                >
-                  -
-                </button>
+                <div className="btn-close" onClick={() => handleRemove(data)} />
               </div>
             ))
           ) : (
@@ -79,14 +67,14 @@ export default function Colores({ data, handleSubmit, handleClose }: Props) {
               onChange={handleChange}
             />
             <button
-              className="btn btn-success"
+              className="btn btn-outline-success"
               type="button"
               onClick={handleAddData}
             >
               +
             </button>
           </div>
-          <button className="btn btn-primary" type="submit">
+          <button className="btn btn-success" type="submit">
             Guardar
           </button>
         </div>

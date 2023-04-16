@@ -6,12 +6,17 @@ import styles from "./AddImages.module.css";
 
 interface Props {
   imageUrls: string[];
-  setImageUrls: (imageUrl: string[]) => void
+  setImageUrls: (imageUrl: string[]) => void;
   imageFiles: File[];
   setImageFiles: (image: File[]) => void;
 }
 
-export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImageFiles }: Props) {
+export default function AddImages({
+  imageUrls,
+  setImageUrls,
+  imageFiles,
+  setImageFiles,
+}: Props) {
   const [selectedImage, setSelectedImage] = useState<string>(img);
 
   // Set selected image
@@ -42,23 +47,18 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
   }
 
   function handleRemove() {
-    setImageUrls(
-      imageUrls.filter((url: string) => url !== selectedImage)
-    );
+    setImageUrls(imageUrls.filter((url: string) => url !== selectedImage));
   }
 
   return (
-    <div className={styles.form}>
+    <div className={styles.container}>
       <div>
         <div className={styles.imageContainer}>
           {imageUrls.length > 0 ? (
-            <button
-              className={`btn btn-outline-danger ${styles.delete}`}
-              type="button"
+            <div
+              className={`btn-close ${styles.delete}`}
               onClick={handleRemove}
-            >
-              X
-            </button>
+            />
           ) : null}
           <img className={styles.icon} src={selectedImage} alt="img" />
         </div>
@@ -75,15 +75,21 @@ export default function AddImages({ imageUrls, setImageUrls, imageFiles, setImag
         </div>
       </div>
       <div className={styles.imgList}>
-        {imageUrls.map((url) => (
-          <div
-            key={url}
-            className={styles.image}
-            onClick={() => handleSelect(url)}
-          >
-            <img src={url} alt="product" />
+        {imageUrls.length > 0 ? (
+          imageUrls.map((url) => (
+            <div
+              key={url}
+              className={styles.image}
+              onClick={() => handleSelect(url)}
+            >
+              <img src={url} alt="product" />
+            </div>
+          ))
+        ) : (
+          <div className={styles.empty}>
+            <span>Vacío</span>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

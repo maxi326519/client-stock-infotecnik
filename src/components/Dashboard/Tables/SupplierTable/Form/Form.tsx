@@ -58,14 +58,8 @@ export default function Form({ handleForm }: Props) {
     <div className={style.container}>
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
-          <h4>Agregar Proveedor</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <h4>Nuevo Proveedor</h4>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.inputs}>
           <div className="form-floating">

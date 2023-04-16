@@ -46,7 +46,7 @@ export default function InvoiceTable() {
         />
         <button className="btn btn-success" type="button" onClick={handleForm}>
           <img src={add} alt="add" />
-          <span>Nuevo Facturas</span>
+          <span>Nueva Facturas</span>
         </button>
       </div>
       <div className={style.dashboardList__grid}>
@@ -63,7 +63,7 @@ export default function InvoiceTable() {
         <div className={style.contentCard}>
           {rows.length <= 0 ? (
             <div className={style.listEmpty}>
-              <span>No hay productos</span>
+              <span>No hay facturas</span>
             </div>
           ) : (
             rows?.map((invoice: Invoices) => (

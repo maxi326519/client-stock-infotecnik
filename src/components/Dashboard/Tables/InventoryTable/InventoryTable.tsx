@@ -79,9 +79,15 @@ export default function InventoryTable() {
     handleSelection(stock);
   }
 
+
+
   return (
     <div className={`toLeft ${style.dashboardList}`}>
-      {form ? <Form handleClose={handleCloseForm} /> : null}
+      {form ? (
+        <Form
+          handleClose={handleCloseForm}
+        />
+      ) : null}
       {details ? (
         <Details
           product={selection?.product}

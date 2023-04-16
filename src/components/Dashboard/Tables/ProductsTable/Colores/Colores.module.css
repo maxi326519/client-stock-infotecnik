@@ -1,5 +1,6 @@
 .background {
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   display: flex;
@@ -13,7 +14,7 @@
 .container {
   width: 400px;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: white;
 }
 
@@ -34,9 +35,9 @@
   max-height: 300px;
   margin: 10px 0;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow-y: scroll;
-  border: 1px solid grey;
+  border: 1px solid var(--border);
 }
 
 .categoriesList {
@@ -46,7 +47,7 @@
 
 .categoriesList .empty {
   height: 100%;
-  color: grey;
+  color: var(--border);
 }
 
 .categoriesList .row {
@@ -54,8 +55,8 @@
   align-items: center;
   margin-bottom: 5px;
   padding: 5px;
-  border-radius: 10px;
-  border: 1px solid grey;
+  border-radius: 5px;
+  border: 1px solid var(--border);
 }
 
 .categoriesList .row span {
@@ -64,7 +65,7 @@
 
 .categoriesList .row button {
   width: 40px;
-  border-radius: 8px;
+  border-radius: 5px;
 }
 
 .formContainer {
@@ -82,7 +83,7 @@
 }
 
 .formContainer input {
-  border: 1px solid grey;
+  border: 1px solid var(--border);
 }
 
 .formContainer button {

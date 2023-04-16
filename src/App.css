@@ -13,7 +13,7 @@
   --dark-font: white;
 }
 
-.App{
+.App {
   background-color: var(--background);
 }
 
@@ -58,19 +58,11 @@
   background-color: var(--primary-color);
 }
 
-input,
-input:focus,
-input:active,
-select,
-select:focus,
-select:active,
-.form-floating {
-  background-color: #0002;
-  border-color: var(--border);
-  color: var(--font);
-}
-
 .btn img {
   width: 25px;
   filter: invert(100%);
+}
+
+small {
+  color: red;
 }

@@ -4,31 +4,27 @@ import { postProduct } from "../../../../../redux/actions/products";
 import { Product, RootState } from "../../../../../interfaces";
 import swal from "sweetalert";
 import {
+  postCapacidades,
+  postColores,
+} from "../../../../../redux/actions/products";
+import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
 
 import AddImages from "./AddImages/AddImages";
 import CategoriesTree from "../CategoriesTree/CategoriesTree";
+import Capacidades from "../Capacidades/Capacidades";
+import Colores from "../Colores/Colores";
 
 import style from "./Form.module.css";
 import axios from "axios";
 
 interface Props {
-  capacidades: string[];
-  colores: string[];
   handleForm: () => void;
-  handleCapacidadesForm: () => void;
-  handleColoresForm: () => void;
 }
 
-export default function Form({
-  capacidades,
-  colores,
-  handleForm,
-  handleCapacidadesForm,
-  handleColoresForm,
-}: Props) {
+export default function Form({ handleForm }: Props) {
   const initialState: Product = {
     id: "",
     codigo: "",
@@ -41,14 +37,29 @@ export default function Form({
     CategoryId: "",
     Images: [],
   };
+  const capacidades = useSelector(
+    (state: RootState) => state.attributes.capacidades
+  );
+  const colores = useSelector((state: RootState) => state.attributes.colores);
   const categories = useSelector(
     (state: RootState) => state.attributes.categories
   );
+  const [capacidadesForm, setCapacidadesForm] = useState(false);
+  const [coloresForm, setColoresForm] = useState(false);
   const [product, setProduct] = useState(initialState);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
-
+  const [error, setError] = useState({
+    codigo: "",
+    modelo: "",
+    marca: "",
+    color: "",
+    capacidad: "",
+    descCorta: "",
+    descLarga: "",
+    CategoryId: "",
+  });
   const dispatch = useDispatch();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -122,6 +133,22 @@ export default function Form({
     setCategoriesForm(!categoriesForm);
   }
 
+  function handleSubmitCapacidades(data: string[]) {
+    dispatch<any>(postCapacidades(data));
+  }
+
+  function handleSubmitColores(data: string[]) {
+    dispatch<any>(postColores(data));
+  }
+
+  function handleCapacidadesForm() {
+    setCapacidadesForm(!capacidadesForm);
+  }
+
+  function handleColoresForm() {
+    setColoresForm(!coloresForm);
+  }
+
   return (
     <div className={style.container}>
       {categoriesForm ? (
@@ -131,60 +158,74 @@ export default function Form({
           handleClose={handleCloseCategories}
         />
       ) : null}
+      {capacidadesForm ? (
+        <Capacidades
+          data={capacidades}
+          handleClose={handleCapacidadesForm}
+          handleSubmit={handleSubmitCapacidades}
+        />
+      ) : null}
+      {coloresForm ? (
+        <Colores
+          data={colores}
+          handleClose={handleColoresForm}
+          handleSubmit={handleSubmitColores}
+        />
+      ) : null}
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
-          <h4>Agregar productos</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <h4>Nuevo producto</h4>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.flex}>
           <div className={style.inputs}>
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <input
-                id="codigo"
-                name="codigo"
-                className="form-control"
+                id={!error.codigo ? "floatingInputInvalid" : "codigo"}
+                className={`form-control ${!error.codigo ? "" : "is-invalid"}`}
                 type="text"
+                placeholder="codigo"
                 value={product.codigo}
                 onChange={handleChange}
               />
               <label htmlFor="codigo">Codigo</label>
+              <small>{error.codigo}</small>
             </div>
 
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <input
-                id="modelo"
+                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
+                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
                 name="modelo"
-                className="form-control"
                 type="text"
+                placeholder="modelo"
                 value={product.modelo}
                 onChange={handleChange}
               />
               <label htmlFor="modelo">Modelo</label>
+              <small>{error.modelo}</small>
             </div>
 
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <input
-                id="marca"
+                id={!error.marca ? "floatingInputInvalid" : "marca"}
+                className={`form-control ${!error.marca ? "" : "is-invalid"}`}
                 name="marca"
-                className="form-control"
                 type="text"
+                placeholder="marca"
                 value={product.marca}
                 onChange={handleChange}
               />
               <label htmlFor="marca">Marca</label>
+              <small>{error.marca}</small>
             </div>
 
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <select
-                id="color"
+                id={error.color ? "floatingInputInvalid" : "color"}
+                className={`form-control ${!error.color ? "" : "is-invalid"}`}
                 name="color"
-                className="form-select"
+                placeholder="color"
                 value={product.color}
                 onChange={handleChangeSelect}
               >
@@ -196,13 +237,17 @@ export default function Form({
                 ))}
               </select>
               <label htmlFor="color">Colores</label>
+              <small>{error.color}</small>
             </div>
 
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <select
-                id="capacidad"
+                id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+                className={`form-control ${
+                  !error.capacidad ? "" : "is-invalid"
+                }`}
                 name="capacidad"
-                className="form-select"
+                placeholder="capacidad"
                 value={product.capacidad}
                 onChange={handleChangeSelect}
               >
@@ -214,38 +259,54 @@ export default function Form({
                 ))}
               </select>
               <label htmlFor="capacidad">Capacidad</label>
+              <small>{error.capacidad}</small>
             </div>
 
-            <div className="mb-3 form-floating">
-              <textarea
-                id="descLarga"
-                name="descLarga"
-                className={`form-control ${style.textArea}`}
-                value={product.descLarga}
-                onChange={handleChangeTextArea}
-              />
-              <label htmlFor="descLarga">Desc Larga</label>
-            </div>
-            <div className="mb-3 form-floating">
+            <div className="form-floating">
               <input
-                id="descCorta"
+                id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
+                className={`form-control ${
+                  !error.descCorta ? "" : "is-invalid"
+                }`}
                 name="descCorta"
-                className="form-control"
+                placeholder="descCorta"
                 type="text"
                 value={product.descCorta}
                 onChange={handleChange}
               />
               <label htmlFor="descCorta">Desc Corta</label>
+              <small>{error.descCorta}</small>
             </div>
-            <div className={style.categoria}>
+
+            <div className="form-floating">
+              <textarea
+                id={error.descLarga ? "floatingInputInvalid" : "descLarga"}
+                className={`form-control ${
+                  !error.descLarga ? "" : "is-invalid"
+                }`}
+                name="descLarga"
+                placeholder="descLarga"
+                value={product.descLarga}
+                onChange={handleChangeTextArea}
+              />
+              <label htmlFor="descLarga">Desc Larga</label>
+              <small>{error.descLarga}</small>
+            </div>
+
+            <div
+              className={`${style.categoria} ${
+                !error.CategoryId ? "" : style.categoriaError
+              }`}
+            >
               <button
-                className="btn btn-primary"
+                className="btn btn-outline-success"
                 type="button"
                 onClick={handleCloseCategories}
               >
                 Agregar
               </button>
               <label htmlFor="categoria">{product.CategoryId}</label>
+              <small>{error.CategoryId}</small>
             </div>
           </div>
           <AddImages
@@ -257,18 +318,18 @@ export default function Form({
         </div>
         <div className={style.buttons}>
           <button className="btn btn-success" type="submit">
-            Agregar
+            Crear producto
           </button>
           <div className={style.buttonsForm}>
             <button
-              className="btn btn-primary"
+              className="btn btn-outline-success"
               type="button"
               onClick={handleCapacidadesForm}
             >
               Capacidades
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-outline-success"
               type="button"
               onClick={handleColoresForm}
             >

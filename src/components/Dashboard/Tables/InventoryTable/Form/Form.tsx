@@ -293,7 +293,7 @@ export default function Form({ handleClose }: Props) {
   }
 
   return (
-    <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
+    <div className={style.background}>
       {addProducts ? (
         <AddProduct
           productsSelected={productsSelected}
@@ -309,38 +309,40 @@ export default function Form({ handleClose }: Props) {
           handleClose={handleFormSuppliers}
         />
       ) : null}
-      <div className={style.close}>
-        <h4>Agregar inventario</h4>
-        <div className="btn-close" onClick={handleLocalClose} />
-      </div>
-      <div className={style.flex}>
-        <div className={style.dataRight}>
-          <InvoiceData
-            invoice={invoice}
-            handleChange={handleChangeInvoice}
-            file={file}
-            setFile={setFile}
-          />
-          <SupplierData
-            supplier={supplierSelected}
-            handleFormSuppliers={handleFormSuppliers}
-          />
-          <button type="submit" className="btn btn-success">
-            Agregar inventario
-          </button>
+      <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
+        <div className={style.close}>
+          <h4>Agregar inventario</h4>
+          <div className="btn-close" onClick={handleLocalClose} />
         </div>
-        {/* Products */}
-        <ProductData
-          stock={stock}
-          images={images}
-          handleSaveImages={handleSaveImages}
-          tipoImpositivo={invoice.tipoImpositivo}
-          handleChange={handleChangeProduct}
-          handleDuplicate={handleDuplicate}
-          handleRemove={handleRemove}
-          handleFormProduct={handleFormProduct}
-        />
-      </div>
-    </form>
+        <div className={style.flex}>
+          <div className={style.dataRight}>
+            <InvoiceData
+              invoice={invoice}
+              handleChange={handleChangeInvoice}
+              file={file}
+              setFile={setFile}
+            />
+            <SupplierData
+              supplier={supplierSelected}
+              handleFormSuppliers={handleFormSuppliers}
+            />
+            <button type="submit" className="btn btn-success">
+              Agregar inventario
+            </button>
+          </div>
+          {/* Products */}
+          <ProductData
+            stock={stock}
+            images={images}
+            handleSaveImages={handleSaveImages}
+            tipoImpositivo={invoice.tipoImpositivo}
+            handleChange={handleChangeProduct}
+            handleDuplicate={handleDuplicate}
+            handleRemove={handleRemove}
+            handleFormProduct={handleFormProduct}
+          />
+        </div>
+      </form>
+    </div>
   );
 }

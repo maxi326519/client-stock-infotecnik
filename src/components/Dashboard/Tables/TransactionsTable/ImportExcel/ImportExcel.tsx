@@ -40,13 +40,10 @@ export default function ImportExcel({ handleData, handleClose }: Props) {
       <form>
         <div className={styles.close}>
           <h4>Importar movimientos</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
+          <div
+            className="btn-close"
             onClick={handleClose}
-          >
-            x
-          </button>
+          />
         </div>
         <input
           className="form-control"

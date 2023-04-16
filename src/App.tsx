@@ -6,7 +6,7 @@ import { getAttributes, getProduct } from "./redux/actions/products";
 import { getSuppliers } from "./redux/actions/suppliers";
 /* import { getInvoice } from "./redux/actions/invoices"; */
 import { getInventory } from "./redux/actions/inventory";
-import { closeLoading } from "./redux/actions/loading/loading";
+import { closeLoading, loading } from "./redux/actions/loading/loading";
 import { getTransactions } from "./redux/actions/transactions";
 import { getConfig } from "./redux/actions/configurations";
 import { getClients } from "./redux/actions/clients";
@@ -25,7 +25,7 @@ import "./Animation.css";
 function App() {
   const redirect = useNavigate();
   const dispatch = useDispatch();
-  const loading = useSelector((state: RootState) => state.loading);
+  const load = useSelector((state: RootState) => state.loading);
 
   useEffect(() => {
     const data = localStorage.getItem("user");
@@ -34,6 +34,7 @@ function App() {
     if (data) userData = JSON.parse(data);
 
     if (userData) {
+      dispatch(loading());
       dispatch<any>(persistence(userData))
         .then(() => {
           Promise.all([
@@ -72,7 +73,7 @@ function App() {
 
   return (
     <div className="App">
-      {loading ? <Loading /> : null}
+      {load ? <Loading /> : null}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboad />} />

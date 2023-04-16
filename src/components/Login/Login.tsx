@@ -15,6 +15,7 @@ import { getConfig } from "../../redux/actions/configurations";
 import swal from "sweetalert";
 
 import "./Login.css";
+import logo from "../../assets/img/Infotecnik-logo.png";
 
 interface Error {
   email: string | null;
@@ -112,43 +113,47 @@ export default function Signin() {
 
   return (
     <div className="sesion">
-      <form onSubmit={handleSubmit}>
-        <h2>Iniciar sesion</h2>
-        {/* EMAIL */}
-        <div className="form-floating mb-3">
-          <input
-            type="email"
-            name="email"
-            value={user.email}
-            className={`form-control ${!error.email ? "" : "is-invalid"}`}
-            id={error.email ? "floatingInputInvalid" : "user"}
-            placeholder="name"
-            onChange={handleChange}
-            /*             required */
-          />
-          <label htmlFor="floatingInput">Email</label>
-          {!error.email ? null : <small>{error.email}</small>}
+      <form className="toLeft" onSubmit={handleSubmit}>
+        <div className="header">
+          <img src={logo} />
         </div>
+        <div className="content">
+          {/* EMAIL */}
+          <div className="form-floating mb-3">
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              className={`form-control ${!error.email ? "" : "is-invalid"}`}
+              id={error.email ? "floatingInputInvalid" : "user"}
+              placeholder="name"
+              onChange={handleChange}
+              /*             required */
+            />
+            <label htmlFor="floatingInput">Email</label>
+            {!error.email ? null : <small>{error.email}</small>}
+          </div>
 
-        {/* CONTRASEÑA */}
-        <div className="form-floating mb-3">
-          <input
-            type="password"
-            name="password"
-            value={user.password}
-            className={`form-control ${!error.password ? "" : "is-invalid"}`}
-            id={error.password ? "floatingInputInvalid" : "pass"}
-            placeholder="Contraseña"
-            onChange={handleChange}
-            /*             required */
-          />
-          <label htmlFor="floatingInput">Contraseña</label>
-          {!error.password ? null : <small>{error.password}</small>}
+          {/* CONTRASEÑA */}
+          <div className="form-floating mb-3">
+            <input
+              type="password"
+              name="password"
+              value={user.password}
+              className={`form-control ${!error.password ? "" : "is-invalid"}`}
+              id={error.password ? "floatingInputInvalid" : "pass"}
+              placeholder="Contraseña"
+              onChange={handleChange}
+              /*             required */
+            />
+            <label htmlFor="floatingInput">Contraseña</label>
+            {!error.password ? null : <small>{error.password}</small>}
+          </div>
+
+          <button className="submit" type="submit">
+            Iniciar sesion
+          </button>
         </div>
-
-        <button className="btn btn-primary" type="submit">
-          Iniciar sesion
-        </button>
       </form>
     </div>
   );

@@ -31,10 +31,7 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
   useEffect(() => {
     let newData: any = [];
     if (categories.length <= 0) {
-      newData = [
-        ...tree,
-        [0, "categorias", -1, 1, "black"]
-      ]
+      newData = [...tree, [0, "categorias", -1, 1, "black"]];
     } else {
       newData = [
         ...tree,
@@ -202,13 +199,7 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
       <div className={style.form}>
         <div className={style.close}>
           <h4>Categorias</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.chartContainer}>
           <Chart
@@ -284,7 +275,7 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
         ) : (
           <div className={style.buttons}>
             <button
-              className="btn btn-primary"
+              className="btn btn-success"
               type="button"
               onClick={handleSubmit}
               disabled={selectedNode === "categorias"}
@@ -292,7 +283,7 @@ const CategoriesTree = ({ categories, handleSelected, handleClose }: Props) => {
               Seleccionar
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-outline-success"
               type="button"
               onClick={() => setEdit(!edit)}
             >

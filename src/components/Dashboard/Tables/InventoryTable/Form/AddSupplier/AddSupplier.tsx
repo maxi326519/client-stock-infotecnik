@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Supplier, RootState } from "../../../../../../interfaces";
 
+import SupplierForm from "../../../SupplierTable/Form/Form";
+
 import style from "./AddSupplier.module.css";
 
 interface Props {
@@ -20,6 +22,7 @@ export default function AddSupplier({
   );
   const [rows, setRows] = useState<Supplier[]>([]);
   const [selected, setSelected] = useState<Supplier | null>(null);
+  const [supplierForm, setSupplierForm] = useState<boolean>(false);
 
   useEffect(() => {
     setSelected(supplierSelected);
@@ -67,14 +70,19 @@ export default function AddSupplier({
     }
   }
 
+  function handleSupplierForm() {
+    setSupplierForm(!supplierForm);
+  }
+
   return (
     <div className={style.container}>
+      {supplierForm ? <SupplierForm handleForm={handleSupplierForm} /> : null}
       <div className={`toTop ${style.window}`}>
         <div className={style.close}>
           <h5>Seleccione un proveedor</h5>
           <div className="btn-close" onClick={handleClose} />
         </div>
-        <div className={style.searchData}>
+        <div className={style.content}>
           <div>
             <input
               id="search"
@@ -121,7 +129,7 @@ export default function AddSupplier({
           <button
             className="btn btn-outline-success"
             type="button"
-/*             onClick={handleOpenSupplierForm} */
+            onClick={handleSupplierForm}
           >
             Crear nuevo
           </button>

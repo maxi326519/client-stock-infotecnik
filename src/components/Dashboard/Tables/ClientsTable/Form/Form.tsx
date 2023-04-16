@@ -58,14 +58,8 @@ export default function Form({ handleForm }: Props) {
     <div className={style.container}>
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.close}>
-          <h4>Agregar cliente</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleClose}
-          >
-            X
-          </button>
+          <h4>Nuevo cliente</h4>
+          <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.inputs}>
           <div className="form-floating">
@@ -80,6 +74,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="numero">
               Numero
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -94,6 +89,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="nombre">
               Nombre
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -108,6 +104,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="direccion">
               Direccion
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -122,6 +119,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="postal">
               Codigo Postal
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -136,6 +134,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="poblacion">
               Poblacion
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -150,6 +149,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="cifNif">
               CIF / NIF
             </label>
+            <small></small>
           </div>
 
           <div className="form-floating">
@@ -164,6 +164,7 @@ export default function Form({ handleForm }: Props) {
             <label className="form-label" htmlFor="telefono">
               Telefono
             </label>
+            <small></small>
           </div>
 
           <button className="btn btn-success" type="submit">

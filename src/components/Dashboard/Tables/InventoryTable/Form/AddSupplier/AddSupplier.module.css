@@ -1,6 +1,6 @@
 .container {
   position: fixed;
-  z-index: 500;
+  z-index: 600;
   top: 0;
   left: 0;
   display: flex;
@@ -44,6 +44,10 @@
   margin-top: 30px;
 }
 
+.content {
+  width: 100%;
+}
+
 .table {
   display: flex;
   flex-direction: column;
@@ -68,7 +72,7 @@
   user-select: none;
 }
 
-.row span{
+.row span {
   padding: 5px 10px;
   text-align: center;
 }
@@ -99,12 +103,12 @@
   filter: none;
 }
 
-.btnContainer{
+.btnContainer {
   display: grid;
   width: 100%;
-  grid-template-columns: 100px 1fr ;
+  grid-template-columns: 100px 1fr;
 }
 
-.btnContainer button:last-child{
+.btnContainer button:last-child {
   justify-self: end;
 }
