@@ -3,8 +3,14 @@ import { Invoices, TipoImpositivo } from "../../../../../../interfaces";
 
 import styles from "./InvoiceData.module.css";
 
+interface InvoiceError {
+  numero: string;
+  archivo: string;
+}
+
 interface Props {
   invoice: Invoices;
+  error: InvoiceError;
   handleChange: (name: string, value: string | number | boolean) => void;
   file: File | undefined;
   setFile: (file: File) => void;
@@ -12,6 +18,7 @@ interface Props {
 
 export default function InvoiceData({
   invoice,
+  error,
   handleChange,
   file,
   setFile,
@@ -64,9 +71,9 @@ export default function InvoiceData({
       <div className={styles.data}>
         <div className="form-floating">
           <input
-            id="numero"
+            id={error.archivo ? "floatingInputInvalid" : "numero"}
             name="numero"
-            className="form-control"
+            className={`form-control ${!error.numero ? "" : "is-invalid"}`}
             type="number"
             value={invoice.numero}
             onChange={handleLocalChange}
@@ -74,6 +81,7 @@ export default function InvoiceData({
           <label htmlFor="numero" className="form-label">
             Numero
           </label>
+          <small>{error.numero}</small>
         </div>
 
         <div className="form-floating">
@@ -122,15 +130,16 @@ export default function InvoiceData({
 
         <div className="form-floating">
           <input
-            id="archivo"
+            id={error.archivo ? "floatingInputInvalid" : "archivo"}
             name="archivo"
-            className="form-control"
+            className={`form-control ${!error.archivo ? "" : "is-invalid"}`}
             type="file"
             placeholder="archivo"
             onChange={handleFile}
             ref={inputRef}
             disabled={invoice.pendiente}
           />
+          <small>{error.archivo}</small>
         </div>
       </div>
     </div>

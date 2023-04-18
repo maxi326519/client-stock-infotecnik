@@ -45,3 +45,13 @@
   margin-left: 5px;
   color: grey;
 }
+
+.error{
+  position: absolute;
+  border-color: red;
+}
+
+.error small{
+  position: absolute;
+  top: 100%;
+}

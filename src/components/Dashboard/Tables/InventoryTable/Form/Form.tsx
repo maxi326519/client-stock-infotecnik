@@ -27,6 +27,17 @@ interface ImagesData {
   imageFiles: File[];
 }
 
+interface InvoiceError {
+  numero: string;
+  archivo: string;
+}
+
+interface StockError {
+  id: string,
+  code: string;
+  imei: string;
+}
+
 interface Props {
   handleClose: () => void;
 }
@@ -64,6 +75,7 @@ const initialStock: Stock = {
 };
 
 export default function Form({ handleClose }: Props) {
+  const dispatch = useDispatch();
   const config = useSelector((state: RootState) => state.config);
   const [images, setImages] = useState<ImagesData[]>([]);
   const [productsSelected, setProduct] = useState<string[]>([]);
@@ -73,13 +85,25 @@ export default function Form({ handleClose }: Props) {
   const [file, setFile] = useState<File | undefined>();
   const [addProducts, setFormProducts] = useState<boolean>(false);
   const [addSupplier, setFormSuppliers] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const [invoiceError, setInvoiceError] = useState<InvoiceError>({
+    numero: "",
+    archivo: "",
+  });
+  const [supplierError, setSupplierError] = useState<string>("");
+  const [stockError, setStockError] = useState<StockError[]>([]);
 
   useEffect(() => {
-    const stock = productsSelected.map((p, i) => {
+    let newErrors: StockError[] = [];
+    const stock: Stock[] = productsSelected.map((p, i) => {
+      newErrors.push({
+        id: i.toString(),
+        code: "",
+        imei: "",
+      });
       return { ...initialStock, id: i.toString(), ProductId: p };
     });
     setStock(stock);
+    setStockError([ ...stockError, ...newErrors ]);
   }, [productsSelected]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -148,13 +172,27 @@ export default function Form({ handleClose }: Props) {
         dispatch(closeLoading());
       })
       .catch((err: any) => {
-        console.log(err);
         dispatch(closeLoading());
-        swal(
-          "Error",
-          `Hubo un error al guardar el nuevo inventario: ${err.message}`,
-          "error"
-        );
+        console.log(err);
+        if (err.message?.includes("numero already exist")) {
+          setInvoiceError({ ...invoiceError, numero: "El numero ya existe" });
+        } else if (err.message?.includes("missing parameter (archivo)")) {
+          setInvoiceError({
+            ...invoiceError,
+            archivo: "Falta seleccionar un archivo",
+          });
+        } else if (err.message?.includes("missing parameter (supplier)")) {
+          setSupplierError("Falta seleccionar un proveedor");
+        } else if (err.message?.includes("No se adjunto inventario")) {
+          swal("Error", "Agregue inventario a guardar", "error");
+          setSupplierError("No se adjunto inventario");
+        } else {
+          swal(
+            "Error",
+            `Hubo un error al guardar el nuevo inventario: ${err.message}`,
+            "error"
+          );
+        }
       });
   }
 
@@ -211,9 +249,9 @@ export default function Form({ handleClose }: Props) {
     setStock(newStock);
   }
 
-  /*   function handleValidation(stock: Stock, name: string, value: any) {
-    if (name === "codigoDeBarras") {
-      console.log(isBarCodeValid(stock.tipoCodigoDeBarras, value));
+/*     function handleValidation(stockId: Stock, name: string, value: any) {
+    if (name === "codigo") {
+      
     }
     if (name === "IMEISerie") {
       console.log(isValidIMEI(value));
@@ -318,12 +356,14 @@ export default function Form({ handleClose }: Props) {
           <div className={style.dataRight}>
             <InvoiceData
               invoice={invoice}
+              error={invoiceError}
               handleChange={handleChangeInvoice}
               file={file}
               setFile={setFile}
             />
             <SupplierData
               supplier={supplierSelected}
+              error={supplierError}
               handleFormSuppliers={handleFormSuppliers}
             />
             <button type="submit" className="btn btn-success">
@@ -333,6 +373,7 @@ export default function Form({ handleClose }: Props) {
           {/* Products */}
           <ProductData
             stock={stock}
+            stockError={stockError}
             images={images}
             handleSaveImages={handleSaveImages}
             tipoImpositivo={invoice.tipoImpositivo}

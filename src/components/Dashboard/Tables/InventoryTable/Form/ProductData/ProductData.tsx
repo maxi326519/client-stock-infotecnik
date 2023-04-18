@@ -10,8 +10,15 @@ interface ImagesData {
   imageFiles: File[];
 }
 
+interface StockError {
+  id: string,
+  code: string;
+  imei: string;
+}
+
 interface Props {
   stock: Stock[];
+  stockError: StockError[];
   images: ImagesData[];
   handleSaveImages: (
     stockId: string,

@@ -4,10 +4,15 @@ import styles from "./SupplierData.module.css";
 
 interface Props {
   supplier: Supplier | null;
+  error: string;
   handleFormSuppliers: () => void;
 }
 
-export default function SupplierData({ supplier, handleFormSuppliers }: Props) {
+export default function SupplierData({
+  supplier,
+  error,
+  handleFormSuppliers,
+}: Props) {
   return (
     <div className={styles.container}>
       <hr></hr>
@@ -24,7 +29,11 @@ export default function SupplierData({ supplier, handleFormSuppliers }: Props) {
         ) : null}
       </div>
       {!supplier ? (
-        <div className={styles.panelAdd}>
+        <div
+          className={`${styles.panelAdd} ${
+            error ? styles.error : ""
+          }`}
+        >
           <button
             className="btn btn-outline-success"
             type="button"
@@ -32,6 +41,7 @@ export default function SupplierData({ supplier, handleFormSuppliers }: Props) {
           >
             Seleccionar
           </button>
+          <small>{error}</small>
         </div>
       ) : (
         <div className={styles.grid}>

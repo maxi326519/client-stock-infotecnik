@@ -13,8 +13,7 @@ interface Props {
 }
 
 export default function AddSupplier({
-  supplierSelected,
-  setSupplier,
+  supplierSelected,  setSupplier,
   handleClose,
 }: Props) {
   const suppliers: Supplier[] = useSelector(
