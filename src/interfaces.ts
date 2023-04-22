@@ -76,8 +76,20 @@ export interface Invoices {
   pendiente: boolean;
   archivo: string;
   tipoImpositivo: TipoImpositivo;
+  InvoiceDestails: InvoiceDestails[];
   SuipplierId: string;
   StockId: Stock[];
+}
+
+export interface InvoiceDestails {
+  id: string;
+  concepto: string;
+  cantidad: number;
+  baseImponible: number;
+  ivaPorcentaje: number;
+  ivaMonto: number;
+  recargoPorcentaje: number;
+  recargoMonto: number;
 }
 
 export interface Client {

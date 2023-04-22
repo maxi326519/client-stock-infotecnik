@@ -9,6 +9,7 @@ import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
+import DetaisTable from "./ClientsTable/DetaisTable";
 
 interface Props {
   handleForm: () => void;
@@ -22,6 +23,7 @@ export default function Form({ handleForm }: Props) {
     pendiente: true,
     archivo: "",
     tipoImpositivo: TipoImpositivo.IVA,
+    InvoiceDestails: [],
     SuipplierId: "",
     StockId: [],
   };
@@ -29,8 +31,17 @@ export default function Form({ handleForm }: Props) {
   const [invoice, setInvoice] = useState(initialState);
   const dispatch = useDispatch();
 
+  
+
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setInvoice({ ...invoice, [event.target.name]: event.target.value });
+  }
+
+  function handleChangeCheckbox(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.checked;
+
+    setInvoice({ ...invoice, [name]: value });
   }
 
   function handleClose(): void {
@@ -68,7 +79,7 @@ export default function Form({ handleForm }: Props) {
               name="numero"
               type="text"
               className="form-control"
-              value={client.numero}
+              value={invoice.numero}
               onChange={handleChange}
             />
             <label className="form-label" htmlFor="numero">
@@ -79,93 +90,47 @@ export default function Form({ handleForm }: Props) {
 
           <div className="form-floating">
             <input
-              id="nombre"
-              name="nombre"
-              type="text"
+              id="fecha"
+              name="fecha"
+              type="date"
               className="form-control"
-              value={client.nombre}
+              value={invoice.fecha}
               onChange={handleChange}
             />
-            <label className="form-label" htmlFor="nombre">
-              Nombre
+            <label className="form-label" htmlFor="fecha">
+              Fecha
             </label>
             <small></small>
           </div>
 
-          <div className="form-floating">
+          <div className={style.pending}>
             <input
-              id="direccion"
-              name="direccion"
-              type="text"
-              className="form-control"
-              value={client.direccion}
-              onChange={handleChange}
+              id="pendiente"
+              name="pendiente"
+              type="checkbox"
+              checked={invoice.pendiente}
+              onChange={handleChangeCheckbox}
             />
-            <label className="form-label" htmlFor="direccion">
-              Direccion
-            </label>
-            <small></small>
+            <label htmlFor="pendiente">Pendiente</label>
           </div>
 
           <div className="form-floating">
             <input
-              id="postal"
-              name="postal"
-              type="text"
+              id="archivo"
+              name="archivo"
+              type="file"
               className="form-control"
-              value={client.postal}
+              value={invoice.archivo}
               onChange={handleChange}
+              disabled={invoice.pendiente}
             />
-            <label className="form-label" htmlFor="postal">
-              Codigo Postal
+            <label className="form-label" htmlFor="archivo">
+              PDF
             </label>
             <small></small>
           </div>
 
-          <div className="form-floating">
-            <input
-              id="poblacion"
-              name="poblacion"
-              type="text"
-              className="form-control"
-              value={client.poblacion}
-              onChange={handleChange}
-            />
-            <label className="form-label" htmlFor="poblacion">
-              Poblacion
-            </label>
-            <small></small>
-          </div>
-
-          <div className="form-floating">
-            <input
-              id="cifNif"
-              name="cifNif"
-              type="text"
-              className="form-control"
-              value={client.cifNif}
-              onChange={handleChange}
-            />
-            <label className="form-label" htmlFor="cifNif">
-              CIF / NIF
-            </label>
-            <small></small>
-          </div>
-
-          <div className="form-floating">
-            <input
-              id="telefono"
-              name="telefono"
-              type="text"
-              className="form-control"
-              value={client.telefono}
-              onChange={handleChange}
-            />
-            <label className="form-label" htmlFor="telefono">
-              Telefono
-            </label>
-            <small></small>
-          </div>
+          <DetaisTable />
 
           <button className="btn btn-success" type="submit">
             Agregar

@@ -33,9 +33,18 @@
 }
 
 .inputs input {
-  width: 350px;
+  width: 100%;
 }
 
 .inputs div {
   margin-bottom: 10px;
+}
+
+.pending {
+  margin-top: 20px;
+}
+
+.pending input {
+  width: min-content;
+  margin-right: 10px;
 }

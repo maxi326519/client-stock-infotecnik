@@ -52,6 +52,7 @@ const initialState: Invoices = {
   archivo: "",
   tipoImpositivo: TipoImpositivo.IVA,
   SuipplierId: "",
+  InvoiceDestails: [],
   StockId: [],
 };
 
