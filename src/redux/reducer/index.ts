@@ -48,7 +48,9 @@ const initialState: RootState = {
   invoices: [],
   transactions: [],
   config: {
-    iva: 0,
+    ivaSuperReducido: 0,
+    ivaReducido: 0,
+    ivaGeneral: 0,
     recargo: 0,
   },
   loading: false,
@@ -223,7 +225,9 @@ export default function Reducer(
       return {
         ...state,
         config: {
-          iva: action.payload.iva,
+          ivaSuperReducido: action.payload.ivaSuperReducido,
+          ivaReducido: action.payload.ivaReducido,
+          ivaGeneral: action.payload.ivaGeneral,
           recargo: action.payload.recargo,
         },
       };

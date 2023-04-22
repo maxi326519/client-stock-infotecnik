@@ -109,16 +109,19 @@ export interface Transactions {
 }
 
 export enum BarCode {
-  Code128,
-  Code39,
-  UPCA,
-  UPCE,
-  EAN8,
-  EAN13,
+  Ninguno = "",
+  Code128 = "Code128",
+  Code39 = "Code39",
+  UPCA = "UPC-A",
+  UPCE = "UPC-E",
+  EAN8 = "EAN8",
+  EAN13 = "EAN13",
 }
 
 export interface Config {
-  iva: number;
+  ivaSuperReducido: number;
+  ivaReducido: number;
+  ivaGeneral: number;
   recargo: number;
 }
 

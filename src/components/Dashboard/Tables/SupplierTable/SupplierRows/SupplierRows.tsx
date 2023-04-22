@@ -158,7 +158,7 @@ export default function SupplieRows({ supplier }: Props) {
         <img src={edit} alt="edit" />
       </button>
         :
-        <div>
+        <div className="btn-content">
           <button
             className="btn btn-success"
             type="button"

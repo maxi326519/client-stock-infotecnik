@@ -11,9 +11,10 @@ interface ImagesData {
 }
 
 interface StockError {
-  id: string,
-  code: string;
-  imei: string;
+  id: string;
+  codigoDeBarras: string;
+  IMEISerie: string;
+  cantidad: string;
 }
 
 interface Props {
@@ -38,6 +39,7 @@ interface Props {
 
 export default function ProductData({
   stock,
+  stockError,
   images,
   handleSaveImages,
   tipoImpositivo,
@@ -63,6 +65,7 @@ export default function ProductData({
           return (
             <Row
               stock={s}
+              error={stockError.find((err: StockError) => err.id === s.id)}
               images={images.find((i) => i.stockId === s.id)}
               handleSaveImages={handleSaveImages}
               tipoImpositivo={tipoImpositivo}

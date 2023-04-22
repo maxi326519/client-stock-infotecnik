@@ -1,5 +1,6 @@
-.container{
+.container {
   position: fixed;
+  z-index: 1000;
   top: 0;
   left: 0;
   display: flex;
@@ -10,24 +11,25 @@
   background-color: #0006;
 }
 
-.details{
+.details {
+  position: relative;
   padding: 30px;
-  border-radius: 10px;
-  background-color: var(--panel);
+  border-radius: 5px;
+  background-color: var(--background);
 }
 
-.btnClose{
+.btnClose {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 30px;
 }
 
-.btnClose h4{
+.btnClose h4 {
   flex-grow: 1;
 }
 
-.dataGrid{
+.dataGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;

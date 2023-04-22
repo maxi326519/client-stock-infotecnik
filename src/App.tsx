@@ -4,7 +4,7 @@ import { RootState } from "./interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttributes, getProduct } from "./redux/actions/products";
 import { getSuppliers } from "./redux/actions/suppliers";
-/* import { getInvoice } from "./redux/actions/invoices"; */
+import { getInvoice } from "./redux/actions/invoices";
 import { getInventory } from "./redux/actions/inventory";
 import { closeLoading, loading } from "./redux/actions/loading/loading";
 import { getTransactions } from "./redux/actions/transactions";
@@ -35,15 +35,16 @@ function App() {
 
     if (userData) {
       dispatch(loading());
+      dispatch<any>(getInvoice);
       dispatch<any>(persistence(userData))
         .then(() => {
           Promise.all([
-            /* dispatch<any>(getInvoice()), */
             dispatch<any>(getProduct()),
             dispatch<any>(getAttributes()),
             dispatch<any>(getSuppliers()),
             dispatch<any>(getClients()),
             dispatch<any>(getInventory()),
+            dispatch<any>(getInvoice()),
             dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
             dispatch<any>(getConfig()),

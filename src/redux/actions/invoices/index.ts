@@ -4,7 +4,6 @@ import {
   RootState,
   Invoices,
   TipoImpositivo,
-  BarCode,
 } from "../../../interfaces";
 import axios from "axios";
 
@@ -38,22 +37,6 @@ export function postInvoice(
         supplier: newInventory.SupplierId,
         detalles: newInventory.detalles.map((stock: any) => {
           let tipoCodigoDeBarras = "";
-
-          if (Number(stock.tipoCodigoDeBarras) === -1) {
-            tipoCodigoDeBarras = "Ninguno";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code128) {
-            tipoCodigoDeBarras = "Code128";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.Code39) {
-            tipoCodigoDeBarras = "Code39";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCA) {
-            tipoCodigoDeBarras = "UPC-A";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.UPCE) {
-            tipoCodigoDeBarras = "UPC-E";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN8) {
-            tipoCodigoDeBarras = "EAN8";
-          } else if (Number(stock.tipoCodigoDeBarras) === BarCode.EAN13) {
-            tipoCodigoDeBarras = "EAN13";
-          }
 
           console.log(stock.Images);
 
@@ -102,7 +85,9 @@ export function getInvoice(): ThunkAction<
 > {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const invoices = await axios.get("/invoices");
+      const invoices = await axios.get("/invoice");
+
+      console.log("getInvoices");
 
       dispatch({
         type: GET_INVOICE,

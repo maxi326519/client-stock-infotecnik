@@ -17,7 +17,9 @@ export default function Configuration({ handleClose }: Props) {
   const config: Config = useSelector((state: RootState) => state.config);
   const [edit, setEdit] = useState<boolean>(false);
   const [editConfig, setEditConfig] = useState<Config>({
-    iva: 0,
+    ivaSuperReducido: 0,
+    ivaReducido: 0,
+    ivaGeneral: 0,
     recargo: 0,
   });
 
@@ -66,23 +68,50 @@ export default function Configuration({ handleClose }: Props) {
     <div className={styles.background}>
       <form className={`toTop ${styles.container}`} onSubmit={handleSubmit}>
         <div className={styles.close}>
-          <img src={configSvg} alt="config"/>
+          <img src={configSvg} alt="config" />
           <h5>Configuracion</h5>
           <div className="btn-close" onClick={handleClose} />
         </div>
         <div>
           <div className="form-floating mb-3">
             <input
-              id="iva"
-              name="iva"
-              value={editConfig.iva}
+              id="ivaSuperReducido"
+              name="ivaSuperReducido"
+              value={editConfig.ivaSuperReducido}
               type="number"
               className="form-control"
               onChange={handleChange}
               disabled={!edit}
             />
-            <label htmlFor="iva">I.V.A:</label>
+            <label htmlFor="ivaSuperReducido">I.V.A Super reducido:</label>
           </div>
+
+          <div className="form-floating mb-3">
+            <input
+              id="ivaReducido"
+              name="ivaReducido"
+              value={editConfig.ivaReducido}
+              type="number"
+              className="form-control"
+              onChange={handleChange}
+              disabled={!edit}
+            />
+            <label htmlFor="ivaReducido">I.V.A Reducido:</label>
+          </div>
+
+          <div className="form-floating mb-3">
+            <input
+              id="ivaGeneral"
+              name="ivaGeneral"
+              value={editConfig.ivaGeneral}
+              type="number"
+              className="form-control"
+              onChange={handleChange}
+              disabled={!edit}
+            />
+            <label htmlFor="ivaGeneral">I.V.A General:</label>
+          </div>
+
           <div className="form-floating mb-3">
             <input
               id="recargo"

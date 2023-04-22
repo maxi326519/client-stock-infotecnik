@@ -20,6 +20,7 @@ import {
   loading,
 } from "../../../../../redux/actions/loading/loading";
 import axios from "axios";
+import isBarCodeValid from "../../../../../functions/barCodes";
 
 interface ImagesData {
   stockId: string;
@@ -33,9 +34,10 @@ interface InvoiceError {
 }
 
 interface StockError {
-  id: string,
-  code: string;
-  imei: string;
+  id: string;
+  codigoDeBarras: string;
+  IMEISerie: string;
+  cantidad: string;
 }
 
 interface Props {
@@ -97,103 +99,106 @@ export default function Form({ handleClose }: Props) {
     const stock: Stock[] = productsSelected.map((p, i) => {
       newErrors.push({
         id: i.toString(),
-        code: "",
-        imei: "",
+        codigoDeBarras: "",
+        IMEISerie: "",
+        cantidad: "",
       });
       return { ...initialStock, id: i.toString(), ProductId: p };
     });
     setStock(stock);
-    setStockError([ ...stockError, ...newErrors ]);
+    setStockError([...stockError, ...newErrors]);
   }, [productsSelected]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    let invoiceURL: string = "";
-    let imagesList: Array<{ stockId: string; imagesUrls: string[] }> = [];
+    if (handleValidation()) {
+      let invoiceURL: string = "";
+      let imagesList: Array<{ stockId: string; imagesUrls: string[] }> = [];
 
-    if (!invoice.pendiente && file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post("/upload/files", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        invoiceURL = response.data.path;
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    for (let image of images) {
-      let url: string[] = [];
-
-      for (let i = 0; i < image.imageFiles.length; i++) {
+      if (!invoice.pendiente && file) {
         const formData = new FormData();
-        formData.append("file", image.imageFiles[i]);
+        formData.append("file", file);
 
         try {
-          const response = await axios.post("/upload/image", formData, {
+          const response = await axios.post("/upload/files", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           });
-          url.push(response.data.path);
+          invoiceURL = response.data.path;
         } catch (error) {
           console.error(error);
         }
       }
 
-      imagesList.push({
-        stockId: image.stockId,
-        imagesUrls: url,
-      });
-    }
+      for (let image of images) {
+        let url: string[] = [];
 
-    const newInvoice = {
-      ...invoice,
-      detalles: stock.map((stock: Stock) => ({
-        ...stock,
-        Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)
-          ?.imagesUrls,
-      })),
-      archivo: invoiceURL,
-      SupplierId: supplierSelected?.id,
-    };
+        for (let i = 0; i < image.imageFiles.length; i++) {
+          const formData = new FormData();
+          formData.append("file", image.imageFiles[i]);
 
-    dispatch(loading());
-    dispatch<any>(postInvoice(newInvoice))
-      .then(() => {
-        handleClose();
-        swal("Guardado", "Su inventario se guardo correctamente", "success");
-        dispatch(closeLoading());
-      })
-      .catch((err: any) => {
-        dispatch(closeLoading());
-        console.log(err);
-        if (err.message?.includes("numero already exist")) {
-          setInvoiceError({ ...invoiceError, numero: "El numero ya existe" });
-        } else if (err.message?.includes("missing parameter (archivo)")) {
-          setInvoiceError({
-            ...invoiceError,
-            archivo: "Falta seleccionar un archivo",
-          });
-        } else if (err.message?.includes("missing parameter (supplier)")) {
-          setSupplierError("Falta seleccionar un proveedor");
-        } else if (err.message?.includes("No se adjunto inventario")) {
-          swal("Error", "Agregue inventario a guardar", "error");
-          setSupplierError("No se adjunto inventario");
-        } else {
-          swal(
-            "Error",
-            `Hubo un error al guardar el nuevo inventario: ${err.message}`,
-            "error"
-          );
+          try {
+            const response = await axios.post("/upload/image", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+            url.push(response.data.path);
+          } catch (error) {
+            console.error(error);
+          }
         }
-      });
+
+        imagesList.push({
+          stockId: image.stockId,
+          imagesUrls: url,
+        });
+      }
+
+      const newInvoice = {
+        ...invoice,
+        detalles: stock.map((stock: Stock) => ({
+          ...stock,
+          Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)
+            ?.imagesUrls,
+        })),
+        archivo: invoiceURL,
+        SupplierId: supplierSelected?.id,
+      };
+
+      dispatch(loading());
+      dispatch<any>(postInvoice(newInvoice))
+        .then(() => {
+          handleClose();
+          swal("Guardado", "Su inventario se guardo correctamente", "success");
+          dispatch(closeLoading());
+        })
+        .catch((err: any) => {
+          dispatch(closeLoading());
+          console.log(err);
+          if (err.message?.includes("numero already exist")) {
+            setInvoiceError({ ...invoiceError, numero: "El numero ya existe" });
+          } else if (err.message?.includes("missing parameter (archivo)")) {
+            setInvoiceError({
+              ...invoiceError,
+              archivo: "Falta seleccionar un archivo",
+            });
+          } else if (err.message?.includes("missing parameter (supplier)")) {
+            setSupplierError("Falta seleccionar un proveedor");
+          } else if (err.message?.includes("No se adjunto inventario")) {
+            swal("Error", "Agregue inventario a guardar", "error");
+            setSupplierError("No se adjunto inventario");
+          } else {
+            swal(
+              "Error",
+              `Hubo un error al guardar el nuevo inventario: ${err.message}`,
+              "error"
+            );
+          }
+        });
+    }
   }
 
   function handleChangeInvoice(name: string, value: string | number | boolean) {
@@ -204,6 +209,9 @@ export default function Form({ handleClose }: Props) {
       if (value) {
         setFile(undefined);
       }
+      setInvoiceError({ ...invoiceError, archivo: "" });
+    } else {
+      setInvoiceError({ ...invoiceError, [name]: "" });
     }
   }
 
@@ -222,7 +230,7 @@ export default function Form({ handleClose }: Props) {
                 invoice.tipoImpositivo,
                 name,
                 Number(value),
-                config.iva,
+                config.ivaGeneral,
                 config.recargo
               ),
             };
@@ -233,10 +241,68 @@ export default function Form({ handleClose }: Props) {
                 invoice.tipoImpositivo,
                 name,
                 Number(value),
-                config.iva,
+                config.ivaGeneral,
                 config.recargo
               ),
             };
+          case "tipoCodigoDeBarras":
+            return {
+              ...s,
+              [name]: value.toString(),
+              codigoDeBarras: value ? s.codigoDeBarras : "",
+            };
+
+          case "codigoDeBarras":
+            setStockError(
+              stockError.map((error: StockError): StockError => {
+                if (error.id === id) {
+                  // Get stock
+                  const currentStock = stock.find((s) => s.id === id);
+                  // If exist and type is selected
+                  if (
+                    currentStock !== undefined &&
+                    currentStock.tipoCodigoDeBarras !== ""
+                  ) {
+                    console.log(value.toString());
+                    console.log(currentStock.tipoCodigoDeBarras);
+                    // Validate barcode
+                    const validation = isBarCodeValid(
+                      currentStock.tipoCodigoDeBarras,
+                      value.toString()
+                    );
+                    // Return error response
+                    return {
+                      ...error,
+                      codigoDeBarras: validation ? "" : "Codigo invalido",
+                    };
+                  } else {
+                    return { ...error, codigoDeBarras: "" };
+                  }
+                } else {
+                  return error;
+                }
+              })
+            );
+            return {
+              ...s,
+              [name]: value.toString(),
+            };
+
+          case "IMEISerie":
+            setStockError(
+              stockError.map((error: StockError): StockError => {
+                if (error.id === id) {
+                  return { ...error, IMEISerie: "" };
+                } else {
+                  return error;
+                }
+              })
+            );
+            return {
+              ...s,
+              [name]: value.toString(),
+            };
+
           default:
             return {
               ...s,
@@ -249,14 +315,30 @@ export default function Form({ handleClose }: Props) {
     setStock(newStock);
   }
 
-/*     function handleValidation(stockId: Stock, name: string, value: any) {
-    if (name === "codigo") {
-      
-    }
-    if (name === "IMEISerie") {
-      console.log(isValidIMEI(value));
-    }
-  } */
+  function handleValidation() {
+    let newErrors: StockError[] = stockError;
+    let validation: boolean = true;
+
+    stock.forEach((stock, i) => {
+      if (stock.tipoCodigoDeBarras !== "" && stock.codigoDeBarras !== "") {
+        newErrors[i].codigoDeBarras = "Debes agregar un codigo";
+        validation = false;
+      }
+      if (stock.IMEISerie === "") {
+        newErrors[i].IMEISerie = "Debes agregar un IMEI";
+        validation = false;
+      }
+      if (stock.cantidad <= 0) {
+        newErrors[i].cantidad = "Debes agregar una cantidad";
+        validation = false;
+      }
+    });
+
+    setStockError(newErrors);
+    console.log(stock);
+    console.log(newErrors);
+    return validation;
+  }
 
   function handleDuplicate(newStock: Stock) {
     const newStockList = [
@@ -266,7 +348,11 @@ export default function Form({ handleClose }: Props) {
     setStock(newStockList);
   }
 
-  function handleRemove(stockId: string) {}
+  function handleRemove(stockId: string) {
+    const filterStock = stock.filter((s) => s.id !== stockId);
+    setStock(filterStock);
+    setStockError(stockError.filter((err) => err.id !== stockId));
+  }
 
   function handleTemporal() {
     const newStockList = [

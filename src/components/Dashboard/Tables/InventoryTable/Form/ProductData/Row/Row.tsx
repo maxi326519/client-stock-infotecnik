@@ -13,14 +13,33 @@ import AddImages from "../../AddImages/AddImages";
 import styles from "./Row.module.css";
 import img from "../../../../../../../assets/svg/image.svg";
 
+const initialError: Error = {
+  codigoDeBarras: "",
+  IMEISerie: "",
+  cantidad: "",
+};
+
+interface Error {
+  codigoDeBarras: string;
+  IMEISerie: string;
+  cantidad: string;
+}
 interface ImagesData {
   stockId: string;
   imageUrls: string[];
   imageFiles: File[];
 }
 
+interface StockError {
+  id: string;
+  codigoDeBarras: string;
+  IMEISerie: string;
+  cantidad: string;
+}
+
 interface Props {
   stock: Stock;
+  error: StockError | undefined;
   images: ImagesData | undefined;
   handleSaveImages: (
     stockId: string,
@@ -39,6 +58,7 @@ interface Props {
 
 export default function Row({
   stock,
+  error,
   images,
   handleSaveImages,
   tipoImpositivo,
@@ -68,7 +88,6 @@ export default function Row({
   function handleChangeSelect(event: React.ChangeEvent<HTMLSelectElement>) {
     const name: string = event.target.name;
     const value: string = event.target.value;
-
     handleChange(stock.id, name, value);
   }
 
@@ -106,6 +125,8 @@ export default function Row({
               src={
                 currentProduct?.Images?.[0]
                   ? `http://localhost:3001/images/${currentProduct?.Images[0]}`
+                  : images
+                  ? images.imageUrls[0]
                   : img
               }
               alt="img"
@@ -113,18 +134,19 @@ export default function Row({
           </div>
           <div className="form-floating">
             <input
-              className="form-control"
-              id="cantidad"
+              className={`form-control ${!error?.cantidad ? "" : "is-invalid"}`}
+              id={error?.cantidad ? "floatingInputInvalid" : "pass"}
               name="cantidad"
               value={stock.cantidad}
               onChange={handleLocalChange}
             />
             <label htmlFor="cantidad">Cantidad</label>
+            <small>{error?.cantidad}</small>
           </div>
         </div>
         <div className={styles.inputs}>
-          {stock.estado !== "Temporal" ? (
-            <div className={styles.top}>
+          <div className={styles.top}>
+            {stock.estado !== "Temporal" ? (
               <div>
                 <input
                   id="catalogo"
@@ -135,21 +157,21 @@ export default function Row({
                 />
                 <label htmlFor="catalogo">Vista en catalogo</label>
               </div>
-              <button
-                className="btn btn-outline-success"
-                type="button"
-                onClick={() => handleDuplicate(stock)}
-              >
-                Duplicar
-              </button>
-              <div className={styles.btnClose}>
-                <div
-                  className="btn-close"
-                  onClick={() => handleRemove(stock.id)}
-                />
-              </div>
+            ) : null}
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              onClick={() => handleDuplicate(stock)}
+            >
+              Duplicar
+            </button>
+            <div className={styles.btnClose}>
+              <div
+                className="btn-close"
+                onClick={() => handleRemove(stock.id)}
+              />
             </div>
-          ) : null}
+          </div>
           <div className={styles.codes}>
             <div className="form-floating ">
               <select
@@ -159,7 +181,7 @@ export default function Row({
                 value={stock.tipoCodigoDeBarras}
                 onChange={handleChangeSelect}
               >
-                <option value={-1}>Ninguno</option>
+                <option value="">Ninguno</option>
                 <option value={BarCode.Code128}>Code 128</option>
                 <option value={BarCode.Code39}>Code 39</option>
                 <option value={BarCode.UPCA}>UPC-A</option>
@@ -171,23 +193,30 @@ export default function Row({
             </div>
             <div className="form-floating">
               <input
-                className="form-control"
-                id="codigoDeBarras"
+                className={`form-control ${
+                  !error?.codigoDeBarras ? "" : "is-invalid"
+                }`}
+                id={error?.codigoDeBarras ? "floatingInputInvalid" : "pass"}
                 name="codigoDeBarras"
                 value={stock.codigoDeBarras}
                 onChange={handleLocalChange}
+                disabled={stock.tipoCodigoDeBarras === ""}
               />
               <label htmlFor="codigoDeBarras">Code</label>
+              <small>{error?.codigoDeBarras}</small>
             </div>
             <div className="form-floating">
               <input
-                className="form-control"
-                id="IMEISerie"
+                className={`form-control ${
+                  !error?.IMEISerie ? "" : "is-invalid"
+                }`}
+                id={error?.IMEISerie ? "floatingInputInvalid" : "pass"}
                 name="IMEISerie"
                 value={stock.IMEISerie}
                 onChange={handleLocalChange}
               />
               <label htmlFor="IMEISerie">Nro de Serie/IMEI </label>
+              <small>{error?.IMEISerie}</small>
             </div>
           </div>
           <div

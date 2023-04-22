@@ -58,70 +58,107 @@ export default function Form({ handleForm }: Props) {
     capacidad: "",
     descCorta: "",
     descLarga: "",
-    CategoryId: "",
+    categoria: "",
   });
   const dispatch = useDispatch();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    let imagesUrl: string[] = [];
 
-    for (let i = 0; i < imageFiles.length; i++) {
-      const formData = new FormData();
-      formData.append("file", imageFiles[i]);
+    if (handleValidations()) {
+      let imagesUrl: string[] = [];
 
-      try {
-        const response = await axios.post("/upload/image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response.data.path);
-        imagesUrl.push(response.data.path);
-      } catch (error) {
-        console.error(error);
+      for (let i = 0; i < imageFiles.length; i++) {
+        const formData = new FormData();
+        formData.append("file", imageFiles[i]);
+
+        try {
+          const response = await axios.post("/upload/image", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          imagesUrl.push(response.data.path);
+        } catch (error) {
+          console.error(error);
+        }
       }
+
+      const newProduct = {
+        ...product,
+        Images: imagesUrl,
+      };
+
+      dispatch(loading());
+      dispatch<any>(postProduct(newProduct))
+        .then(() => {
+          handleClose();
+          dispatch(closeLoading());
+          swal("Guardado", "Su producto se guardo correctamente", "success");
+        })
+        .catch((err: any) => {
+          console.log(err);
+          dispatch(closeLoading());
+          swal("Error", "Hubo un error al guardar el nuevo producto", "error");
+        });
     }
+  }
 
-    const newProduct = {
-      ...product,
-      Images: imagesUrl,
-    };
+  function handleValidations() {
+    let newErrors = { ...error };
+    let validation: boolean = true;
 
-    console.log(newProduct);
-
-    dispatch(loading());
-    dispatch<any>(postProduct(newProduct))
-      .then(() => {
-        handleClose();
-        dispatch(closeLoading());
-        swal("Guardado", "Su producto se guardo correctamente", "success");
-      })
-      .catch((err: any) => {
-        console.log(err);
-        dispatch(closeLoading());
-        swal("Error", "Hubo un error al guardar el nuevo producto", "error");
-      });
+    if (product.codigo === "") {
+      newErrors.codigo = "Debes agregar un codigo";
+      validation = false;
+    }
+    if (product.modelo === "") {
+      newErrors.modelo = "Debes agregar un modelo";
+      validation = false;
+    }
+    if (product.marca === "") {
+      newErrors.marca = "Debes agregar una marca";
+      validation = false;
+    }
+    if (product.color === "0") {
+      newErrors.color = "Debes agregar un color";
+      validation = false;
+    }
+    if (product.capacidad === "0") {
+      newErrors.capacidad = "Debes agregar una capacidad";
+      validation = false;
+    }
+    if (product.CategoryId === "") {
+      newErrors.categoria = "Debes agregar una categoria";
+      validation = false;
+    }
+    setError(newErrors);
+    return validation;
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    console.log(event.target.name);
     setProduct({ ...product, [event.target.name]: event.target.value });
+    setError({ ...error, [event.target.name]: "" });
   }
 
   function handleChangeSelect(
     event: React.ChangeEvent<HTMLSelectElement>
   ): void {
     setProduct({ ...product, [event.target.name]: event.target.value });
+    setError({ ...error, [event.target.name]: "" });
   }
 
   function handleChangeTextArea(
     event: React.ChangeEvent<HTMLTextAreaElement>
   ): void {
     setProduct({ ...product, [event.target.name]: event.target.value });
+    setError({ ...error, [event.target.name]: "" });
   }
 
   function handleSelectedCategories(selected: string) {
     setProduct({ ...product, CategoryId: selected });
+    setError({ ...error, categoria: "" });
   }
 
   function handleClose(): void {
@@ -183,6 +220,7 @@ export default function Form({ handleForm }: Props) {
               <input
                 id={!error.codigo ? "floatingInputInvalid" : "codigo"}
                 className={`form-control ${!error.codigo ? "" : "is-invalid"}`}
+                name="codigo"
                 type="text"
                 placeholder="codigo"
                 value={product.codigo}
@@ -222,14 +260,14 @@ export default function Form({ handleForm }: Props) {
 
             <div className="form-floating">
               <select
-                id={error.color ? "floatingInputInvalid" : "color"}
+                id={!error.color ? "floatingInputInvalid" : "color"}
                 className={`form-control ${!error.color ? "" : "is-invalid"}`}
                 name="color"
                 placeholder="color"
                 value={product.color}
                 onChange={handleChangeSelect}
               >
-                <option value="0">Seleccionar color</option>
+                <option value="">Seleccionar color</option>
                 {colores.map((col, i) => (
                   <option key={i} value={col}>
                     {col}
@@ -242,7 +280,7 @@ export default function Form({ handleForm }: Props) {
 
             <div className="form-floating">
               <select
-                id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+                id={!error.capacidad ? "floatingInputInvalid" : "capacidad"}
                 className={`form-control ${
                   !error.capacidad ? "" : "is-invalid"
                 }`}
@@ -251,7 +289,7 @@ export default function Form({ handleForm }: Props) {
                 value={product.capacidad}
                 onChange={handleChangeSelect}
               >
-                <option value="0">Seleccionar capacidad</option>
+                <option value="">Seleccionar capacidad</option>
                 {capacidades.map((cap, i) => (
                   <option key={i} value={cap}>
                     {cap}
@@ -295,7 +333,7 @@ export default function Form({ handleForm }: Props) {
 
             <div
               className={`${style.categoria} ${
-                !error.CategoryId ? "" : style.categoriaError
+                !error.categoria ? "" : style.categoriaError
               }`}
             >
               <button
@@ -305,8 +343,10 @@ export default function Form({ handleForm }: Props) {
               >
                 Agregar
               </button>
-              <label htmlFor="categoria">{product.CategoryId}</label>
-              <small>{error.CategoryId}</small>
+              <label htmlFor="categoria">
+                {categories.find((cat) => cat[0] === product.CategoryId)?.[1]}
+              </label>
+              <small>{error.categoria}</small>
             </div>
           </div>
           <AddImages

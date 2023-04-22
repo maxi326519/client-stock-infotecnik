@@ -15,6 +15,17 @@ import {
 } from "../../../../../redux/actions/loading/loading";
 import CategoriesTree from "../CategoriesTree/CategoriesTree";
 
+const initialErrors = {
+  codigo: "",
+  modelo: "",
+  marca: "",
+  color: "",
+  capacidad: "",
+  descCorta: "",
+  descLarga: "",
+  CategoryId: "",
+};
+
 interface Props {
   product: Product;
   handleDetails: () => void;
@@ -34,6 +45,7 @@ export default function Details({ product, handleDetails }: Props) {
   const [imageUrls, setImageUrls] = useState<string[]>(product?.Images);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
+  const [error, setError] = useState(initialErrors);
 
   useEffect(() => {
     setLocalProduct(product);
@@ -50,6 +62,7 @@ export default function Details({ product, handleDetails }: Props) {
       [event.target.name]: event.target.value,
     };
     setLocalProduct(editProduct);
+    setError({ ...error, [event.target.name]: "" });
   }
 
   function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -58,35 +71,38 @@ export default function Details({ product, handleDetails }: Props) {
       [event.target.name]: event.target.value,
     };
     setLocalProduct(editProduct);
+    setError({ ...error, [event.target.name]: "" });
   }
 
   function handleSave() {
-    swal({
-      text: "¿Quiere guardar los cambios?",
-      buttons: {
-        si: true,
-        cancel: true,
-      },
-    }).then((res) => {
-      if (res) {
-        dispatch(loading());
-        dispatch<any>(updateProduct(localProduct))
-          .then(() => {
-            handleDisabled();
-            dispatch(closeLoading());
-            swal("Actualizado", "Producto actualizado con exito", "success");
-          })
-          .catch((err: any) => {
-            console.log(err);
-            dispatch(closeLoading());
-            swal(
-              "Error",
-              "Hubo un error al intentar actualizar el producto, intentelo mas tarde",
-              "error"
-            );
-          });
-      }
-    });
+    if (handleValidations()) {
+      swal({
+        text: "¿Quiere guardar los cambios?",
+        buttons: {
+          si: true,
+          cancel: true,
+        },
+      }).then((res) => {
+        if (res) {
+          dispatch(loading());
+          dispatch<any>(updateProduct(localProduct))
+            .then(() => {
+              handleDisabled();
+              dispatch(closeLoading());
+              swal("Actualizado", "Producto actualizado con exito", "success");
+            })
+            .catch((err: any) => {
+              console.log(err);
+              dispatch(closeLoading());
+              swal(
+                "Error",
+                "Hubo un error al intentar actualizar el producto, intentelo mas tarde",
+                "error"
+              );
+            });
+        }
+      });
+    }
   }
 
   function handleCancel() {
@@ -98,6 +114,7 @@ export default function Details({ product, handleDetails }: Props) {
       },
     }).then(() => {
       handleDisabled();
+      setError(initialErrors);
       setLocalProduct(product);
     });
   }
@@ -129,6 +146,34 @@ export default function Details({ product, handleDetails }: Props) {
     });
   }
 
+  function handleValidations() {
+    let newErrors = { ...error };
+    let validation: boolean = true;
+
+    if (localProduct.codigo === "") {
+      newErrors.codigo = "Debes agregar un codigo";
+      validation = false;
+    }
+    if (localProduct.modelo === "") {
+      newErrors.modelo = "Debes agregar un modelo";
+      validation = false;
+    }
+    if (localProduct.marca === "") {
+      newErrors.marca = "Debes agregar una marca";
+      validation = false;
+    }
+    if (localProduct.color === "0") {
+      newErrors.color = "Debes agregar un color";
+      validation = false;
+    }
+    if (localProduct.capacidad === "0") {
+      newErrors.capacidad = "Debes agregar una capacidad";
+      validation = false;
+    }
+    setError(newErrors);
+    return validation;
+  }
+
   function handleSelectedCategories(selected: string) {
     setLocalProduct({ ...product, CategoryId: selected });
   }
@@ -147,59 +192,64 @@ export default function Details({ product, handleDetails }: Props) {
         />
       ) : null}
       <div className={style.details}>
-        <div className={style.btnClose}>
-          <button className="btn btn-danger" type="button" onClick={handleDetails}>
-            x
-          </button>
+        <div className={style.close}>
+          <h4>Detalles del producto</h4>
+          <div className="btn-close" onClick={handleDetails} />
         </div>
-
         <div className={style.data}>
           <div className={style.inputs}>
             <div className="form-floating mb-3">
               <input
-                className="form-control"
-                id="codigo"
+                id={"codigo"}
+                className={`form-control ${!error.codigo ? "" : "is-invalid"}`}
                 name="codigo"
                 type="text"
                 value={localProduct?.codigo}
+                placeholder="codigo"
                 onChange={handleChange}
                 disabled={isDisabled}
               />
-              <label htmlFor="codigo">Codigo</label>
+              <label htmlFor={!error.codigo ? "floatingInputInvalid" : "codigo"}>Codigo</label>
+              <small>{error.codigo}</small>
             </div>
 
             <div className="form-floating mb-3">
               <input
-                className="form-control"
-                id="modelo"
+                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
+                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
                 name="modelo"
                 type="text"
                 value={localProduct?.modelo}
+                placeholder="modelo"
                 onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="modelo">Modelo</label>
+              <small>{error.modelo}</small>
             </div>
 
             <div className="form-floating mb-3">
               <input
-                className="form-control"
-                id="marca"
+                id={!error.marca ? "floatingInputInvalid" : "marca"}
+                className={`form-control ${!error.marca ? "" : "is-invalid"}`}
                 name="marca"
                 type="text"
                 value={localProduct?.marca}
+                placeholder="marca"
                 onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="marca">Marca</label>
+              <small>{error.marca}</small>
             </div>
 
             <div className="form-floating mb-3">
               <select
-                className="form-select"
-                id="color"
+                id={error.color ? "floatingInputInvalid" : "color"}
+                className={`form-control ${!error.color ? "" : "is-invalid"}`}
                 name="color"
                 value={localProduct?.color}
+                placeholder="color"
                 onChange={handleSelectChange}
                 disabled={isDisabled}
               >
@@ -211,14 +261,18 @@ export default function Details({ product, handleDetails }: Props) {
                 ))}
               </select>
               <label htmlFor="color">Color</label>
+              <small>{error.color}</small>
             </div>
 
             <div className="form-floating mb-3">
               <select
-                className="form-select"
-                id="capacidad"
+                id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+                className={`form-control ${
+                  !error.capacidad ? "" : "is-invalid"
+                }`}
                 name="capacidad"
                 value={localProduct?.capacidad}
+                placeholder="capacidad"
                 onChange={handleSelectChange}
                 disabled={isDisabled}
               >
@@ -229,33 +283,46 @@ export default function Details({ product, handleDetails }: Props) {
                   </option>
                 ))}
               </select>
-              <label htmlFor="capacidad">Capacidad</label>
+              <label
+                htmlFor={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+              >
+                Capacidad
+              </label>
+              <small>{error.capacidad}</small>
             </div>
 
             <div className="form-floating mb-3">
               <input
-                className="form-control"
-                id="descLarga"
-                name="descLarga"
-                type="text"
-                value={localProduct?.descLarga}
-                onChange={handleChange}
-                disabled={isDisabled}
-              />
-              <label htmlFor="descLarga">Descripcion larga</label>
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="descCorta"
+                id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
+                className={`form-control ${
+                  !error.descCorta ? "" : "is-invalid"
+                }`}
                 name="descCorta"
                 type="text"
                 value={localProduct?.descCorta}
+                placeholder="descCorta"
                 onChange={handleChange}
                 disabled={isDisabled}
               />
               <label htmlFor="descCorta">Descripcion corta</label>
+              <small>{error.descCorta}</small>
+            </div>
+
+            <div className="form-floating mb-3">
+              <input
+                id={error.descLarga ? "floatingInputInvalid" : "descLarga"}
+                className={`form-control ${
+                  !error.descLarga ? "" : "is-invalid"
+                }`}
+                name="descLarga"
+                type="text"
+                value={localProduct?.descLarga}
+                placeholder="descLarga"
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+              <label htmlFor="descLarga">Descripcion larga</label>
+              <small>{error.descLarga}</small>
             </div>
 
             {isDisabled ? (
@@ -265,23 +332,29 @@ export default function Details({ product, handleDetails }: Props) {
                   id="categoria"
                   type="text"
                   value={localProduct?.CategoryId}
+                  placeholder="categoria"
                   onChange={handleChange}
                   disabled={isDisabled}
                 />
                 <label htmlFor="categoria">Categoria</label>
-              </div>)
-              : (
-                <div className={style.categoria}>
-                  <button
-                    className="btn btn-primary"
-                    type="button"
-                    onClick={handleCloseCategories}
-                  >
-                    Cambiar
-                  </button>
-                  <label htmlFor="categoria">{localProduct.CategoryId}</label>
-                </div>
-              )}
+              </div>
+            ) : (
+              <div
+                className={`${style.categoria} ${
+                  !error.CategoryId ? "" : style.categoriaError
+                }`}
+              >
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={handleCloseCategories}
+                >
+                  Cambiar
+                </button>
+                <label htmlFor="categoria">{localProduct.CategoryId}</label>
+                <small>{error.CategoryId}</small>
+              </div>
+            )}
           </div>
           <div className={style.rightData}>
             <ImageEditor
@@ -323,7 +396,7 @@ export default function Details({ product, handleDetails }: Props) {
             </div>
           )}
           <button
-            className="btn btn-danger"
+            className="btn btn-outline-danger"
             type="button"
             onClick={handleRemove}
           >

@@ -3,25 +3,24 @@ export default function isBarCodeValid(
   barCode: string
 ): boolean {
   switch (typeBarCode) {
-    case "Code 128":
+    case "Code128":
       return isCode128Valid(barCode);
 
-    case "Code 39":
+    case "Code39":
       return isCode39Valid(barCode);
 
-    case "UPC-A":
+    case "UPCA":
       return isUPCValid(typeBarCode, barCode);
 
-    case "UPC-E":
+    case "UPCE":
       return isUPCValid(typeBarCode, barCode);
 
-    case "EAN-8":
+    case "EAN8":
       return isCode128Valid(barCode);
 
-    case "EAN-13":
+    case "EAN13":
       return isCode128Valid(barCode);
 
-      break;
     default:
       throw new Error("Tipo de código de barras no soportado");
   }
@@ -123,98 +122,98 @@ function getClosestCode39Value(num: number): number {
 
 /* ---------------------------------UPC-A---&&---UPC-E------------------------------------ */
 function isUPCValid(typeBarCode: string, barCode: string): boolean {
-    if (typeBarCode !== "UPC-A" && typeBarCode !== "UPC-E") {
-      return false;
-    }
-  
-    // Verificar que el código de barras tenga una longitud válida
-    if (barCode.length !== 12 && barCode.length !== 7) {
-      return false;
-    }
-  
-    // Verificar que todos los caracteres sean dígitos numéricos
-    const numericChars = /^[0-9]+$/;
-    if (!numericChars.test(barCode)) {
-      return false;
-    }
-  
-    // Calcular y verificar el código de control
-    const code = barCode.substring(0, barCode.length - 1);
-    const codeControl = getUPCCodeControl(code);
-    const expectedCodeControl = parseInt(barCode.charAt(barCode.length - 1));
-  
-    return codeControl === expectedCodeControl;
+  if (typeBarCode !== "UPC-A" && typeBarCode !== "UPC-E") {
+    return false;
   }
-  
-  function getUPCCodeControl(code: string): number {
-    let sumOdd = 0;
-    let sumEven = 0;
-  
-    for (let i = 0; i < code.length; i++) {
-      const digit = parseInt(code.charAt(i));
-  
-      if ((i + 1) % 2 === 0) {
-        sumEven += digit;
-      } else {
-        sumOdd += digit;
-      }
-    }
-  
-    const sum = (sumOdd * 3) + sumEven;
-    const remainder = sum % 10;
-  
-    if (remainder === 0) {
-      return 0;
+
+  // Verificar que el código de barras tenga una longitud válida
+  if (barCode.length !== 12 && barCode.length !== 7) {
+    return false;
+  }
+
+  // Verificar que todos los caracteres sean dígitos numéricos
+  const numericChars = /^[0-9]+$/;
+  if (!numericChars.test(barCode)) {
+    return false;
+  }
+
+  // Calcular y verificar el código de control
+  const code = barCode.substring(0, barCode.length - 1);
+  const codeControl = getUPCCodeControl(code);
+  const expectedCodeControl = parseInt(barCode.charAt(barCode.length - 1));
+
+  return codeControl === expectedCodeControl;
+}
+
+function getUPCCodeControl(code: string): number {
+  let sumOdd = 0;
+  let sumEven = 0;
+
+  for (let i = 0; i < code.length; i++) {
+    const digit = parseInt(code.charAt(i));
+
+    if ((i + 1) % 2 === 0) {
+      sumEven += digit;
     } else {
-      return 10 - remainder;
+      sumOdd += digit;
     }
   }
 
+  const sum = sumOdd * 3 + sumEven;
+  const remainder = sum % 10;
+
+  if (remainder === 0) {
+    return 0;
+  } else {
+    return 10 - remainder;
+  }
+}
+
 /* ---------------------------------EAN-8---&&---EAN-13------------------------------------ */
-  function isEANValid(typeBarCode: string, barCode: string): boolean {
-    if (typeBarCode !== "EAN-8" && typeBarCode !== "EAN-13") {
-      return false;
-    }
-  
-    // Verificar que el código de barras tenga una longitud válida
-    if (barCode.length !== 8 && barCode.length !== 13) {
-      return false;
-    }
-  
-    // Verificar que todos los caracteres sean dígitos numéricos
-    const numericChars = /^[0-9]+$/;
-    if (!numericChars.test(barCode)) {
-      return false;
-    }
-  
-    // Calcular y verificar el código de control
-    const code = barCode.substring(0, barCode.length - 1);
-    const codeControl = getEANCodeControl(code);
-    const expectedCodeControl = parseInt(barCode.charAt(barCode.length - 1));
-  
-    return codeControl === expectedCodeControl;
+function isEANValid(typeBarCode: string, barCode: string): boolean {
+  if (typeBarCode !== "EAN-8" && typeBarCode !== "EAN-13") {
+    return false;
   }
-  
-  function getEANCodeControl(code: string): number {
-    let sumOdd = 0;
-    let sumEven = 0;
-  
-    for (let i = 0; i < code.length; i++) {
-      const digit = parseInt(code.charAt(i));
-  
-      if ((i + 1) % 2 === 0) {
-        sumEven += digit;
-      } else {
-        sumOdd += digit;
-      }
-    }
-  
-    const sum = (sumOdd * 3) + sumEven;
-    const remainder = sum % 10;
-  
-    if (remainder === 0) {
-      return 0;
+
+  // Verificar que el código de barras tenga una longitud válida
+  if (barCode.length !== 8 && barCode.length !== 13) {
+    return false;
+  }
+
+  // Verificar que todos los caracteres sean dígitos numéricos
+  const numericChars = /^[0-9]+$/;
+  if (!numericChars.test(barCode)) {
+    return false;
+  }
+
+  // Calcular y verificar el código de control
+  const code = barCode.substring(0, barCode.length - 1);
+  const codeControl = getEANCodeControl(code);
+  const expectedCodeControl = parseInt(barCode.charAt(barCode.length - 1));
+
+  return codeControl === expectedCodeControl;
+}
+
+function getEANCodeControl(code: string): number {
+  let sumOdd = 0;
+  let sumEven = 0;
+
+  for (let i = 0; i < code.length; i++) {
+    const digit = parseInt(code.charAt(i));
+
+    if ((i + 1) % 2 === 0) {
+      sumEven += digit;
     } else {
-      return 10 - remainder;
+      sumOdd += digit;
     }
   }
+
+  const sum = sumOdd * 3 + sumEven;
+  const remainder = sum % 10;
+
+  if (remainder === 0) {
+    return 0;
+  } else {
+    return 10 - remainder;
+  }
+}

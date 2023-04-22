@@ -11,14 +11,20 @@
 }
 
 .details {
-  padding: 30px;
-  border-radius: 10px;
-  background-color: var(--panel);
+  padding: 20px;
+  border-radius: 5px;
+  background-color: var(--background);
 }
 
-.btnClose {
+.close {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close h4 {
+  flex-grow: 1;
 }
 
 .data {
@@ -26,15 +32,39 @@
 }
 
 .inputs {
-  width: 400px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 250px 250px;
+  grid-template-rows: repeat(5, 1fr);
+  margin-bottom: 20px;
+}
+
+.inputs input {
+  width: 100%;
+}
+
+.inputs div:nth-child(7) {
+  grid-column: 1 / 3;
+}
+
+.inputs div:last-child {
+  grid-column: 1 / 3;
 }
 
 .categoria {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 10px;
+  height: 60px;
   border-radius: 5px;
-  background-color: #0003;
+  border: 1px solid #ccc;
+}
+
+.categoria small {
+  position: absolute;
+  top: 60px;
+  left: 0;
 }
 
 .categoria label {
@@ -42,10 +72,13 @@
   text-align: center;
 }
 
+.categoriaError {
+  border-color: red;
+}
+
 .rightData {
   display: flex;
   flex-direction: column;
-  width: 400px;
   margin-left: 30px;
 }
 
@@ -72,18 +105,4 @@
 
 .leftButtons {
   flex-grow: 1;
-}
-
-.inputs input,
-.inputs input:focus,
-.inputs input:active,
-.inputs input:disabled,
-.inputs select,
-.inputs select:focus,
-.inputs select:active,
-.inputs select:disabled,
-.inputs .form-floating {
-  background-color: #0002;
-  border-color: var(--border);
-  color: var(--font);
 }

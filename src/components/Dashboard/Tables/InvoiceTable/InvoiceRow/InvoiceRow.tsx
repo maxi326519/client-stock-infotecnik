@@ -31,14 +31,14 @@ export default function InvoiceRow({
         <img src={products} alt="products" />
       </button>
       <button
-        className="btn btn-primary"
+        className="btn btn-outline-success"
         type="button"
         onClick={() => handleSupplier(invoice.SuipplierId)}
       >
         <img src={supplier} alt="supplier" />
       </button>
       <button
-        className="btn btn-danger"
+        className="btn btn-outline-success"
         type="button"
         onClick={() => handleSupplier(invoice.id)}
       >

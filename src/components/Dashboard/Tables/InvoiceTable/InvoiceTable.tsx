@@ -7,11 +7,13 @@ import InvoiceRow from "./InvoiceRow/InvoiceRow";
 
 import style from "./InvoiceTable.module.css";
 import add from "../../../../assets/svg/add.svg";
+import Form from "./Form/Form";
 
 export default function InvoiceTable() {
   const invoices = useSelector((state: RootState) => state.invoices);
   const [rows, setRows] = useState<Invoices[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [form, setForm] = useState(false);
 
   useEffect(() => {
     const filter = invoices.filter(() => {
@@ -26,16 +28,17 @@ export default function InvoiceTable() {
     setSearch(value);
   }
 
+  function handleForm(): void {
+    setForm(!form);
+  }
+
   function handleStock() {}
 
   function handleSupplier() {}
 
-  function handleForm(){
-
-  }
-
   return (
     <div className={`toLeft ${style.dashboardList}`}>
+      {form ? <Form handleForm={handleForm} /> : null}
       <h3>Facturas</h3>
       <div className={style.dashboardList__searchBar}>
         <input

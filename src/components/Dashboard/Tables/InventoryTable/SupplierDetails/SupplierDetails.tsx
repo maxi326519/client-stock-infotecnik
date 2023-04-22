@@ -10,16 +10,10 @@ interface Props {
 export default function SupplierDetails({ supplier, handleClose }: Props) {
   return (
     <div className={style.container}>
-      <div className={style.details}>
+      <div className={`toTop ${style.details}`}>
         <div className={style.btnClose}>
           <h4>Datos del proveedor</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={() => handleClose(null)}
-          >
-            x
-          </button>
+          <div className="btn-close" onClick={() => handleClose(null)} />
         </div>
         <div className={style.data}>
           <div className={style.dataGrid}>

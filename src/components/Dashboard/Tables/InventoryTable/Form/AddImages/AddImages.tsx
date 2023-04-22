@@ -36,7 +36,7 @@ export default function ImageEditor({
       setImageUrls(imageUrls);
       setImageFiles(imageFiles);
     }
-  }, [imageUrls, imageFiles])
+  }, [imageUrls, imageFiles]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -71,30 +71,18 @@ export default function ImageEditor({
 
   return (
     <div className={styles.container}>
-      <div className={styles.form}>
+      <div className={`toTop ${styles.form}`}>
         <div>
           <div className={styles.close}>
-            <button
-              className="btn btn-danger"
-              type="button"
-              onClick={handleClose}
-            >
-              X
-            </button>
+            <h4>Seleccione imagenes</h4>
+            <div className="btn-close" onClick={handleClose} />
           </div>
           <div className={styles.imageContainer}>
-            <button
-              className={`btn btn-outline-danger ${styles.delete}`}
-              type="button"
+            <div
+              className={`btn-close ${styles.delete}`}
               onClick={handleRemove}
-            >
-              X
-            </button>
-            <img
-              className={styles.icon}
-              src={selectedImage}
-              alt="img"
             />
+            <img className={styles.icon} src={selectedImage} alt="img" />
           </div>
           <div className="mb-3 form-floating">
             <label className="form-control" htmlFor="images">
@@ -120,8 +108,20 @@ export default function ImageEditor({
           ))}
         </div>
         <div className={styles.btnContainer}>
-          <button className="btn btn-primary" type="button" onClick={handleSave}>Guardar</button>
-          <button className="btn btn-danger" type="button" onClick={handleCancel}>Cancelar</button>
+          <button
+            className="btn btn-success"
+            type="button"
+            onClick={handleSave}
+          >
+            Guardar
+          </button>
+          <button
+            className="btn btn-danger"
+            type="button"
+            onClick={handleCancel}
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>

@@ -143,13 +143,7 @@ export default function Details({
       <div className={style.details}>
         <div className={style.btnClose}>
           <h4>Detalles del item</h4>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={() => handleClose(null)}
-          >
-            x
-          </button>
+          <div className="btn-close" onClick={() => handleClose(null)} />
         </div>
         <div className={style.data}>
           <div className={style.product}>

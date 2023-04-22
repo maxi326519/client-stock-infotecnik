@@ -79,8 +79,6 @@ export default function InventoryTable() {
     handleSelection(stock);
   }
 
-
-
   return (
     <div className={`toLeft ${style.dashboardList}`}>
       {form ? (
