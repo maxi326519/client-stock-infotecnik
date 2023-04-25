@@ -1,10 +1,9 @@
-import { InvoiceDestails } from "../../../../../../../interfaces";
+import { TotalDetail } from "../../../../../../../interfaces";
 
-import deleteSvg from "../../../../../../../assets/svg/delete.svg";
 import style from "./DetailsRows.module.css";
 
 interface Props {
-  detail: InvoiceDestails;
+  detail: TotalDetail;
   handleChange: (
     detailId: string,
     name: string,
@@ -22,7 +21,7 @@ export default function DetailsRows({
     const name = event.target.name;
     const value = event.target.value;
 
-    handleChange(detail.id, name, value);
+    handleChange(detail.id!, name, value);
   }
 
   return (
@@ -62,7 +61,7 @@ export default function DetailsRows({
       <button
         className="btn btn-outline-danger"
         type="button"
-        onClick={() => handleRemove(detail.id)}
+        onClick={() => handleRemove(detail.id!)}
       >
         -
       </button>

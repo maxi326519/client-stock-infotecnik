@@ -23,7 +23,7 @@ export default function calcularIVA(
         };
       }
       break;
-    case TipoImpositivo.recargo:
+    case TipoImpositivo.Recargo:
       if (name === "precioSinIVA") {
         prices = {
           precioSinIVA: value,

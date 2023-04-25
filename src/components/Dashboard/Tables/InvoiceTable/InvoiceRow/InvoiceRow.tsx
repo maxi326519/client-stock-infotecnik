@@ -8,13 +8,15 @@ import deleteSvg from "../../../../../assets/svg/delete.svg";
 interface Props {
   invoice: Invoices;
   handleStock: (stockId: string) => void;
-  handleSupplier: (stockId: string) => void;
+  handleSupplier: (supplierId: string) => void;
+  handleDelete: (invoiceId: string) => void;
 }
 
 export default function InvoiceRow({
   invoice,
   handleStock,
   handleSupplier,
+  handleDelete,
 }: Props) {
   return (
     <div className={style.row}>
@@ -26,21 +28,21 @@ export default function InvoiceRow({
       <button
         className="btn btn-primary"
         type="button"
-        onClick={() => handleStock(invoice.SuipplierId)}
+        onClick={() => handleStock(invoice.SupplierId)}
       >
         <img src={products} alt="products" />
       </button>
       <button
         className="btn btn-outline-success"
         type="button"
-        onClick={() => handleSupplier(invoice.SuipplierId)}
+        onClick={() => handleSupplier(invoice.SupplierId)}
       >
         <img src={supplier} alt="supplier" />
       </button>
       <button
         className="btn btn-outline-success"
         type="button"
-        onClick={() => handleSupplier(invoice.id)}
+        onClick={() => handleDelete(invoice.id!)}
       >
         <img src={deleteSvg} alt="delete" />
       </button>

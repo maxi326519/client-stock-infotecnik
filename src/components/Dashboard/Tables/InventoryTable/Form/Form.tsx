@@ -47,12 +47,14 @@ interface Props {
 const initialState: Invoices = {
   id: "",
   fecha: new Date().toISOString().split("T")[0],
-  numero: 1,
+  numero: "",
+  tipo: "Stock",
   pendiente: false,
   archivo: "",
+  total: 0,
   tipoImpositivo: TipoImpositivo.IVA,
-  SuipplierId: "",
-  InvoiceDestails: [],
+  SupplierId: "",
+  TotalDetails: [],
   StockId: [],
 };
 
@@ -72,9 +74,7 @@ const initialStock: Stock = {
   total: 0,
   detalles: "",
   Images: [],
-  ProductId: "",
   SupplierId: "",
-  InvoiceId: "",
 };
 
 export default function Form({ handleClose }: Props) {
@@ -160,14 +160,17 @@ export default function Form({ handleClose }: Props) {
 
       const newInvoice = {
         ...invoice,
-        detalles: stock.map((stock: Stock) => ({
+        Stock: stock.map((stock: Stock) => ({
           ...stock,
           Images: imagesList.find((imagesUrl) => imagesUrl.stockId === stock.id)
             ?.imagesUrls,
+          SupplierId: supplierSelected?.id,
         })),
         archivo: invoiceURL,
         SupplierId: supplierSelected?.id,
       };
+
+      console.log(newInvoice);
 
       dispatch(loading());
       dispatch<any>(postInvoice(newInvoice))
@@ -186,7 +189,7 @@ export default function Form({ handleClose }: Props) {
               ...invoiceError,
               archivo: "Falta seleccionar un archivo",
             });
-          } else if (err.message?.includes("missing parameter (supplier)")) {
+          } else if (err.message?.includes("missing parameter (SupplierId)")) {
             setSupplierError("Falta seleccionar un proveedor");
           } else if (err.message?.includes("No se adjunto inventario")) {
             swal("Error", "Agregue inventario a guardar", "error");
@@ -325,10 +328,10 @@ export default function Form({ handleClose }: Props) {
         newErrors[i].codigoDeBarras = "Debes agregar un codigo";
         validation = false;
       }
-      if (stock.IMEISerie === "") {
+      /*       if (stock.IMEISerie === "") {
         newErrors[i].IMEISerie = "Debes agregar un IMEI";
         validation = false;
-      }
+      } */
       if (stock.cantidad <= 0) {
         newErrors[i].cantidad = "Debes agregar una cantidad";
         validation = false;

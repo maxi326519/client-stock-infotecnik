@@ -1,42 +1,34 @@
 import { useState } from "react";
-import { InvoiceDestails } from "../../../../../../interfaces";
+import { TotalDetail, initDetail } from "../../../../../../interfaces";
 import DetailsRows from "./DetailsRows/DetailsRows";
 
-import style from "./DetaisTable.module.css";
+import style from "./DetailsTable.module.css";
 
-const initialDetail = {
-  id: "",
-  concepto: "",
-  cantidad: 0,
-  baseImponible: 0,
-  ivaPorcentaje: 0,
-};
+interface Props {
+  details: TotalDetail[];
+  addDetail: (detail: TotalDetail) => void;
+  removeDetails: (detailId: string) => void;
+  changeDetail: (
+    detailId: string,
+    name: string,
+    value: string | number
+  ) => void;
+}
 
-export default function DetaisTable() {
-  const [details, setDetails] = useState<any>([]);
-  const [newDetail, setNewDetial] = useState<any>(initialDetail);
+export default function DetaisTable({
+  details,
+  addDetail,
+  removeDetails,
+  changeDetail,
+}: Props) {
+  const [newDetail, setNewDetail] = useState<TotalDetail>(initDetail);
 
-  function handleNewDetail(event: React.ChangeEvent<HTMLInputElement>) {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    setNewDetial({ ...newDetail, [name]: value });
+  function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setNewDetail({ ...newDetail, [event.target.name]: event.target.value });
   }
 
-  function handleAddDetail() {
-    let newId: string = details.length.toString();
-
-    while (details.some((d: InvoiceDestails) => d.id === newId)) {
-      newId = (Number(newId) + 1).toString();
-    }
-
-    const detail = {
-      ...newDetail,
-      id: newId,
-    };
-
-    setNewDetial(initialDetail);
-    setDetails([...details, detail]);
+  function handleAdd() {
+    addDetail(newDetail);
   }
 
   function handleChange(
@@ -44,24 +36,11 @@ export default function DetaisTable() {
     name: string,
     value: string | number
   ) {
-    setDetails(
-      details.map((detail: InvoiceDestails) => {
-        if (detail.id === detailId) {
-          return {
-            ...detail,
-            [name]: value,
-          };
-        } else {
-          return detail;
-        }
-      })
-    );
+    changeDetail(detailId, name, value);
   }
 
   function handleRemove(detailId: string) {
-    setDetails(
-      details.filter((detail: InvoiceDestails) => detail.id !== detailId)
-    );
+    removeDetails(detailId);
   }
 
   return (
@@ -79,7 +58,7 @@ export default function DetaisTable() {
             <span>No hay detalles</span>
           </div>
         ) : (
-          details?.map((detail: InvoiceDestails) => (
+          details?.map((detail: TotalDetail) => (
             <DetailsRows
               key={detail.id}
               detail={detail}
@@ -93,38 +72,39 @@ export default function DetaisTable() {
         <input
           id="concepto"
           name="concepto"
+          type="text"
           value={newDetail.concepto}
           placeholder="Concepto"
-          onChange={handleNewDetail}
+          onChange={handleLocalChange}
         />
         <input
           id="cantidad"
           name="cantidad"
+          type="number"
           value={newDetail.cantidad}
           placeholder="Cantidad"
-          type="number"
-          onChange={handleNewDetail}
+          onChange={handleLocalChange}
         />
         <input
           id="baseImponible"
           name="baseImponible"
+          type="number"
           value={newDetail.baseImponible}
           placeholder="Precio"
-          type="number"
-          onChange={handleNewDetail}
+          onChange={handleLocalChange}
         />
         <input
           id="ivaPorcentaje"
           name="ivaPorcentaje"
+          type="number"
           value={newDetail.ivaPorcentaje}
           placeholder="IVA"
-          type="number"
-          onChange={handleNewDetail}
+          onChange={handleLocalChange}
         />
         <button
           className="btn btn-outline-success"
           type="button"
-          onClick={handleAddDetail}
+          onClick={handleAdd}
         >
           +
         </button>

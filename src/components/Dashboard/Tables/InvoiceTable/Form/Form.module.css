@@ -12,6 +12,8 @@
 }
 
 .form {
+  position: relative;
+  width: 600px;
   padding: 20px;
   border-radius: 5px;
   background-color: white;
@@ -47,4 +49,25 @@
 .pending input {
   width: min-content;
   margin-right: 10px;
+}
+
+.catContainer {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  grid-template-rows: 20px 1fr;
+  margin-bottom: 0 !important;
+  padding: 5px;
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.catContainer .title {
+  color: #666;
+  font-size: 14px;
+}
+
+.category button {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
 }

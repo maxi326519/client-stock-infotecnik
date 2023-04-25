@@ -1,4 +1,11 @@
-import { RootState } from "../../interfaces";
+import {
+  Invoices,
+  Product,
+  RootState,
+  Stock,
+  Supplier,
+  User,
+} from "../../interfaces/index";
 import { AnyAction } from "redux";
 import { POST_USER, UPDATE_USER, DELETE_USER } from "../actions/user";
 import {
@@ -22,7 +29,13 @@ import {
   GET_CONFIGURATIONS,
   UPDATE_CONFIGURATIONS,
 } from "../actions/configurations";
-import { POST_INVOICE, GET_INVOICE, UPDATE_INVOICE } from "../actions/invoices";
+import {
+  POST_INVOICE,
+  GET_INVOICE,
+  UPDATE_INVOICE,
+  POST_STOCK_INVOICE,
+  DELETE_INVOICE,
+} from "../actions/invoices";
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
 import { LOGIN, LOGOUT, PRESISTENCE } from "../actions/login";
@@ -40,6 +53,7 @@ const initialState: RootState = {
     capacidades: [],
     colores: [],
     categories: [],
+    types: [],
   },
   products: [],
   suppliers: [],
@@ -132,11 +146,17 @@ export default function Reducer(
         clients: [...state.clients, action.payload],
       };
 
-    case POST_INVOICE:
+    case POST_STOCK_INVOICE:
       return {
         ...state,
         stock: [...state.stock, ...action.payload.inventory],
         invoices: [...state.invoices, action.payload.invoice],
+      };
+
+    case POST_INVOICE:
+      return {
+        ...state,
+        invoices: [...state.invoices, action.payload],
       };
 
     case POST_CATEGORIES:
@@ -236,7 +256,7 @@ export default function Reducer(
     case UPDATE_PRODUCT:
       return {
         ...state,
-        products: state.products.map((p) =>
+        products: state.products.map((p: Product) =>
           p.id === action.payload.id ? action.payload : p
         ),
       };
@@ -244,7 +264,7 @@ export default function Reducer(
     case UPDATE_INVOICE:
       return {
         ...state,
-        invoices: state.invoices.map((i) =>
+        invoices: state.invoices.map((i: Invoices) =>
           i.id === action.payload.id ? action.payload : i
         ),
       };
@@ -252,7 +272,7 @@ export default function Reducer(
     case UPDATE_STOCK:
       return {
         ...state,
-        stock: state.stock.map((s) =>
+        stock: state.stock.map((s: Stock) =>
           s.id === action.payload.id ? action.payload : s
         ),
       };
@@ -266,7 +286,7 @@ export default function Reducer(
     case UPDATE_USER:
       return {
         ...state,
-        users: state.users.map((user) =>
+        users: state.users.map((user: User) =>
           user.id === action.payload.id ? action.payload : user
         ),
       };
@@ -274,19 +294,35 @@ export default function Reducer(
     case DELETE_PRODUCT:
       return {
         ...state,
-        products: state.products.filter((p) => p.id !== action.payload),
+        products: state.products.filter(
+          (p: Product) => p.id !== action.payload
+        ),
       };
 
     case DELETE_SUPPLIER:
       return {
         ...state,
-        suppliers: state.suppliers.filter((s) => s.id !== action.payload),
+        suppliers: state.suppliers.filter(
+          (s: Supplier) => s.id !== action.payload
+        ),
+      };
+
+    case DELETE_INVOICE:
+      console.log(action.payload);
+      return {
+        ...state,
+        stock: state.stock.filter(
+          (stock) => stock.InvoiceId !== action.payload
+        ),
+        invoices: state.invoices.filter(
+          (invoice) => invoice.id !== action.payload
+        ),
       };
 
     case DELETE_USER:
       return {
         ...state,
-        users: state.users.filter((user) => user.id !== action.payload),
+        users: state.users.filter((user: User) => user.id !== action.payload),
       };
 
     default:

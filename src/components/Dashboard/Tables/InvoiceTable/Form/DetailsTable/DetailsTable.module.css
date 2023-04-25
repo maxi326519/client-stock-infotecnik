@@ -1,6 +1,7 @@
 .grid {
   flex-grow: 1;
   outline: 1px solid var(--border);
+  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -50,4 +51,5 @@
   display: grid;
   grid-template-columns: 1fr repeat(3, 80px) 50px;
   grid-template-rows: 1fr;
+  margin-bottom: 0 !important;
 }

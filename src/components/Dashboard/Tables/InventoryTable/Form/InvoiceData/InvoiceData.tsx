@@ -48,15 +48,7 @@ export default function InvoiceData({
   }
 
   function handleLocalSelect(event: React.ChangeEvent<HTMLSelectElement>) {
-    const value = event.target.value;
-
-    if (Number(value) === TipoImpositivo.IVA) {
-      handleChange("tipoImpositivo", TipoImpositivo.IVA);
-    } else if (Number(value) === TipoImpositivo.REBU) {
-      handleChange("tipoImpositivo", TipoImpositivo.REBU);
-    } else if (Number(value) === TipoImpositivo.recargo) {
-      handleChange("tipoImpositivo", TipoImpositivo.recargo);
-    }
+    handleChange(event.target.name, event.target.value);
   }
 
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -108,7 +100,7 @@ export default function InvoiceData({
             onChange={handleLocalSelect}
           >
             <option value={TipoImpositivo.IVA}>IVA</option>
-            <option value={TipoImpositivo.recargo}>Recargo</option>
+            <option value={TipoImpositivo.Recargo}>Recargo</option>
             <option value={TipoImpositivo.REBU}>REBU</option>
           </select>
           <label htmlFor="tipoImpositivo" className="form-label">

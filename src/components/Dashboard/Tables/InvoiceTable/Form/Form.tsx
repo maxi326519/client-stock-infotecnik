@@ -1,73 +1,98 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Invoices, TipoImpositivo } from ".././../../../../interfaces";
-import { postInvoice } from "../../../../../redux/actions/invoices";
+import { useDispatch, useSelector } from "react-redux";
+import { useInvoice } from "../../../../../hooks";
 import swal from "sweetalert";
-
-import style from "./Form.module.css";
 import {
   closeLoading,
   loading,
 } from "../../../../../redux/actions/loading/loading";
-import DetaisTable from "./ClientsTable/DetaisTable";
 
+import DetailsTable from "./DetailsTable/DetailsTable";
+
+import style from "./Form.module.css";
+import Categories from "./Categories/Categories";
+import { useState } from "react";
+import SupplierData from "./SupplierData/SupplierData";
+import { RootState, Supplier } from "../../../../../interfaces";
+import AddSupplier from "./AddSupplier/AddSupplier";
 interface Props {
   handleForm: () => void;
 }
 
 export default function Form({ handleForm }: Props) {
-  const initialState: Invoices = {
-    id: "",
-    fecha: new Date().toISOString().split("T")[0],
-    numero: 0,
-    pendiente: true,
-    archivo: "",
-    tipoImpositivo: TipoImpositivo.IVA,
-    InvoiceDestails: [],
-    SuipplierId: "",
-    StockId: [],
-  };
-
-  const [invoice, setInvoice] = useState(initialState);
+  const {
+    invoice,
+    setInvoice,
+    postInvoice,
+    resetInvoice,
+    details,
+    addDetail,
+    removeDetails,
+    changeDetail,
+  } = useInvoice();
   const dispatch = useDispatch();
+  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const [supplier, setSupplier] = useState<Supplier | null>(null);
+  const [error, setError] = useState({
+    SupplierId: "",
+  });
+  const [categories, setCategories] = useState<boolean>(false);
+  const [supplierForm, setSupplierForm] = useState<boolean>(false);
 
-  
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    dispatch(loading());
+    postInvoice()
+      .then(() => {
+        handleClose();
+        dispatch(closeLoading());
+        swal("Guardado", "Se guardo la factura correctamente", "success");
+      })
+      .catch((err: any) => {
+        dispatch(closeLoading());
+        swal("Error", "Hubo un error al guardar la factura", "error");
+        console.log(err);
+      });
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setInvoice({ ...invoice, [event.target.name]: event.target.value });
   }
 
   function handleChangeCheckbox(event: React.ChangeEvent<HTMLInputElement>) {
-    const name = event.target.name;
-    const value = event.target.checked;
+    setInvoice({ ...invoice, [event.target.name]: event.target.checked });
+  }
 
-    setInvoice({ ...invoice, [name]: value });
+  function handleSetSupplier(supplier: Supplier | null) {
+    if (supplier) {
+      setSupplier(supplier);
+      setInvoice({ ...invoice, SupplierId: supplier.id });
+    }
   }
 
   function handleClose(): void {
-    setInvoice(initialState);
+    resetInvoice();
     handleForm();
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
-    dispatch(loading());
-    dispatch<any>(postInvoice(invoice))
-      .then(() => {
-        handleClose();
-        dispatch(closeLoading());
-        swal("Guardado", "Se guardo el cliente correctamente", "success");
-      })
-      .catch((err: any) => {
-        dispatch(closeLoading());
-        swal("Error", "Hubo un error al guardar el nuevo ", "error");
-        console.log(err);
-      });
+  function handleCategories() {
+    setCategories(!categories);
+  }
+
+  function handleFormSuppliers() {
+    setSupplierForm(!supplierForm);
   }
 
   return (
     <div className={style.container}>
-      <form className={style.form} onSubmit={handleSubmit}>
+      {categories ? <Categories handleClose={handleCategories} /> : null}
+      {supplierForm ? (
+        <AddSupplier
+          supplierSelected={supplier}
+          setSupplier={handleSetSupplier}
+          handleClose={handleFormSuppliers}
+        />
+      ) : null}
+      <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
         <div className={style.close}>
           <h4>Nuevo cliente</h4>
           <div className="btn-close" onClick={handleClose} />
@@ -75,10 +100,25 @@ export default function Form({ handleForm }: Props) {
         <div className={style.inputs}>
           <div className="form-floating">
             <input
+              id="fecha"
+              className="form-control"
+              name="fecha"
+              type="date"
+              value={invoice.fecha}
+              onChange={handleChange}
+            />
+            <label className="form-label" htmlFor="fecha">
+              Fecha
+            </label>
+            <small></small>
+          </div>
+
+          <div className="form-floating">
+            <input
               id="numero"
+              className="form-control"
               name="numero"
               type="text"
-              className="form-control"
               value={invoice.numero}
               onChange={handleChange}
             />
@@ -88,20 +128,42 @@ export default function Form({ handleForm }: Props) {
             <small></small>
           </div>
 
+          <div className={style.category}>
+            <div className={style.catContainer}>
+              <span className={style.title}>Categoria</span>
+              <span className={style.data}>{invoice.tipo}Luz</span>
+              <button
+                className="btn btn-outline-success"
+                type="button"
+                onClick={handleCategories}
+              >
+                Seleccionar
+              </button>
+            </div>
+            <small></small>
+          </div>
+
           <div className="form-floating">
             <input
-              id="fecha"
-              name="fecha"
-              type="date"
+              id="total"
               className="form-control"
-              value={invoice.fecha}
+              name="total"
+              type="number"
+              value={invoice.total}
               onChange={handleChange}
             />
-            <label className="form-label" htmlFor="fecha">
-              Fecha
+            <label className="form-label" htmlFor="total">
+              Total
             </label>
             <small></small>
           </div>
+
+          <DetailsTable
+            details={details}
+            addDetail={addDetail}
+            removeDetails={removeDetails}
+            changeDetail={changeDetail}
+          />
 
           <div className={style.pending}>
             <input
@@ -117,9 +179,9 @@ export default function Form({ handleForm }: Props) {
           <div className="form-floating">
             <input
               id="archivo"
+              className="form-control"
               name="archivo"
               type="file"
-              className="form-control"
               value={invoice.archivo}
               onChange={handleChange}
               disabled={invoice.pendiente}
@@ -130,8 +192,11 @@ export default function Form({ handleForm }: Props) {
             <small></small>
           </div>
 
-          <DetaisTable />
-
+          <SupplierData
+            supplier={supplier}
+            error={error.SupplierId}
+            handleFormSuppliers={handleFormSuppliers}
+          />
           <button className="btn btn-success" type="submit">
             Agregar
           </button>

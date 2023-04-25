@@ -1,9 +1,18 @@
-export interface Login {
+import {
+  Invoices,
+  TotalDetail,
+  Stock,
+  TipoImpositivo,
+  initInvoice,
+  initDetail,
+} from "./invoices";
+
+interface Login {
   email: string;
   password: string;
 }
 
-export interface User {
+interface User {
   id: string;
   rol: string;
   name: string;
@@ -11,7 +20,7 @@ export interface User {
   email: string;
 }
 
-export interface PostUser {
+interface PostUser {
   rol: string;
   name: string;
   userName: string;
@@ -19,12 +28,12 @@ export interface PostUser {
   password: string;
 }
 
-export enum Rol {
+enum Rol {
   Admin = "Admin",
   Contador = "Contador",
 }
 
-export interface Product {
+interface Product {
   id: string;
   codigo: string;
   modelo: string;
@@ -37,7 +46,7 @@ export interface Product {
   CategoryId: string;
 }
 
-export interface Supplier {
+interface Supplier {
   id: string;
   numero: number;
   nombre: string;
@@ -48,51 +57,7 @@ export interface Supplier {
   telefono: string;
 }
 
-export interface Stock {
-  id: string;
-  fechaAlta: string;
-  estado: string;
-  cantidad: number;
-  catalogo: boolean;
-  IMEISerie: string;
-  tipoCodigoDeBarras: string;
-  codigoDeBarras: string;
-  precioSinIVA: number;
-  precioIVA: number;
-  precioIVAINC: number;
-  recargo: number;
-  total: number;
-  detalles: string;
-  Images: string[];
-  ProductId: string;
-  SupplierId: string;
-  InvoiceId: string;
-}
-
-export interface Invoices {
-  id: string;
-  fecha: string;
-  numero: number;
-  pendiente: boolean;
-  archivo: string;
-  tipoImpositivo: TipoImpositivo;
-  InvoiceDestails: InvoiceDestails[];
-  SuipplierId: string;
-  StockId: Stock[];
-}
-
-export interface InvoiceDestails {
-  id: string;
-  concepto: string;
-  cantidad: number;
-  baseImponible: number;
-  ivaPorcentaje: number;
-  ivaMonto: number;
-  recargoPorcentaje: number;
-  recargoMonto: number;
-}
-
-export interface Client {
+interface Client {
   id: string;
   numero: number;
   nombre: string;
@@ -103,13 +68,7 @@ export interface Client {
   telefono: string;
 }
 
-export enum TipoImpositivo {
-  IVA,
-  recargo,
-  REBU,
-}
-
-export interface Transactions {
+interface Transactions {
   id: string;
   fecha: string;
   fechaValor: string;
@@ -120,7 +79,7 @@ export interface Transactions {
   InvoiceId: string;
 }
 
-export enum BarCode {
+enum BarCode {
   Ninguno = "",
   Code128 = "Code128",
   Code39 = "Code39",
@@ -130,20 +89,21 @@ export enum BarCode {
   EAN13 = "EAN13",
 }
 
-export interface Config {
+interface Config {
   ivaSuperReducido: number;
   ivaReducido: number;
   ivaGeneral: number;
   recargo: number;
 }
 
-export interface RootState {
+interface RootState {
   profile: User;
   users: User[];
   attributes: {
     capacidades: Array<string>;
     colores: Array<string>;
     categories: Array<any>;
+    types: Array<string>;
   };
   products: Array<Product>;
   suppliers: Array<Supplier>;
@@ -154,3 +114,20 @@ export interface RootState {
   config: Config;
   loading: boolean;
 }
+
+export type {
+  RootState,
+  Invoices,
+  TotalDetail,
+  Login,
+  User,
+  PostUser,
+  Product,
+  Supplier,
+  Stock,
+  Client,
+  Transactions,
+  Config,
+};
+
+export { TipoImpositivo, BarCode, Rol, initInvoice, initDetail };

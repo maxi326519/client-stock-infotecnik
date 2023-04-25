@@ -221,7 +221,7 @@ export default function Row({
           </div>
           <div
             className={
-              tipoImpositivo === TipoImpositivo.recargo
+              tipoImpositivo === TipoImpositivo.Recargo
                 ? styles.recargo
                 : tipoImpositivo === TipoImpositivo.REBU
                 ? styles.rebu
@@ -260,7 +260,7 @@ export default function Row({
               />
               <label htmlFor="precioIVAINC">Precio de venta</label>
             </div>
-            {tipoImpositivo === TipoImpositivo.recargo ? (
+            {tipoImpositivo === TipoImpositivo.Recargo ? (
               <div className="form-floating">
                 <input
                   className="form-control"
@@ -272,7 +272,7 @@ export default function Row({
                 <label htmlFor="recargo">Recargo</label>
               </div>
             ) : null}
-            {tipoImpositivo === TipoImpositivo.recargo ? (
+            {tipoImpositivo === TipoImpositivo.Recargo ? (
               <div className="form-floating">
                 <input
                   className="form-control"
