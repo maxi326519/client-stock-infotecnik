@@ -209,23 +209,12 @@ export default function Details({ product, handleDetails }: Props) {
                 onChange={handleChange}
                 disabled={isDisabled}
               />
-              <label htmlFor={!error.codigo ? "floatingInputInvalid" : "codigo"}>Codigo</label>
+              <label
+                htmlFor={!error.codigo ? "floatingInputInvalid" : "codigo"}
+              >
+                Codigo
+              </label>
               <small>{error.codigo}</small>
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
-                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
-                name="modelo"
-                type="text"
-                value={localProduct?.modelo}
-                placeholder="modelo"
-                onChange={handleChange}
-                disabled={isDisabled}
-              />
-              <label htmlFor="modelo">Modelo</label>
-              <small>{error.modelo}</small>
             </div>
 
             <div className="form-floating mb-3">
@@ -241,6 +230,21 @@ export default function Details({ product, handleDetails }: Props) {
               />
               <label htmlFor="marca">Marca</label>
               <small>{error.marca}</small>
+            </div>
+
+            <div className="form-floating mb-3">
+              <input
+                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
+                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
+                name="modelo"
+                type="text"
+                value={localProduct?.modelo}
+                placeholder="modelo"
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+              <label htmlFor="modelo">Modelo</label>
+              <small>{error.modelo}</small>
             </div>
 
             <div className="form-floating mb-3">

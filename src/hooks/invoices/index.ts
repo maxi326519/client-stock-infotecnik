@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Invoices, TotalDetail, initInvoice } from "../interfaces";
+import { Invoices, TotalDetail, initInvoice } from "../../interfaces";
 import { useDispatch } from "react-redux";
 import {
   postInvoice as postInvoiceAction,
   postServiceInvoice,
-} from "../redux/actions/invoices";
+} from "../../redux/actions/invoices";
 
 export default function useInvoice() {
   const dispatch = useDispatch();

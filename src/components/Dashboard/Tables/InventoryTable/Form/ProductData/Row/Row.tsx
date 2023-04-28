@@ -12,6 +12,7 @@ import AddImages from "../../AddImages/AddImages";
 
 import styles from "./Row.module.css";
 import img from "../../../../../../../assets/svg/image.svg";
+import { useApi } from "../../../../../../../hooks";
 
 const initialError: Error = {
   codigoDeBarras: "",
@@ -69,6 +70,7 @@ export default function Row({
   const products = useSelector((state: RootState) => state.products);
   const [currentProduct, setCurrentProduct] = useState<Product>();
   const [imagesForm, setImagesForm] = useState(false);
+  const api = useApi();
 
   useEffect(() => {
     const product = products.find((p) => p.id === stock.ProductId);
@@ -123,11 +125,11 @@ export default function Row({
           <div className={styles.image} onClick={handleClose}>
             <img
               src={
-                currentProduct?.Images?.[0]
-                  ? `http://localhost:3001/images/${currentProduct?.Images[0]}`
-                  : images
-                  ? images.imageUrls[0]
-                  : img
+                images?.imageUrls?.[0]
+                ? images.imageUrls[0]
+                : currentProduct?.Images?.[0]
+                ? `${api}/images/${currentProduct.Images[0]}`
+                : img
               }
               alt="img"
             />
@@ -228,28 +230,43 @@ export default function Row({
                 : styles.price
             }
           >
+            <div className="form-floating">
+              <input
+                className="form-control"
+                id="precioSinIVA"
+                name="precioSinIVA"
+                value={stock.precioSinIVA}
+                onChange={handleLocalChange}
+              />
+              <label htmlFor="precioSinIVA">
+                Precio{" "}
+                {tipoImpositivo !== TipoImpositivo.REBU ? "sin IVA:" : ""}
+              </label>
+            </div>
             {tipoImpositivo !== TipoImpositivo.REBU ? (
               <div className="form-floating">
                 <input
                   className="form-control"
-                  id="precioSinIVA"
-                  name="precioSinIVA"
-                  value={stock.precioSinIVA}
+                  id="precioIVA"
+                  name="precioIVA"
+                  value={stock.precioIVA}
                   onChange={handleLocalChange}
                 />
-                <label htmlFor="precioSinIVA">Precio </label>
+                <label htmlFor="precioIVA">IVA:</label>
               </div>
             ) : null}
-            <div className="form-floating">
-              <input
-                className="form-control"
-                id="precioIVA"
-                name="precioIVA"
-                value={stock.precioIVA}
-                onChange={handleLocalChange}
-              />
-              <label htmlFor="precioIVA">Precio I.V.A.</label>
-            </div>
+            {tipoImpositivo === TipoImpositivo.IVA ? (
+              <div className="form-floating">
+                <input
+                  className="form-control"
+                  id="totalIva"
+                  name="total"
+                  value={stock.total}
+                  onChange={handleLocalChange}
+                />
+                <label htmlFor="totalIva">Precio de compra IVA INC</label>
+              </div>
+            ) : null}
             <div className="form-floating">
               <input
                 className="form-control"
@@ -258,7 +275,7 @@ export default function Row({
                 value={stock.precioIVAINC}
                 onChange={handleLocalChange}
               />
-              <label htmlFor="precioIVAINC">Precio de venta</label>
+              <label htmlFor="precioIVAINC">Precio de venta IVA INC</label>
             </div>
             {tipoImpositivo === TipoImpositivo.Recargo ? (
               <div className="form-floating">

@@ -11,15 +11,20 @@ export default function calcularIVA(
   switch (tipoImpositivo) {
     case TipoImpositivo.IVA:
       if (name === "precioSinIVA") {
+        console.log(value);
+        console.log((Number(value) * (iva / 100)).toFixed(2));
+        console.log((Number(value) + Number(value) * (iva / 100)).toFixed(2));
         prices = {
           precioSinIVA: value,
           precioIVA: (Number(value) * (iva / 100)).toFixed(2),
+          total: (Number(value) + Number(value) * (iva / 100)).toFixed(2),
         };
       }
       if (name === "precioIVA") {
         prices = {
           precioSinIVA: (Number(value) / (iva / 100)).toFixed(2),
           precioIVA: value,
+          total: (Number(value) + Number(value) * (iva / 100)).toFixed(2),
         };
       }
       break;

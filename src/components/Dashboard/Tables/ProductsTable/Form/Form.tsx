@@ -232,20 +232,6 @@ export default function Form({ handleForm }: Props) {
 
             <div className="form-floating">
               <input
-                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
-                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
-                name="modelo"
-                type="text"
-                placeholder="modelo"
-                value={product.modelo}
-                onChange={handleChange}
-              />
-              <label htmlFor="modelo">Modelo</label>
-              <small>{error.modelo}</small>
-            </div>
-
-            <div className="form-floating">
-              <input
                 id={!error.marca ? "floatingInputInvalid" : "marca"}
                 className={`form-control ${!error.marca ? "" : "is-invalid"}`}
                 name="marca"
@@ -256,6 +242,20 @@ export default function Form({ handleForm }: Props) {
               />
               <label htmlFor="marca">Marca</label>
               <small>{error.marca}</small>
+            </div>
+
+            <div className="form-floating">
+              <input
+                id={!error.modelo ? "floatingInputInvalid" : "modelo"}
+                className={`form-control ${!error.modelo ? "" : "is-invalid"}`}
+                name="modelo"
+                type="text"
+                placeholder="modelo"
+                value={product.modelo}
+                onChange={handleChange}
+              />
+              <label htmlFor="modelo">Modelo</label>
+              <small>{error.modelo}</small>
             </div>
 
             <div className="form-floating">

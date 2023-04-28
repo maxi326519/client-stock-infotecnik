@@ -40,11 +40,13 @@ export default function Form({ handleForm }: Props) {
   const dispatch = useDispatch();
   const [supplier, setSupplier] = useState(initialState);
   const [error, setError] = useState(initialError);
+  const [validate, setValidate] = useState<boolean>(false);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setSupplier({ ...supplier, [event.target.name]: event.target.value });
     setError({ ...error, [event.target.name]: "" });
-    if (event.target.name === "cifNif") handleCifNif(event.target.value);
+    if (!validate && event.target.name === "cifNif")
+      handleCifNif(event.target.value);
   }
 
   function handleClose(): void {
@@ -74,6 +76,13 @@ export default function Form({ handleForm }: Props) {
     const response = validarNifCif(value);
     console.log(response);
     if (!response) setError({ ...error, cifNif: "Formato incorrecto" });
+  }
+
+  function handleValidate() {
+    if (!validate) {
+      setError({ ...error, cifNif: "" });
+    }
+    setValidate(!validate);
   }
 
   function handleValidations() {
@@ -125,7 +134,7 @@ export default function Form({ handleForm }: Props) {
               id={!error.numero ? "floatingInputInvalid" : "numero"}
               className={`form-control ${!error.numero ? "" : "is-invalid"}`}
               name="numero"
-              type="text"
+              type="number"
               value={supplier.numero}
               onChange={handleChange}
             />
@@ -170,7 +179,7 @@ export default function Form({ handleForm }: Props) {
               id={!error.postal ? "floatingInputInvalid" : "modelo"}
               className={`form-control ${!error.postal ? "" : "is-invalid"}`}
               name="postal"
-              type="text"
+              type="number"
               value={supplier.postal}
               onChange={handleChange}
             />
@@ -185,7 +194,7 @@ export default function Form({ handleForm }: Props) {
               id={!error.poblacion ? "floatingInputInvalid" : "poblacion"}
               className={`form-control ${!error.poblacion ? "" : "is-invalid"}`}
               name="poblacion"
-              type="text"
+              type="number"
               value={supplier.poblacion}
               onChange={handleChange}
             />
@@ -195,14 +204,20 @@ export default function Form({ handleForm }: Props) {
             <small>{error.poblacion}</small>
           </div>
 
-          <div className="form-floating">
+          <div className={`form-floating`}>
             <input
-              id={!error.cifNif ? "floatingInputInvalid" : "cifNif"}
-              className={`form-control ${!error.cifNif ? "" : "is-invalid"}`}
+              id="cifNif"
+              className={`form-control ${!error.cifNif ? "" : style.errCifNif}`}
               name="cifNif"
-              type="text"
+              type="number"
               value={supplier.cifNif}
               onChange={handleChange}
+            />
+            <input
+              className={style.cifNif}
+              type="checkbox"
+              checked={validate}
+              onClick={handleValidate}
             />
             <label className="form-label" htmlFor="cifNif">
               CIF / NIF
@@ -215,7 +230,7 @@ export default function Form({ handleForm }: Props) {
               id={!error.telefono ? "floatingInputInvalid" : "telefono"}
               className={`form-control ${!error.telefono ? "" : "is-invalid"}`}
               name="telefono"
-              type="text"
+              type="tel"
               value={supplier.telefono}
               onChange={handleChange}
             />

@@ -12,7 +12,9 @@ import { getConfig } from "./redux/actions/configurations";
 import { getClients } from "./redux/actions/clients";
 import { getUsers } from "./redux/actions/user";
 import { persistence } from "./redux/actions/login";
+import { useApi } from "./hooks";
 import swal from "sweetalert";
+import axios from "axios";
 
 import Loading from "./components/Loading/Loading";
 import Login from "./components/Login/Login";
@@ -26,14 +28,17 @@ function App() {
   const redirect = useNavigate();
   const dispatch = useDispatch();
   const load = useSelector((state: RootState) => state.loading);
+  const api = useApi();
 
   useEffect(() => {
+    axios.defaults.baseURL = api;
+
     const data = localStorage.getItem("user");
     let userData = null;
 
     if (data) userData = JSON.parse(data);
 
-    if (userData) {
+    if (userData && api) {
       dispatch(loading());
       dispatch<any>(getInvoice);
       dispatch<any>(persistence(userData))
@@ -70,7 +75,7 @@ function App() {
     } else {
       redirect("/login");
     }
-  }, [dispatch, redirect]);
+  }, [dispatch, redirect, api]);
 
   return (
     <div className="App">

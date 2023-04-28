@@ -4,17 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import store from "./redux/store";
-import axios from "axios";
 import App from "./App";
 
 import "./index.css";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || "https://api.infotecnik.cat/";
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
-);
-root.render(
+  );
+  root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>

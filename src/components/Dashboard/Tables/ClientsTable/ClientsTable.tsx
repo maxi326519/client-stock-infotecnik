@@ -9,13 +9,30 @@ import style from "./ClientsTable.module.css";
 import add from "../../../../assets/svg/add.svg";
 
 export default function ClientsTable() {
-  const client = useSelector((state: RootState) => state.clients);
+  const clients = useSelector((state: RootState) => state.clients);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    setRows(client);
-  }, [client]);
+    const searchStr = search.toLowerCase();
+    const filter = clients.filter((client: Client) => {
+      if (searchStr === "") return true;
+      if (client.numero.toString().includes(searchStr)) return true;
+      if (client.nombre.toLocaleLowerCase().includes(searchStr)) return true;
+      if (client.direccion.toLocaleLowerCase().includes(searchStr)) return true;
+      if (client.poblacion.toString().includes(searchStr)) return true;
+      if (client.postal.toString().includes(searchStr)) return true;
+      if (client.cifNif.toLocaleLowerCase().includes(searchStr)) return true;
+      if (client.telefono.toString().includes(searchStr)) return true;
+      return false;
+    });
+    setRows(filter);
+  }, [clients, search]);
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value);
+  }
 
   function handleForm(): void {
     setForm(!form);
@@ -30,6 +47,7 @@ export default function ClientsTable() {
           className="form-control"
           type="search"
           placeholder="Buscar cliente"
+          onChange={handleChange}
         />
         <button className="btn btn-success" type="button" onClick={handleForm}>
           <img src={add} alt="add" />

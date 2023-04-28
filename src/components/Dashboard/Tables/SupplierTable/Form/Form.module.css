@@ -39,3 +39,14 @@
 .inputs div {
   margin-bottom: 10px;
 }
+
+.errCifNif {
+  border: 1px solid red !important;
+}
+
+.cifNif {
+  position: absolute;
+  top: 23px;
+  right: 5px;
+  width: 50px !important;
+}

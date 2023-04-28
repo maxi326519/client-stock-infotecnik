@@ -26,10 +26,13 @@ export default function InvoiceTable() {
   const [supplierSelected, setSupplierSelected] = useState<Supplier | null>();
 
   useEffect(() => {
-    const filter = invoices.filter(() => {
-      if (search === "") return true;
-      return true;
+    const searchStr = search.toLowerCase();
+    const filter = invoices.filter((invoices: Invoices) => {
+      if (searchStr === "") return true;
+      if (invoices.numero.toString().includes(searchStr)) return true;
+      return false;
     });
+
     setRows(filter);
   }, [invoices, search]);
 
