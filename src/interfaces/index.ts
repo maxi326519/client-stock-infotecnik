@@ -7,6 +7,19 @@ import {
   initDetail,
 } from "./invoices";
 
+import {
+  SaleInvoice,
+  SaleDetail,
+  PriceDetail,
+  TipoImpositivoSale,
+  MetodoDePago,
+  ErrorSaleInvoice,
+  initSaleInvoice,
+  initSaleDetail,
+  initPriceDetail,
+  initErrorSaleInvoice,
+} from "./sales";
+
 interface Login {
   email: string;
   password: string;
@@ -70,7 +83,7 @@ interface Client {
 
 interface Transactions {
   id: string;
-  fecha: string;
+  fecha: Date;
   fechaValor: string;
   movimiento: string;
   masDatos: string;
@@ -110,6 +123,7 @@ interface RootState {
   clients: Array<Client>;
   stock: Array<Stock>;
   invoices: Array<Invoices>;
+  sales: SaleInvoice[];
   transactions: Array<Transactions>;
   config: Config;
   loading: boolean;
@@ -128,6 +142,22 @@ export type {
   Client,
   Transactions,
   Config,
+  SaleInvoice,
+  SaleDetail,
+  PriceDetail,
+  ErrorSaleInvoice,
 };
 
-export { TipoImpositivo, BarCode, Rol, initInvoice, initDetail };
+export {
+  TipoImpositivo,
+  BarCode,
+  Rol,
+  TipoImpositivoSale,
+  MetodoDePago,
+  initInvoice,
+  initDetail,
+  initSaleInvoice,
+  initSaleDetail,
+  initPriceDetail,
+  initErrorSaleInvoice,
+};

@@ -6,7 +6,7 @@ import { login } from "../../redux/actions/login";
 import { loading, closeLoading } from "../../redux/actions/loading/loading";
 import { getAttributes, getProduct } from "../../redux/actions/products";
 import { getSuppliers } from "../../redux/actions/suppliers";
-/* import { getInvoice } from "../../redux/actions/invoices"; */
+import { getInvoice } from "../../redux/actions/invoices";
 import { getInventory } from "../../redux/actions/inventory";
 import { getClients } from "../../redux/actions/clients";
 import { getTransactions } from "../../redux/actions/transactions";
@@ -16,6 +16,7 @@ import swal from "sweetalert";
 
 import "./Login.css";
 import logo from "../../assets/img/Infotecnik-logo.png";
+import { getSales } from "../../redux/actions/sales";
 
 interface Error {
   email: string | null;
@@ -70,7 +71,7 @@ export default function Signin() {
         .then(() => {
           redirect("/dashboard");
           Promise.all([
-            /* dispatch<any>(getInvoice()), */
+            dispatch<any>(getInvoice()),
             dispatch<any>(getProduct()),
             dispatch<any>(getAttributes()),
             dispatch<any>(getSuppliers()),
@@ -79,6 +80,7 @@ export default function Signin() {
             dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
             dispatch<any>(getConfig()),
+            dispatch<any>(getSales()),
           ])
             .then(() => {
               dispatch(closeLoading());
@@ -115,7 +117,7 @@ export default function Signin() {
     <div className="sesion">
       <form className="toLeft" onSubmit={handleSubmit}>
         <div className="header">
-          <img src={logo} />
+          <img src={logo} alt="logo" />
         </div>
         <div className="content">
           {/* EMAIL */}

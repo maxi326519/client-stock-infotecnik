@@ -4,8 +4,9 @@ import product from "../../../assets/svg/sideBar/product.svg";
 import supplier from "../../../assets/svg/sideBar/supplier.svg";
 import clients from "../../../assets/svg/sideBar/clients.svg";
 import invoice from "../../../assets/svg/sideBar/invoice.svg";
+import sales from "../../../assets/svg/sideBar/sales.svg";
 import bank from "../../../assets/svg/sideBar/bank.svg";
-import logo from "../../../assets/img/Infotecnik-logo.png"
+import logo from "../../../assets/img/Infotecnik-logo.png";
 
 import styles from "./SideBar.module.css";
 
@@ -16,6 +17,7 @@ const items = [
   { name: "Proveedores", icon: supplier },
   { name: "Clientes", icon: clients },
   { name: "Facturas", icon: invoice },
+  { name: "Ventas", icon: sales },
   { name: "Movimientos", icon: bank },
 ];
 
@@ -28,7 +30,7 @@ export default function SideBar({ table, changeTable }: Props) {
   return (
     <div className={styles.sideBar}>
       <div className={styles.head}>
-        <img src={logo} alt="logo"/>
+        <img src={logo} alt="logo" />
       </div>
       {items.map((item, i) => (
         <button

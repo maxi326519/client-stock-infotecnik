@@ -23,6 +23,7 @@ import Dashboad from "./components/Dashboard/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./Animation.css";
+import { getSales } from "./redux/actions/sales";
 
 function App() {
   const redirect = useNavigate();
@@ -53,6 +54,7 @@ function App() {
             dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
             dispatch<any>(getConfig()),
+            dispatch<any>(getSales()),
           ])
             .then(() => {
               redirect("/dashboard");

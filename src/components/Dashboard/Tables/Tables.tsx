@@ -4,6 +4,7 @@ import Products from "./ProductsTable/ProductsTable";
 import Supplier from "./SupplierTable/SupplierTable";
 import Clients from "./ClientsTable/ClientsTable";
 import Invoice from "./InvoiceTable/InvoiceTable";
+import Sales from "./SalesTable/SalesTable";
 import Transactions from "./TransactionsTable/TransactionsTable";
 
 import styles from "../Dashboard.module.css";
@@ -15,8 +16,9 @@ const tables = [
   Supplier,
   Clients,
   Invoice,
+  Sales,
   Transactions,
-]
+];
 
 interface Props {
   table: number;

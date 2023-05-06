@@ -13,7 +13,7 @@ interface Props {
 export default function TransactionsRow({ transaction, handleInvoice }: Props) {
   return (
     <div className={style.row}>
-      <span>{transaction.fecha}</span>
+      <span>{transaction.fecha.toISOString().split("T")[0]}</span>
       <span>{transaction.fechaValor}</span>
       <span>{transaction.movimiento}</span>
       <span>{transaction.masDatos}</span>

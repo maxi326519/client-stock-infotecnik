@@ -39,6 +39,14 @@ import {
 import { GET_INVENTORY, UPDATE_STOCK } from "../actions/inventory";
 import { LOADING, CLOSE_LOADING } from "../actions/loading/loading";
 import { LOGIN, LOGOUT, PRESISTENCE } from "../actions/login";
+import {
+  POST_SALE,
+  GET_SALES,
+  UPDATE_SALE_INVOICE,
+  UPDATE_SALE_ITEM,
+  DELETE_SALE_INVOICE,
+  DELETE_SALE_ITEM,
+} from "../actions/sales";
 
 const initialState: RootState = {
   profile: {
@@ -59,6 +67,7 @@ const initialState: RootState = {
   suppliers: [],
   clients: [],
   stock: [],
+  sales: [],
   invoices: [],
   transactions: [],
   config: {
@@ -325,6 +334,56 @@ export default function Reducer(
         users: state.users.filter((user: User) => user.id !== action.payload),
       };
 
+    /* Sales */
+    case POST_SALE:
+      return {
+        ...state,
+        sales: [...state.sales, action.payload],
+      };
+
+    case GET_SALES:
+      return {
+        ...state,
+        sales: action.payload,
+      };
+
+    case UPDATE_SALE_INVOICE:
+      return {
+        ...state,
+        sales: state.sales.map((invoice) =>
+          invoice.id === action.payload.id ? action.payload : invoice
+        ),
+      };
+
+    case UPDATE_SALE_ITEM:
+      return {
+        ...state,
+        sales: state.sales.map((invoice) =>
+          invoice.id === action.payload.SaleInvoiceId
+            ? invoice.SaleDetails.map((item) =>
+                item.id === action.payload.id ? action.payload : item
+              )
+            : invoice
+        ),
+      };
+
+    case DELETE_SALE_INVOICE:
+      return {
+        ...state,
+        sales: state.sales.filter((invoice) => invoice.id !== action.payload),
+      };
+
+    case DELETE_SALE_ITEM:
+      return {
+        ...state,
+        sales: state.sales.map((invoice) =>
+          invoice.id === action.payload.SaleInvoiceId
+            ? invoice.SaleDetails.filter((item) => item.id !== action.payload)
+            : invoice
+        ),
+      };
+
+    /* Sales */
     default:
       return state;
   }
