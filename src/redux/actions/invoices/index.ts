@@ -50,15 +50,13 @@ export function postServiceInvoice(
   };
 }
 
-export function getInvoice(): ThunkAction<
-  Promise<void>,
-  RootState,
-  null,
-  AnyAction
-> {
+export function getInvoice(
+  from: string,
+  to: string
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const invoices = await axios.get("/invoice");
+      const invoices = await axios.get(`/invoice?from=${from}&to=${to}`);
 
       dispatch({
         type: GET_INVOICE,

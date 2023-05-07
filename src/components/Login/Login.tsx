@@ -17,6 +17,7 @@ import swal from "sweetalert";
 import "./Login.css";
 import logo from "../../assets/img/Infotecnik-logo.png";
 import { getSales } from "../../redux/actions/sales";
+import { getDateRange } from "../../functions/getDateRange";
 
 interface Error {
   email: string | null;
@@ -64,23 +65,23 @@ export default function Signin() {
       if (user.password === "") err.password = "Debes ingresar una contraseña";
       setError(err);
     } else {
+      const { from, to } = getDateRange();
       redirect("/dashboard");
-
       dispatch(loading());
       dispatch<any>(login(user))
         .then(() => {
           redirect("/dashboard");
           Promise.all([
-            dispatch<any>(getInvoice()),
             dispatch<any>(getProduct()),
             dispatch<any>(getAttributes()),
             dispatch<any>(getSuppliers()),
             dispatch<any>(getClients()),
             dispatch<any>(getInventory()),
-            dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
             dispatch<any>(getConfig()),
-            dispatch<any>(getSales()),
+            dispatch<any>(getInvoice(from, to)),
+            dispatch<any>(getSales(from, to)),
+            dispatch<any>(getTransactions(from, to)),
           ])
             .then(() => {
               dispatch(closeLoading());

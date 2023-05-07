@@ -24,6 +24,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./Animation.css";
 import { getSales } from "./redux/actions/sales";
+import { getDateRange } from "./functions/getDateRange";
 
 function App() {
   const redirect = useNavigate();
@@ -40,6 +41,7 @@ function App() {
     if (data) userData = JSON.parse(data);
 
     if (userData && api) {
+      const { from, to } = getDateRange();
       dispatch(loading());
       dispatch<any>(getInvoice);
       dispatch<any>(persistence(userData))
@@ -50,11 +52,11 @@ function App() {
             dispatch<any>(getSuppliers()),
             dispatch<any>(getClients()),
             dispatch<any>(getInventory()),
-            dispatch<any>(getInvoice()),
-            dispatch<any>(getTransactions()),
             dispatch<any>(getUsers()),
             dispatch<any>(getConfig()),
-            dispatch<any>(getSales()),
+            dispatch<any>(getInvoice(from, to)),
+            dispatch<any>(getSales(from, to)),
+            dispatch<any>(getTransactions(from, to)),
           ])
             .then(() => {
               redirect("/dashboard");

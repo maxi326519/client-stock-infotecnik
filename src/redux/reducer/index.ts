@@ -198,7 +198,7 @@ export default function Reducer(
     case POST_TRANSACTIONS:
       return {
         ...state,
-        transactions: action.payload,
+        transactions: [...state.transactions, ...action.payload],
       };
 
     case POST_USER:

@@ -14,10 +14,16 @@ export function postTransactions(
     try {
       const transactions: Transactions[] = [];
 
-      for (let i = 0; i < newTransactions.length; i++) {
-        const response = await axios.post("/transactions", newTransactions[i]);
-        transactions.push(response.data);
-      }
+      const response = await axios.post(`/transactions`, newTransactions);
+
+      console.log(response.data);
+
+      response.data.forEach((data: any) => {
+        transactions.push({
+          ...data,
+          fecha: new Date(data.fecha),
+        });
+      });
 
       dispatch({
         type: POST_TRANSACTIONS,
@@ -30,19 +36,27 @@ export function postTransactions(
   };
 }
 
-export function getTransactions(): ThunkAction<
-  Promise<void>,
-  RootState,
-  null,
-  AnyAction
-> {
+export function getTransactions(
+  from: string,
+  to: string,
+  linked?: string
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const transactions = await axios.get("/transactions");
+      const transactions = await axios.get(
+        `/transactions?from=${from}&to=${to}${
+          linked ? `&linked=${linked}` : ""
+        }`
+      );
+
+      const newData = transactions.data.map((data: any) => ({
+        ...data,
+        fecha: new Date(data.fecha),
+      }));
 
       dispatch({
         type: GET_TRANSACTIONS,
-        payload: transactions.data,
+        payload: newData,
       });
     } catch (error: any) {
       console.log(error.response ? error.response.data.error : error);

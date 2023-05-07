@@ -89,7 +89,9 @@ interface Transactions {
   masDatos: string;
   importe: number;
   saldo: number;
-  InvoiceId: string;
+  vinculada: boolean;
+  invoiceId?: string;
+  invoiceType?: string;
 }
 
 enum BarCode {

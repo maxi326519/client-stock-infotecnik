@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { RootState, Transactions } from "../../../../interfaces";
 import { useDispatch, useSelector } from "react-redux";
-import { postTransactions } from "../../../../redux/actions/transactions";
+import {
+  getTransactions,
+  postTransactions,
+} from "../../../../redux/actions/transactions";
 import {
   closeLoading,
   loading,
@@ -14,7 +17,8 @@ import ImportExcel from "./ImportExcel/ImportExcel";
 
 import style from "./TransactionsTable.module.css";
 import importSvg from "../../../../assets/svg/import.svg";
-import filterSvg from "../../../../assets/svg/filter.svg";
+import { getDateRange } from "../../../../functions/getDateRange";
+import Filters from "./FIlters/Filters";
 
 export default function TransactionsTable() {
   const dispatch = useDispatch();
@@ -22,20 +26,35 @@ export default function TransactionsTable() {
   const [rows, setRows] = useState<Transactions[]>([]);
   const [search, setSearch] = useState<string>("");
   const [transactionForm, setTransactionForm] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
   const [filters, setFilters] = useState({
     fromDate: new Date().toISOString().split("T")[0],
     toDate: new Date().toISOString().split("T")[0],
-    type: "0",
+    linked: "",
   });
 
   useEffect(() => {
-    const filter = transactions.filter(() => {
+    const { from, to } = getDateRange();
+    setFilters({
+      ...filters,
+      fromDate: from,
+      toDate: to,
+    });
+  }, []);
+
+  useEffect(() => {
+    const filter = transactions.filter((data) => {
+      const from = new Date(filters.fromDate).getTime();
+      const to = new Date(filters.toDate).getTime();
+
+      if (filters.linked !== "" && data.vinculada.toString() !== filters.linked)
+        return false;
+      if (data.fecha.getTime() < from) return false;
+      if (data.fecha.getTime() >= to) return false;
       if (search === "") return true;
       return true;
     });
     setRows(filter);
-  }, [transactions, search]);
+  }, [transactions, search, filters]);
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
@@ -63,10 +82,22 @@ export default function TransactionsTable() {
       });
   }
 
-  function getData() {}
-
-  function handleFilter() {
-    setFilter(!filter);
+  function getData() {
+    dispatch(loading());
+    dispatch<any>(
+      getTransactions(filters.fromDate, filters.toDate, filters.linked)
+    )
+      .then(() => {
+        dispatch(closeLoading());
+      })
+      .catch(() => {
+        dispatch(closeLoading());
+        swal(
+          "Error",
+          "Error al cargar las movimientos, intentelo mas tarde",
+          "error"
+        );
+      });
   }
 
   function handleClose(): void {
@@ -96,66 +127,13 @@ export default function TransactionsTable() {
           <img src={importSvg} alt="importSvg" />
           <span>Importar</span>
         </button>
-        <div className={style.filter}>
-          <button
-            className={style.btnFilter}
-            type="button"
-            onClick={handleFilter}
-          >
-            <span>Filtros</span>
-            <img src={filterSvg} alt="filtros" />
-          </button>
-          {filter ? (
-            <div className={style.filterContainer}>
-              <div className="form-floating">
-                <input
-                  id="fromDate"
-                  className="form-control"
-                  name="fromDate"
-                  value={filters.fromDate}
-                  type="date"
-                  onChange={handleFilterChange}
-                />
-                <label htmlFor="fromDate">Desde:</label>
-              </div>
-
-              <div className="form-floating">
-                <input
-                  id="toDate"
-                  className="form-control"
-                  name="toDate"
-                  value={filters.toDate}
-                  type="date"
-                  onChange={handleFilterChange}
-                />
-                <label htmlFor="toDate">Hasta:</label>
-              </div>
-
-              <div className="form-floating">
-                <select
-                  id="type"
-                  className="form-control"
-                  name="type"
-                  value={filters.type}
-                  onChange={handleFilterChange}
-                >
-                  <option value="0">Todas</option>
-                  <option value="1">Vinculadas</option>
-                  <option value="2">No vinculadas</option>
-                </select>
-                <label htmlFor="type">Tipo:</label>
-              </div>
-
-              <button
-                className="btn btn-success"
-                type="button"
-                onClick={getData}
-              >
-                Aplicar
-              </button>
-            </div>
-          ) : null}
-        </div>
+        <Filters
+          fromDate={filters.fromDate}
+          toDate={filters.toDate}
+          linked={filters.linked}
+          handleChange={handleFilterChange}
+          handleSubmit={getData}
+        />
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>

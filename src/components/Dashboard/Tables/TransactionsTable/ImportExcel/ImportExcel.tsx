@@ -21,12 +21,13 @@ export default function ImportExcel({ handleData, handleClose }: Props) {
         let newData = worksheetData.slice(3);
         newData = newData.filter((d: any) => d.length > 0);
         newData = newData.map((d: any) => ({
-          fecha: XLSX.SSF.format("dd/mm/yyyy", d[0]),
-          fechaValor: XLSX.SSF.format("dd/mm/yyyy", d[1]),
+          fecha: new Date(XLSX.SSF.format("mm-dd-yyyy", d[0])),
+          fechaValor: XLSX.SSF.format("mm-dd-yyyy", d[1]),
           movimiento: d[2],
           masDatos: d[3],
           importe: d[4],
           saldo: d[5],
+          vinculada: false,
         }))
         console.log(newData);
         handleData(newData);

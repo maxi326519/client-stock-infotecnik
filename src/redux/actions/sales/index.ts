@@ -28,15 +28,13 @@ export function postSaleInvoice(
   };
 }
 
-export function getSales(): ThunkAction<
-  Promise<void>,
-  RootState,
-  null,
-  AnyAction
-> {
+export function getSales(
+  from: string,
+  to: string
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const sales = await axios.get("/sales");
+      const sales = await axios.get(`/sales?from=${from}&to=${to}`);
 
       dispatch({
         type: GET_SALES,

@@ -2,19 +2,21 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Invoices, RootState, Supplier } from "../../../../interfaces";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteInvoice, getInvoice } from "../../../../redux/actions/invoices";
 import {
   closeLoading,
   loading,
 } from "../../../../redux/actions/loading/loading";
-import { deleteInvoice } from "../../../../redux/actions/invoices";
 
 import Form from "./Form/Form";
 import SupplierDetails from "./SupplierDetails/SupplierDetails";
 import InvoiceRow from "./InvoiceRow/InvoiceRow";
+import Filters from "./FIlters/Filters";
 
 import style from "./InvoiceTable.module.css";
 import add from "../../../../assets/svg/add.svg";
 import swal from "sweetalert";
+import { getInventory } from "../../../../redux/actions/inventory";
 
 export default function InvoiceTable() {
   const invoices = useSelector((state: RootState) => state.invoices);
@@ -24,6 +26,10 @@ export default function InvoiceTable() {
   const [search, setSearch] = useState<string>("");
   const [form, setForm] = useState(false);
   const [supplierSelected, setSupplierSelected] = useState<Supplier | null>();
+  const [filters, setFilters] = useState({
+    fromDate: new Date().toISOString().split("T")[0],
+    toDate: new Date().toISOString().split("T")[0],
+  });
 
   useEffect(() => {
     const searchStr = search.toLowerCase();
@@ -89,6 +95,28 @@ export default function InvoiceTable() {
     if (supplier) setSupplierSelected(supplier);
   }
 
+  function handleFilterChange(
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    setFilters({ ...filters, [event.target.name]: event.target.value });
+  }
+
+  function getData() {
+    dispatch(loading());
+    dispatch<any>(getInvoice(filters.fromDate, filters.toDate))
+      .then(() => {
+        dispatch(closeLoading());
+      })
+      .catch(() => {
+        dispatch(closeLoading());
+        swal(
+          "Error",
+          "Error al cargar las facturas, intentelo mas tarde",
+          "error"
+        );
+      });
+  }
+
   return (
     <div className={`toLeft ${style.dashboardList}`}>
       {form ? <Form handleForm={handleForm} /> : null}
@@ -110,6 +138,12 @@ export default function InvoiceTable() {
           <img src={add} alt="add" />
           <span>Nueva Facturas</span>
         </button>
+        <Filters
+          fromDate={filters.fromDate}
+          toDate={filters.toDate}
+          handleChange={handleFilterChange}
+          handleSubmit={getData}
+        />
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, SaleDetail, SaleInvoice } from "../../../../interfaces";
 
 import SaleRow from "./SaleRow/SaleRow";
@@ -7,12 +7,24 @@ import SaleRow from "./SaleRow/SaleRow";
 import style from "./SalesTable.module.css";
 import add from "../../../../assets/svg/add.svg";
 import Form from "./Form/Form";
+import {
+  closeLoading,
+  loading,
+} from "../../../../redux/actions/loading/loading";
+import { getSales } from "../../../../redux/actions/sales";
+import swal from "sweetalert";
+import Filters from "./FIlters/Filters";
 
 export default function SalesTable() {
+  const dispatch = useDispatch();
   const sales = useSelector((state: RootState) => state.sales);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const [filters, setFilters] = useState({
+    fromDate: new Date().toISOString().split("T")[0],
+    toDate: new Date().toISOString().split("T")[0],
+  });
 
   useEffect(() => {
     const searchStr = search.toLowerCase();
@@ -38,6 +50,28 @@ export default function SalesTable() {
     setForm(!form);
   }
 
+  function handleFilterChange(
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    setFilters({ ...filters, [event.target.name]: event.target.value });
+  }
+
+  function getData() {
+    dispatch(loading());
+    dispatch<any>(getSales(filters.fromDate, filters.toDate))
+      .then(() => {
+        dispatch(closeLoading());
+      })
+      .catch(() => {
+        dispatch(closeLoading());
+        swal(
+          "Error",
+          "Error al cargar las ventas, intentelo mas tarde",
+          "error"
+        );
+      });
+  }
+
   return (
     <div className={`toLeft ${style.dashboardList}`}>
       {form ? <Form handleClose={handleForm} /> : null}
@@ -53,6 +87,12 @@ export default function SalesTable() {
           <img src={add} alt="add" />
           <span>Nueva venta</span>
         </button>
+        <Filters
+          fromDate={filters.fromDate}
+          toDate={filters.toDate}
+          handleChange={handleFilterChange}
+          handleSubmit={getData}
+        />
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>
