@@ -8,6 +8,7 @@ import ProductRow from "./ProductRow/ProductRow";
 
 import style from "./ProductsTable.module.css";
 import add from "../../../../assets/svg/add.svg";
+import Filters from "./FIlters/Filters";
 
 export default function ProductTable() {
   const products: Product[] = useSelector((state: RootState) => state.products);
@@ -15,6 +16,12 @@ export default function ProductTable() {
   const [form, setForm] = useState(false);
   const [details, setDetails] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const [filters, setFilters] = useState({
+    marca: "",
+    color: "",
+    capacidad: "",
+    categoria: "",
+  });
 
   useEffect(() => {
     const searchStr = search.toLowerCase();
@@ -48,6 +55,14 @@ export default function ProductTable() {
     setDetails(!details);
   }
 
+  function handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setFilters({ ...filters, [event.target.name]: event.target.value });
+  }
+
+  function handleGetDataByFilter(){
+
+  }
+
   return (
     <div className={`toLeft ${style.dashboardList}`}>
       {form ? <Form handleForm={handleForm} /> : null}
@@ -66,6 +81,14 @@ export default function ProductTable() {
           <img src={add} alt="add" />
           <span>Nuevo producto</span>
         </button>
+        <Filters
+          marca={filters.marca}
+          color={filters.color}
+          capacidad={filters.capacidad}
+          categoria={filters.categoria}
+          handleChange={handleFilterChange}
+          handleSubmit={handleGetDataByFilter}
+        />
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>

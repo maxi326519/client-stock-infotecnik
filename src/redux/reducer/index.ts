@@ -16,6 +16,7 @@ import {
   POST_CATEGORIES,
   POST_CAPACIDADES,
   POST_COLORES,
+  POST_MARCAS,
   GET_ATTRIBUTES,
 } from "../actions/products";
 import {
@@ -60,6 +61,7 @@ const initialState: RootState = {
   attributes: {
     capacidades: [],
     colores: [],
+    marcas: [],
     categories: [],
     types: [],
   },
@@ -192,6 +194,15 @@ export default function Reducer(
         attributes: {
           ...state.attributes,
           colores: action.payload,
+        },
+      };
+
+    case POST_MARCAS:
+      return {
+        ...state,
+        attributes: {
+          ...state.attributes,
+          marcas: action.payload,
         },
       };
 

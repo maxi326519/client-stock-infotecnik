@@ -107,6 +107,7 @@ interface RootState {
   attributes: {
     capacidades: Array<string>;
     colores: Array<string>;
+    marcas: Array<string>;
     categories: Array<any>;
     types: Array<string>;
   };

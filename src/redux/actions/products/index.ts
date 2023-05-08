@@ -11,6 +11,7 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const POST_CATEGORIES = "POST_CATEGORIES";
 export const POST_CAPACIDADES = "POST_CAPACIDADES";
 export const POST_COLORES = "POST_COLORES";
+export const POST_MARCAS = "POST_MARCAS";
 export const GET_ATTRIBUTES = "GET_ATTRIBUTES";
 
 export function postProduct(
@@ -18,7 +19,6 @@ export function postProduct(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-            
       const response = await axios.post("/products", newProduct);
 
       dispatch({
@@ -122,6 +122,24 @@ export function postColores(
   };
 }
 
+export function postMarcas(
+  marcas: string[]
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    try {
+      console.log(marcas);
+      await axios.post("/products/attributes/marca", marcas);
+
+      dispatch({
+        type: POST_MARCAS,
+        payload: marcas,
+      });
+    } catch (error: any) {
+      throw new Error(error.response ? error.response.data.error : error);
+    }
+  };
+}
+
 export function getAttributes(): ThunkAction<
   Promise<void>,
   RootState,
@@ -134,7 +152,8 @@ export function getAttributes(): ThunkAction<
 
       const attributes = {
         capacidades: response.data.capacidades.map((cap: any) => cap.capacidad),
-        colores: response.data.colores.map((cap: any) => cap.color),
+        colores: response.data.colores.map((col: any) => col.color),
+        marcas: response.data.marcas.map((mar: any) => mar.marca),
         categories: response.data.categories.map((cat: any) => [
           cat.id,
           cat.name,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postProduct } from "../../../../../redux/actions/products";
+import { postMarcas, postProduct } from "../../../../../redux/actions/products";
 import {
   BarCode,
   Product,
@@ -24,6 +24,7 @@ import Colores from "../Colores/Colores";
 
 import style from "./Form.module.css";
 import axios from "axios";
+import Marcas from "../Marcas/Marcas";
 
 interface Props {
   handleForm: () => void;
@@ -34,11 +35,13 @@ export default function Form({ handleForm }: Props) {
     (state: RootState) => state.attributes.capacidades
   );
   const colores = useSelector((state: RootState) => state.attributes.colores);
+  const marcas = useSelector((state: RootState) => state.attributes.marcas);
   const categories = useSelector(
     (state: RootState) => state.attributes.categories
   );
   const [capacidadesForm, setCapacidadesForm] = useState(false);
   const [coloresForm, setColoresForm] = useState(false);
+  const [marcasForm, setMarcasForm] = useState(false);
   const [product, setProduct] = useState(initProduct);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -176,12 +179,20 @@ export default function Form({ handleForm }: Props) {
     dispatch<any>(postColores(data));
   }
 
+  function handleSubmitMarcas(data: string[]) {
+    dispatch<any>(postMarcas(data));
+  }
+
   function handleCapacidadesForm() {
     setCapacidadesForm(!capacidadesForm);
   }
 
   function handleColoresForm() {
     setColoresForm(!coloresForm);
+  }
+
+  function handleMarcasForm() {
+    setMarcasForm(!marcasForm);
   }
 
   return (
@@ -205,6 +216,13 @@ export default function Form({ handleForm }: Props) {
           data={colores}
           handleClose={handleColoresForm}
           handleSubmit={handleSubmitColores}
+        />
+      ) : null}
+      {marcasForm ? (
+        <Marcas
+          data={marcas}
+          handleClose={handleMarcasForm}
+          handleSubmit={handleSubmitMarcas}
         />
       ) : null}
       <form className={style.form} onSubmit={handleSubmit}>
@@ -424,6 +442,13 @@ export default function Form({ handleForm }: Props) {
               onClick={handleColoresForm}
             >
               Colores
+            </button>
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              onClick={handleMarcasForm}
+            >
+              Marcas
             </button>
           </div>
         </div>
