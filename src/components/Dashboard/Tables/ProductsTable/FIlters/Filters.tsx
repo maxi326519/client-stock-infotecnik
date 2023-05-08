@@ -9,10 +9,7 @@ interface Props {
   color: string;
   capacidad: string;
   categoria: string;
-  handleChange: (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => void;
-  handleSubmit: () => void;
+  handleSubmit: (filters: any) => void;
 }
 
 export default function Filters({
@@ -20,7 +17,6 @@ export default function Filters({
   color,
   capacidad,
   categoria,
-  handleChange,
   handleSubmit,
 }: Props) {
   const capacidades = useSelector(
@@ -30,10 +26,26 @@ export default function Filters({
     (state: RootState) => state.attributes.categories
   );
   const colores = useSelector((state: RootState) => state.attributes.colores);
+  const marcas = useSelector((state: RootState) => state.attributes.marcas);
   const [filter, setFilter] = useState<boolean>(false);
+  const [filters, setFilters] = useState({
+    marca: marca,
+    color: color,
+    capacidad: capacidad,
+    categoria: categoria
+  });
 
   function handleFilter() {
     setFilter(!filter);
+  }
+
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>){
+    setFilters({ ...filters, [event.target.name]: event?.target.value })
+  }
+
+  function handleSetFilter(){
+    handleSubmit(filters);
+    handleFilter();
   }
 
   return (
@@ -50,10 +62,13 @@ export default function Filters({
               id="marca"
               className="form-control"
               name="marca"
-              value={marca}
+              value={filters.marca}
               onChange={handleChange}
             >
               <option>Seleccionar</option>
+              {marcas.map((marca: string) => (
+                <option value={marca}>{marca}</option>
+              ))}
             </select>
             <label htmlFor="marca">Marca</label>
           </div>
@@ -64,7 +79,7 @@ export default function Filters({
               id="color"
               className="form-control"
               name="color"
-              value={color}
+              value={filters.color}
               onChange={handleChange}
             >
               <option value="">Seleccionar</option>
@@ -81,7 +96,7 @@ export default function Filters({
               id="capacidad"
               className="form-control"
               name="capacidad"
-              value={capacidad}
+              value={filters.capacidad}
               onChange={handleChange}
             >
               <option value="">Seleccionar</option>
@@ -98,12 +113,12 @@ export default function Filters({
               id="categoria"
               className="form-control"
               name="categoria"
-              value={categoria}
+              value={filters.categoria}
               onChange={handleChange}
             >
               <option value="">Seleccionar</option>
               {categories.map((category: string) => (
-                <option value={category[1]}>{category[1]}</option>
+                <option value={category[0]}>{category[1]}</option>
               ))}
             </select>
             <label htmlFor="categoria">Categorias</label>
@@ -112,7 +127,7 @@ export default function Filters({
           <button
             className="btn btn-success"
             type="button"
-            onClick={handleSubmit}
+            onClick={handleSetFilter}
           >
             Aplicar
           </button>

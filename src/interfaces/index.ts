@@ -95,10 +95,17 @@ enum BarCode {
 }
 
 interface Config {
-  ivaSuperReducido: number;
-  ivaReducido: number;
-  ivaGeneral: number;
-  recargo: number;
+  iva: {
+    ivaSuperReducido: number;
+    ivaReducido: number;
+    ivaGeneral: number;
+    recargo: number;
+  },
+  business: {
+    name: string;
+    adress: string;
+    image: string;
+  }
 }
 
 interface RootState {

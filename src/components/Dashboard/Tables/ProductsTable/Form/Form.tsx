@@ -248,16 +248,22 @@ export default function Form({ handleForm }: Props) {
             </div>
 
             {/* MARCA */}
-            <div className="form-floating">
-              <input
-                id={!error.marca ? "floatingInputInvalid" : "marca"}
-                className={`form-control ${!error.marca ? "" : "is-invalid"}`}
+            <div className="form-floating mb-3">
+              <select
+                id={error.marca ? "floatingInputInvalid" : "marca"}
+                className={`form-select ${!error.marca ? "" : "is-invalid"}`}
                 name="marca"
-                type="text"
-                placeholder="marca"
                 value={product.marca}
-                onChange={handleChange}
-              />
+                placeholder="marca"
+                onChange={handleChangeSelect}
+              >
+                <option value="0">Seleccionar marca</option>
+                {marcas.map((marca, i) => (
+                  <option key={i} value={marca}>
+                    {marca}
+                  </option>
+                ))}
+              </select>
               <label htmlFor="marca">Marca</label>
               <small>{error.marca}</small>
             </div>
@@ -301,9 +307,8 @@ export default function Form({ handleForm }: Props) {
             {/*   CODIGO DE BARRAS */}
             <div className="form-floating">
               <input
-                className={`form-control ${
-                  !error?.codigoDeBarras ? "" : "is-invalid"
-                }`}
+                className={`form-control ${!error?.codigoDeBarras ? "" : "is-invalid"
+                  }`}
                 id={error?.codigoDeBarras ? "floatingInputInvalid" : "pass"}
                 name="codigoDeBarras"
                 value={product.codigoDeBarras}
@@ -338,9 +343,8 @@ export default function Form({ handleForm }: Props) {
             <div className="form-floating">
               <input
                 id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
-                className={`form-control ${
-                  !error.descCorta ? "" : "is-invalid"
-                }`}
+                className={`form-control ${!error.descCorta ? "" : "is-invalid"
+                  }`}
                 name="descCorta"
                 placeholder="descCorta"
                 type="text"
@@ -355,9 +359,8 @@ export default function Form({ handleForm }: Props) {
             <div className="form-floating mb-3">
               <select
                 id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
-                className={`form-select ${
-                  !error.capacidad ? "" : "is-invalid"
-                }`}
+                className={`form-select ${!error.capacidad ? "" : "is-invalid"
+                  }`}
                 name="capacidad"
                 value={product.capacidad}
                 placeholder="capacidad"
@@ -382,9 +385,8 @@ export default function Form({ handleForm }: Props) {
             <div className="form-floating">
               <textarea
                 id={error.descLarga ? "floatingInputInvalid" : "descLarga"}
-                className={`form-control ${
-                  !error.descLarga ? "" : "is-invalid"
-                }`}
+                className={`form-control ${!error.descLarga ? "" : "is-invalid"
+                  }`}
                 name="descLarga"
                 placeholder="descLarga"
                 value={product.descLarga}
@@ -396,9 +398,8 @@ export default function Form({ handleForm }: Props) {
 
             {/* CATEGORIAS */}
             <div
-              className={`${style.categoria} ${
-                !error.categoria ? "" : style.categoriaError
-              }`}
+              className={`${style.categoria} ${!error.categoria ? "" : style.categoriaError
+                }`}
             >
               <button
                 className="btn btn-outline-success"

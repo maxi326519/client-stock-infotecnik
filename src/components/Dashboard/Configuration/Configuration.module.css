@@ -39,3 +39,8 @@
 .bntContainer button {
   margin-right: 10px;
 }
+
+.topMenu{
+  border-bottom: 1px solid grey;
+  margin-bottom: 10px;
+}

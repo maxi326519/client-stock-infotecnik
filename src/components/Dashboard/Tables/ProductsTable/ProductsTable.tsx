@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, Product } from "../../../../interfaces";
 
 import Form from "./Form/Form";
@@ -9,8 +9,12 @@ import ProductRow from "./ProductRow/ProductRow";
 import style from "./ProductsTable.module.css";
 import add from "../../../../assets/svg/add.svg";
 import Filters from "./FIlters/Filters";
+import { closeLoading, loading } from "../../../../redux/actions/loading/loading";
+import { getProduct } from "../../../../redux/actions/products";
+import swal from "sweetalert";
 
 export default function ProductTable() {
+  const dispatch = useDispatch();
   const products: Product[] = useSelector((state: RootState) => state.products);
   const [rows, setRows] = useState<any>([]);
   const [form, setForm] = useState(false);
@@ -26,6 +30,13 @@ export default function ProductTable() {
   useEffect(() => {
     const searchStr = search.toLowerCase();
     const filter = products.filter((product: Product) => {
+      console.log(filters);
+
+      if (filters.marca !== "" && product.marca !== filters.marca) return false;
+      if (filters.color !== "" && product.color !== filters.color) return false;
+      if (filters.capacidad !== "" && product.capacidad !== filters.capacidad) return false;
+      if (filters.categoria !== "" && product.CategoryId.toString() !== filters.categoria.toString()) return false;
+
       if (searchStr === "") return true;
       if (product.id === Number(searchStr)) return true;
       if (product.codigo.toLocaleLowerCase().includes(searchStr)) return true;
@@ -40,7 +51,7 @@ export default function ProductTable() {
     });
     console.log(filter);
     setRows(filter);
-  }, [products, search]);
+  }, [products, search, filters]);
 
   function handleChangeSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
@@ -55,12 +66,8 @@ export default function ProductTable() {
     setDetails(!details);
   }
 
-  function handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    setFilters({ ...filters, [event.target.name]: event.target.value });
-  }
-
-  function handleGetDataByFilter(){
-
+  function handelFilterSubmit(filters: any) {
+    setFilters(filters);
   }
 
   return (
@@ -86,8 +93,7 @@ export default function ProductTable() {
           color={filters.color}
           capacidad={filters.capacidad}
           categoria={filters.categoria}
-          handleChange={handleFilterChange}
-          handleSubmit={handleGetDataByFilter}
+          handleSubmit={handelFilterSubmit}
         />
       </div>
       <div className={style.dashboardList__grid}>

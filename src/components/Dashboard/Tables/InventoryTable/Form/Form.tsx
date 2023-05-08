@@ -45,7 +45,7 @@ interface Props {
 
 export default function Form({ handleClose }: Props) {
   const dispatch = useDispatch();
-  const config = useSelector((state: RootState) => state.config);
+  const config = useSelector((state: RootState) => state.config.iva);
   const [images, setImages] = useState<ImagesData[]>([]);
   const [productsSelected, setProduct] = useState<number[]>([]);
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);

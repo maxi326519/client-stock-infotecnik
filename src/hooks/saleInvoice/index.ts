@@ -18,7 +18,7 @@ import generateId from "../../functions/generateId";
 export default function useSaleInvoice() {
   const dispatch = useDispatch();
   const stock = useSelector((state: RootState) => state.stock);
-  const config = useSelector((state: RootState) => state.config);
+  const config = useSelector((state: RootState) => state.config.iva);
   const [invoice, setInvoice] = useState<SaleInvoice>(initSaleInvoice);
   const [details, setDetails] = useState<SaleDetail[]>([]);
   const [priceDetails, setPriceDetails] = useState<PriceDetail[]>([]);

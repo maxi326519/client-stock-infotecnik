@@ -31,15 +31,10 @@ export function postProduct(
   };
 }
 
-export function getProduct(): ThunkAction<
-  Promise<void>,
-  RootState,
-  null,
-  AnyAction
-> {
+export function getProduct(): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const products = await axios.get("/products");
+      const products = await axios.get(`/products`);
 
       dispatch({
         type: GET_PRODUCT,
