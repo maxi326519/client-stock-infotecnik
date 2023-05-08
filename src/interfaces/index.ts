@@ -5,6 +5,7 @@ import {
   TipoImpositivo,
   initInvoice,
   initDetail,
+  initStock,
 } from "./invoices";
 
 import {
@@ -19,6 +20,8 @@ import {
   initPriceDetail,
   initErrorSaleInvoice,
 } from "./sales";
+
+import { Product, initProduct } from "./products";
 
 interface Login {
   email: string;
@@ -44,19 +47,6 @@ interface PostUser {
 enum Rol {
   Admin = "Admin",
   Contador = "Contador",
-}
-
-interface Product {
-  id: string;
-  codigo: string;
-  modelo: string;
-  marca: string;
-  color: string;
-  capacidad: string;
-  descLarga: string;
-  descCorta: string;
-  Images: string[];
-  CategoryId: string;
 }
 
 interface Supplier {
@@ -158,6 +148,8 @@ export {
   MetodoDePago,
   initInvoice,
   initDetail,
+  initStock,
+  initProduct,
   initSaleInvoice,
   initSaleDetail,
   initPriceDetail,

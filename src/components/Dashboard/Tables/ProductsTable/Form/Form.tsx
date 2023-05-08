@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postProduct } from "../../../../../redux/actions/products";
-import { Product, RootState } from "../../../../../interfaces";
+import {
+  BarCode,
+  Product,
+  RootState,
+  initProduct,
+} from "../../../../../interfaces";
 import swal from "sweetalert";
 import {
   postCapacidades,
@@ -25,18 +30,6 @@ interface Props {
 }
 
 export default function Form({ handleForm }: Props) {
-  const initialState: Product = {
-    id: "",
-    codigo: "",
-    modelo: "",
-    marca: "",
-    color: "",
-    capacidad: "",
-    descLarga: "",
-    descCorta: "",
-    CategoryId: "",
-    Images: [],
-  };
   const capacidades = useSelector(
     (state: RootState) => state.attributes.capacidades
   );
@@ -46,12 +39,13 @@ export default function Form({ handleForm }: Props) {
   );
   const [capacidadesForm, setCapacidadesForm] = useState(false);
   const [coloresForm, setColoresForm] = useState(false);
-  const [product, setProduct] = useState(initialState);
+  const [product, setProduct] = useState(initProduct);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [categoriesForm, setCategoriesForm] = useState<boolean>(false);
   const [error, setError] = useState({
     codigo: "",
+    codigoDeBarras: "",
     modelo: "",
     marca: "",
     color: "",
@@ -112,6 +106,10 @@ export default function Form({ handleForm }: Props) {
       newErrors.codigo = "Debes agregar un codigo";
       validation = false;
     }
+    if (product.tipoCodigoDeBarras !== "" && product.codigoDeBarras === "") {
+      newErrors.codigoDeBarras = "Debes agregar un codigo";
+      validation = false;
+    }
     if (product.modelo === "") {
       newErrors.modelo = "Debes agregar un modelo";
       validation = false;
@@ -163,7 +161,7 @@ export default function Form({ handleForm }: Props) {
 
   function handleClose(): void {
     handleForm();
-    setProduct(initialState);
+    setProduct(initProduct);
   }
 
   function handleCloseCategories(): void {
@@ -216,6 +214,7 @@ export default function Form({ handleForm }: Props) {
         </div>
         <div className={style.flex}>
           <div className={style.inputs}>
+            {/* CODIGO */}
             <div className="form-floating">
               <input
                 id={!error.codigo ? "floatingInputInvalid" : "codigo"}
@@ -230,6 +229,7 @@ export default function Form({ handleForm }: Props) {
               <small>{error.codigo}</small>
             </div>
 
+            {/* MARCA */}
             <div className="form-floating">
               <input
                 id={!error.marca ? "floatingInputInvalid" : "marca"}
@@ -244,6 +244,7 @@ export default function Form({ handleForm }: Props) {
               <small>{error.marca}</small>
             </div>
 
+            {/* MODELO */}
             <div className="form-floating">
               <input
                 id={!error.modelo ? "floatingInputInvalid" : "modelo"}
@@ -258,48 +259,64 @@ export default function Form({ handleForm }: Props) {
               <small>{error.modelo}</small>
             </div>
 
-            <div className="form-floating">
+            {/* COLOR */}
+            <div className="form-floating mb-3">
               <select
-                id={!error.color ? "floatingInputInvalid" : "color"}
-                className={`form-control ${!error.color ? "" : "is-invalid"}`}
+                id={error.color ? "floatingInputInvalid" : "color"}
+                className={`form-select ${!error.color ? "" : "is-invalid"}`}
                 name="color"
-                placeholder="color"
                 value={product.color}
+                placeholder="color"
                 onChange={handleChangeSelect}
               >
-                <option value="">Seleccionar color</option>
+                <option value="0">Seleccionar color</option>
                 {colores.map((col, i) => (
                   <option key={i} value={col}>
                     {col}
                   </option>
                 ))}
               </select>
-              <label htmlFor="color">Colores</label>
+              <label htmlFor="color">Color</label>
               <small>{error.color}</small>
             </div>
 
+            {/*   CODIGO DE BARRAS */}
             <div className="form-floating">
-              <select
-                id={!error.capacidad ? "floatingInputInvalid" : "capacidad"}
+              <input
                 className={`form-control ${
-                  !error.capacidad ? "" : "is-invalid"
+                  !error?.codigoDeBarras ? "" : "is-invalid"
                 }`}
-                name="capacidad"
-                placeholder="capacidad"
-                value={product.capacidad}
-                onChange={handleChangeSelect}
-              >
-                <option value="">Seleccionar capacidad</option>
-                {capacidades.map((cap, i) => (
-                  <option key={i} value={cap}>
-                    {cap}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="capacidad">Capacidad</label>
-              <small>{error.capacidad}</small>
+                id={error?.codigoDeBarras ? "floatingInputInvalid" : "pass"}
+                name="codigoDeBarras"
+                value={product.codigoDeBarras}
+                onChange={handleChange}
+                disabled={product.tipoCodigoDeBarras === ""}
+              />
+              <label htmlFor="codigoDeBarras">Codigo de barra</label>
+              <small>{error?.codigoDeBarras}</small>
             </div>
 
+            {/* TIPO CODIGO DE BARRAS */}
+            <div className="form-floating ">
+              <select
+                className="form-select"
+                id="tipoCodigoDeBarras"
+                name="tipoCodigoDeBarras"
+                value={product.tipoCodigoDeBarras}
+                onChange={handleChangeSelect}
+              >
+                <option value="">Ninguno</option>
+                <option value={BarCode.Code128}>Code 128</option>
+                <option value={BarCode.Code39}>Code 39</option>
+                <option value={BarCode.UPCA}>UPC-A</option>
+                <option value={BarCode.UPCE}>UPC-E</option>
+                <option value={BarCode.EAN8}>EAN-8</option>
+                <option value={BarCode.EAN13}>EAN-13</option>
+              </select>
+              <label htmlFor="tipoCodigoDeBarras">Seleccionar tipo</label>
+            </div>
+
+            {/* DESRIPCION CORTA */}
             <div className="form-floating">
               <input
                 id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
@@ -316,6 +333,34 @@ export default function Form({ handleForm }: Props) {
               <small>{error.descCorta}</small>
             </div>
 
+            {/* CAPACIDAD*/}
+            <div className="form-floating mb-3">
+              <select
+                id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+                className={`form-select ${
+                  !error.capacidad ? "" : "is-invalid"
+                }`}
+                name="capacidad"
+                value={product.capacidad}
+                placeholder="capacidad"
+                onChange={handleChangeSelect}
+              >
+                <option value="0">Seleccionar capacidad</option>
+                {capacidades.map((cap, i) => (
+                  <option key={i} value={cap}>
+                    {cap}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor={error.capacidad ? "floatingInputInvalid" : "capacidad"}
+              >
+                Capacidad
+              </label>
+              <small>{error.capacidad}</small>
+            </div>
+
+            {/* DESRIPCION LARGA */}
             <div className="form-floating">
               <textarea
                 id={error.descLarga ? "floatingInputInvalid" : "descLarga"}
@@ -331,6 +376,7 @@ export default function Form({ handleForm }: Props) {
               <small>{error.descLarga}</small>
             </div>
 
+            {/* CATEGORIAS */}
             <div
               className={`${style.categoria} ${
                 !error.categoria ? "" : style.categoriaError
@@ -349,6 +395,8 @@ export default function Form({ handleForm }: Props) {
               <small>{error.categoria}</small>
             </div>
           </div>
+
+          {/* ADD IMAGES */}
           <AddImages
             imageUrls={imageUrls}
             setImageUrls={setImageUrls}
@@ -356,6 +404,8 @@ export default function Form({ handleForm }: Props) {
             setImageFiles={setImageFiles}
           />
         </div>
+
+        {/* BUTTONS */}
         <div className={style.buttons}>
           <button className="btn btn-success" type="submit">
             Crear producto

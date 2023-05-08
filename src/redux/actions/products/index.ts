@@ -18,19 +18,8 @@ export function postProduct(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const product = {
-        codigo: newProduct.codigo,
-        modelo: newProduct.modelo,
-        marca: newProduct.marca,
-        color: newProduct.color,
-        capacidad: newProduct.capacidad,
-        descLarga: newProduct.descLarga,
-        descCorta: newProduct.descCorta,
-        Images: newProduct.Images,
-        CategoryId: newProduct.CategoryId,
-      };
             
-      const response = await axios.post("/products", product);
+      const response = await axios.post("/products", newProduct);
 
       dispatch({
         type: POST_PRODUCT,
@@ -80,7 +69,7 @@ export function updateProduct(
 }
 
 export function deleteProduct(
-  productId: string
+  productId: number
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {

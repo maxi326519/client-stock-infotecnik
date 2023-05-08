@@ -20,6 +20,7 @@ export default function ProductTable() {
     const searchStr = search.toLowerCase();
     const filter = products.filter((product: Product) => {
       if (searchStr === "") return true;
+      if (product.id === Number(searchStr)) return true;
       if (product.codigo.toLocaleLowerCase().includes(searchStr)) return true;
       if (product.color.toLocaleLowerCase().includes(searchStr)) return true;
       if (product.marca.toLocaleLowerCase().includes(searchStr)) return true;
@@ -30,8 +31,9 @@ export default function ProductTable() {
         return true;
       return false;
     });
+    console.log(filter);
     setRows(filter);
-  }, [products]);
+  }, [products, search]);
 
   function handleChangeSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
@@ -67,7 +69,10 @@ export default function ProductTable() {
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.row} ${style.firstRow}`}>
+          <span>Numero</span>
           <span>Codigo</span>
+          <span>Codigo de Barra</span>
+          <span>Cantidad</span>
           <span>Descripcion</span>
           <span>Cateogria</span>
           <span>Detalle</span>

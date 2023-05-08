@@ -101,7 +101,6 @@ export default function AddProduct({
                 >
                   <span>{s.fechaAlta}</span>
                   <span>{s.IMEISerie}</span>
-                  <span>{s.codigoDeBarras}</span>
                   <span>{s.cantidad}</span>
                   <span>{s.total}</span>
                 </div>

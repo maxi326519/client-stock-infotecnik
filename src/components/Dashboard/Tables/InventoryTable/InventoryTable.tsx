@@ -33,7 +33,6 @@ export default function InventoryTable() {
     const filter = stock.filter((stock: Stock) => {
       if (searchStr === "") return true;
       if (stock.IMEISerie.toString().includes(searchStr)) return true;
-      if (stock.codigoDeBarras.toLocaleLowerCase().includes(searchStr)) return true;
       if (stock.detalles.toLocaleLowerCase().includes(searchStr)) return true;
       return false;
     });

@@ -7,8 +7,8 @@ import ProductForm from "../../../ProductsTable/Form/Form";
 import style from "./AddProduct.module.css";
 
 interface Props {
-  productsSelected: string[];
-  setProduct: (selected: string[]) => void;
+  productsSelected: number[];
+  setProduct: (selected: number[]) => void;
   handleClose: () => void;
   handleTemporal: () => void;
 }
@@ -21,7 +21,7 @@ export default function AddProduct({
 }: Props) {
   const products: Product[] = useSelector((state: RootState) => state.products);
   const [rows, setRows] = useState<Product[]>([]);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
   const [productForm, setProductForm] = useState<boolean>(false);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function AddProduct({
     setRows(
       products.filter((p: Product) => {
         if (value === "") return true;
-        if (p.id.toLowerCase().includes(value.toLowerCase())) return true;
+        if (p.id === Number(value)) return true;
         if (p.modelo.toLowerCase().includes(value.toLowerCase())) return true;
         if (p.marca.toLowerCase().includes(value.toLowerCase())) return true;
         if (p.color.toLowerCase().includes(value.toLowerCase())) return true;
@@ -55,20 +55,18 @@ export default function AddProduct({
     );
   }
 
-  function handleSelect(id: string): void {
+  function handleSelect(productId: number): void {
     // Verificamos si ya existe el producto en la lista
-    if (!selected.find((s) => s.toLowerCase() === id.toLowerCase())) {
-      const newSelect = rows.find(
-        (r) => id.toLowerCase() === r.id.toLowerCase()
-      );
+    if (!selected.find((s) => s === productId)) {
+      const newSelect = rows.find((r) => productId === r.id);
 
       // Verificamos si no pudo encontrar nada
       if (newSelect !== undefined) {
-        setSelected([...selected, newSelect.id]);
+        setSelected([...selected, newSelect.id!]);
       }
     } else {
       // Si existe lo eliminamos
-      setSelected(selected.filter((s) => s !== id));
+      setSelected(selected.filter((s) => s !== productId));
     }
   }
 
@@ -110,7 +108,7 @@ export default function AddProduct({
                   className={`${style.row} ${
                     selected.find((s) => s === p.id) ? style.selected : ""
                   }`}
-                  onClick={() => handleSelect(p.id)}
+                  onClick={() => handleSelect(p.id!)}
                 >
                   <span>{p.codigo}</span>
                   <span>{p.marca}</span>

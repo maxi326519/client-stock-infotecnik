@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postInvoice } from "../../../../../redux/actions/invoices";
-import { Supplier, TipoImpositivo } from "../../../../../interfaces";
+import { Supplier, TipoImpositivo, initInvoice, initStock } from "../../../../../interfaces";
 import { Stock, RootState, Invoices } from "../../../../../interfaces";
 /* import isBarCodeValid from "../../../../../functions/barCodes";
 import isValidIMEI from "../../../../../functions/IMEI"; */
@@ -20,7 +20,6 @@ import {
   loading,
 } from "../../../../../redux/actions/loading/loading";
 import axios from "axios";
-import isBarCodeValid from "../../../../../functions/barCodes";
 
 interface ImagesData {
   stockId: string;
@@ -44,47 +43,14 @@ interface Props {
   handleClose: () => void;
 }
 
-const initialState: Invoices = {
-  id: "",
-  fecha: new Date().toISOString().split("T")[0],
-  numero: "",
-  tipo: "Stock",
-  pendiente: false,
-  archivo: "",
-  total: 0,
-  tipoImpositivo: TipoImpositivo.IVA,
-  SupplierId: "",
-  TotalDetails: [],
-  StockId: [],
-};
-
-const initialStock: Stock = {
-  id: "",
-  fechaAlta: new Date().toISOString().split("T")[0],
-  estado: "Nuevo",
-  cantidad: 1,
-  catalogo: true,
-  IMEISerie: "",
-  tipoCodigoDeBarras: "",
-  codigoDeBarras: "",
-  precioSinIVA: 0,
-  precioIVA: 0,
-  precioIVAINC: 0,
-  recargo: 0,
-  total: 0,
-  detalles: "",
-  Images: [],
-  SupplierId: "",
-};
-
 export default function Form({ handleClose }: Props) {
   const dispatch = useDispatch();
   const config = useSelector((state: RootState) => state.config);
   const [images, setImages] = useState<ImagesData[]>([]);
-  const [productsSelected, setProduct] = useState<string[]>([]);
+  const [productsSelected, setProduct] = useState<number[]>([]);
   const [supplierSelected, setSupplier] = useState<Supplier | null>(null);
   const [stock, setStock] = useState<Stock[]>([]); // Datos de los productos seleccionados
-  const [invoice, setInvoice] = useState<Invoices>(initialState); // Datos de la factura
+  const [invoice, setInvoice] = useState<Invoices>(initInvoice); // Datos de la factura
   const [file, setFile] = useState<File | undefined>();
   const [addProducts, setFormProducts] = useState<boolean>(false);
   const [addSupplier, setFormSuppliers] = useState<boolean>(false);
@@ -104,7 +70,7 @@ export default function Form({ handleClose }: Props) {
         IMEISerie: "",
         cantidad: "",
       });
-      return { ...initialStock, id: i.toString(), ProductId: p };
+      return { ...initStock, id: i.toString(), ProductId: p };
     });
     setStock(stock);
     setStockError([...stockError, ...newErrors]);
@@ -249,49 +215,6 @@ export default function Form({ handleClose }: Props) {
                 config.recargo
               ),
             };
-          case "tipoCodigoDeBarras":
-            return {
-              ...s,
-              [name]: value.toString(),
-              codigoDeBarras: value ? s.codigoDeBarras : "",
-            };
-
-          case "codigoDeBarras":
-            setStockError(
-              stockError.map((error: StockError): StockError => {
-                if (error.id === id) {
-                  // Get stock
-                  const currentStock = stock.find((s) => s.id === id);
-                  // If exist and type is selected
-                  if (
-                    currentStock !== undefined &&
-                    currentStock.tipoCodigoDeBarras !== ""
-                  ) {
-                    console.log(value.toString());
-                    console.log(currentStock.tipoCodigoDeBarras);
-                    // Validate barcode
-                    const validation = isBarCodeValid(
-                      currentStock.tipoCodigoDeBarras,
-                      value.toString()
-                    );
-                    // Return error response
-                    return {
-                      ...error,
-                      codigoDeBarras: validation ? "" : "Codigo invalido",
-                    };
-                  } else {
-                    return { ...error, codigoDeBarras: "" };
-                  }
-                } else {
-                  return error;
-                }
-              })
-            );
-            return {
-              ...s,
-              [name]: value.toString(),
-            };
-
           case "IMEISerie":
             setStockError(
               stockError.map((error: StockError): StockError => {
@@ -324,10 +247,6 @@ export default function Form({ handleClose }: Props) {
     let validation: boolean = true;
 
     stock.forEach((stock, i) => {
-      if (stock.tipoCodigoDeBarras !== "" && stock.codigoDeBarras !== "") {
-        newErrors[i].codigoDeBarras = "Debes agregar un codigo";
-        validation = false;
-      }
       /*       if (stock.IMEISerie === "") {
         newErrors[i].IMEISerie = "Debes agregar un IMEI";
         validation = false;
@@ -362,7 +281,7 @@ export default function Form({ handleClose }: Props) {
     const newStockList = [
       ...stock,
       {
-        ...initialStock,
+        ...initStock,
         id: (stock.length + 1).toString(),
         estado: "Temporal",
       },
@@ -376,7 +295,7 @@ export default function Form({ handleClose }: Props) {
     setProduct([]);
     setSupplier(null);
     setStock([]);
-    setInvoice(initialState);
+    setInvoice(initInvoice);
   }
 
   function handleSaveImages(

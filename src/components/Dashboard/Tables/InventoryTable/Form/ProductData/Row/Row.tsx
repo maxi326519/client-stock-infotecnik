@@ -175,38 +175,6 @@ export default function Row({
             </div>
           </div>
           <div className={styles.codes}>
-            <div className="form-floating ">
-              <select
-                className="form-select"
-                id="tipoCodigoDeBarras"
-                name="tipoCodigoDeBarras"
-                value={stock.tipoCodigoDeBarras}
-                onChange={handleChangeSelect}
-              >
-                <option value="">Ninguno</option>
-                <option value={BarCode.Code128}>Code 128</option>
-                <option value={BarCode.Code39}>Code 39</option>
-                <option value={BarCode.UPCA}>UPC-A</option>
-                <option value={BarCode.UPCE}>UPC-E</option>
-                <option value={BarCode.EAN8}>EAN-8</option>
-                <option value={BarCode.EAN13}>EAN-13</option>
-              </select>
-              <label htmlFor="tipoCodigoDeBarras">Seleccionar</label>
-            </div>
-            <div className="form-floating">
-              <input
-                className={`form-control ${
-                  !error?.codigoDeBarras ? "" : "is-invalid"
-                }`}
-                id={error?.codigoDeBarras ? "floatingInputInvalid" : "pass"}
-                name="codigoDeBarras"
-                value={stock.codigoDeBarras}
-                onChange={handleLocalChange}
-                disabled={stock.tipoCodigoDeBarras === ""}
-              />
-              <label htmlFor="codigoDeBarras">Code</label>
-              <small>{error?.codigoDeBarras}</small>
-            </div>
             <div className="form-floating">
               <input
                 className={`form-control ${

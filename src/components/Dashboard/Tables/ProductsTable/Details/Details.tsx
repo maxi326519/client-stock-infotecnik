@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Product, RootState } from "../../../../../interfaces";
+import { BarCode, Product, RootState } from "../../../../../interfaces";
 import swal from "sweetalert";
 
 import style from "./Details.module.css";
@@ -17,6 +17,7 @@ import CategoriesTree from "../CategoriesTree/CategoriesTree";
 
 const initialErrors = {
   codigo: "",
+  codigoDeBarras: "",
   modelo: "",
   marca: "",
   color: "",
@@ -130,7 +131,7 @@ export default function Details({ product, handleDetails }: Props) {
       },
     }).then((res) => {
       if (res) {
-        dispatch<any>(deleteProduct(product?.id))
+        dispatch<any>(deleteProduct(product.id!))
           .then(() => {
             handleDetails();
             swal("Eliminado", "Se elimino el producto con exito", "success");
@@ -198,6 +199,7 @@ export default function Details({ product, handleDetails }: Props) {
         </div>
         <div className={style.data}>
           <div className={style.inputs}>
+            {/* CODIGO */}
             <div className="form-floating mb-3">
               <input
                 id={"codigo"}
@@ -217,10 +219,11 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.codigo}</small>
             </div>
 
+            {/* MARCA */}
             <div className="form-floating mb-3">
               <input
                 id={!error.marca ? "floatingInputInvalid" : "marca"}
-                className={`form-control ${!error.marca ? "" : "is-invalid"}`}
+                className={`form-select ${!error.marca ? "" : "is-invalid"}`}
                 name="marca"
                 type="text"
                 value={localProduct?.marca}
@@ -232,6 +235,7 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.marca}</small>
             </div>
 
+            {/* MODELO */}
             <div className="form-floating mb-3">
               <input
                 id={!error.modelo ? "floatingInputInvalid" : "modelo"}
@@ -247,10 +251,11 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.modelo}</small>
             </div>
 
+            {/* COLOR */}
             <div className="form-floating mb-3">
               <select
                 id={error.color ? "floatingInputInvalid" : "color"}
-                className={`form-control ${!error.color ? "" : "is-invalid"}`}
+                className={`form-select ${!error.color ? "" : "is-invalid"}`}
                 name="color"
                 value={localProduct?.color}
                 placeholder="color"
@@ -268,10 +273,65 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.color}</small>
             </div>
 
+            {/* CODIGO DE BARRAS */}
+            <div className="form-floating">
+              <input
+                className={`form-control ${
+                  !error?.codigoDeBarras ? "" : "is-invalid"
+                }`}
+                id={error?.codigoDeBarras ? "floatingInputInvalid" : "pass"}
+                name="codigoDeBarras"
+                value={product.codigoDeBarras}
+                onChange={handleChange}
+                disabled={product.tipoCodigoDeBarras === ""}
+              />
+              <label htmlFor="codigoDeBarras">Codigo de barra</label>
+              <small>{error?.codigoDeBarras}</small>
+            </div>
+
+            {/* TIPO CODIGO DE BARRAS */}
+            <div className="form-floating ">
+              <select
+                className="form-select"
+                id="tipoCodigoDeBarras"
+                name="tipoCodigoDeBarras"
+                value={product.tipoCodigoDeBarras}
+                onChange={handleSelectChange}
+              >
+                <option value="">Ninguno</option>
+                <option value={BarCode.Code128}>Code 128</option>
+                <option value={BarCode.Code39}>Code 39</option>
+                <option value={BarCode.UPCA}>UPC-A</option>
+                <option value={BarCode.UPCE}>UPC-E</option>
+                <option value={BarCode.EAN8}>EAN-8</option>
+                <option value={BarCode.EAN13}>EAN-13</option>
+              </select>
+              <label htmlFor="tipoCodigoDeBarras">Tipo codigo de barras</label>
+            </div>
+
+            {/* DESCRIPCION CORTA */}
+            <div className="form-floating mb-3">
+              <input
+                id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
+                className={`form-control ${
+                  !error.descCorta ? "" : "is-invalid"
+                }`}
+                name="descCorta"
+                type="text"
+                value={localProduct?.descCorta}
+                placeholder="descCorta"
+                onChange={handleChange}
+                disabled={isDisabled}
+              />
+              <label htmlFor="descCorta">Descripcion corta</label>
+              <small>{error.descCorta}</small>
+            </div>
+
+            {/* CAPACIDAD*/}
             <div className="form-floating mb-3">
               <select
                 id={error.capacidad ? "floatingInputInvalid" : "capacidad"}
-                className={`form-control ${
+                className={`form-select ${
                   !error.capacidad ? "" : "is-invalid"
                 }`}
                 name="capacidad"
@@ -295,23 +355,7 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.capacidad}</small>
             </div>
 
-            <div className="form-floating mb-3">
-              <input
-                id={error.descCorta ? "floatingInputInvalid" : "descCorta"}
-                className={`form-control ${
-                  !error.descCorta ? "" : "is-invalid"
-                }`}
-                name="descCorta"
-                type="text"
-                value={localProduct?.descCorta}
-                placeholder="descCorta"
-                onChange={handleChange}
-                disabled={isDisabled}
-              />
-              <label htmlFor="descCorta">Descripcion corta</label>
-              <small>{error.descCorta}</small>
-            </div>
-
+            {/* DESCRIPCION LARGA */}
             <div className="form-floating mb-3">
               <input
                 id={error.descLarga ? "floatingInputInvalid" : "descLarga"}
@@ -329,6 +373,7 @@ export default function Details({ product, handleDetails }: Props) {
               <small>{error.descLarga}</small>
             </div>
 
+            {/* CATEGORIAS */}
             {isDisabled ? (
               <div className="form-floating mb-3">
                 <input
@@ -370,6 +415,8 @@ export default function Details({ product, handleDetails }: Props) {
             />
           </div>
         </div>
+
+        {/* BOTONES */}
         <div className={style.btnContainer}>
           {isDisabled ? (
             <div className={style.leftButtons}>

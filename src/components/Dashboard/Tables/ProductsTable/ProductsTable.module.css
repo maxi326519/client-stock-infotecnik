@@ -48,22 +48,22 @@
   height: 100%;
 }
 
-.edit-buttons .btn-primary{
+.edit-buttons .btn-primary {
   width: 100%;
 }
 
-.edit-buttons .btn-success{
+.edit-buttons .btn-success {
   width: 50%;
   margin-right: 5px;
 }
 
-.edit-buttons .btn-danger{
+.edit-buttons .btn-danger {
   width: 45%;
 }
 
-.row{
+.row {
   display: grid;
-  grid-template-columns: 150px 1fr 200px 80px;
+  grid-template-columns: 100px 150px 300px 100px 1fr 200px 80px;
   grid-template-rows: 1fr;
   gap: 10px;
   padding: 10px;
@@ -71,8 +71,12 @@
   background-color: #fff1;
 }
 
-.firstRow{
+.firstRow {
   padding-right: 25px;
   color: white;
   background-color: var(--dark-panel);
+}
+
+.firstRow span{
+  margin-left: 10px;
 }

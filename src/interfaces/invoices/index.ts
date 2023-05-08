@@ -20,8 +20,6 @@ export interface Stock {
   cantidad: number;
   catalogo: boolean;
   IMEISerie: string;
-  tipoCodigoDeBarras: string;
-  codigoDeBarras: string;
   precioSinIVA: number;
   precioIVA: number;
   precioIVAINC: number;
@@ -29,7 +27,7 @@ export interface Stock {
   total: number;
   detalles: string;
   Images: string[];
-  ProductId?: string;
+  ProductId?: number;
   SupplierId: string;
   InvoiceId?: string;
 }
@@ -72,4 +70,21 @@ export const initDetail: TotalDetail = {
   ivaMonto: 0,
   recargoPorcentaje: 0,
   recargoMonto: 0,
+};
+
+export const initStock: Stock = {
+  id: "",
+  fechaAlta: new Date().toISOString().split("T")[0],
+  estado: "Nuevo",
+  cantidad: 1,
+  catalogo: true,
+  IMEISerie: "",
+  precioSinIVA: 0,
+  precioIVA: 0,
+  precioIVAINC: 0,
+  recargo: 0,
+  total: 0,
+  detalles: "",
+  Images: [],
+  SupplierId: "",
 };

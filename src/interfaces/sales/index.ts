@@ -20,7 +20,7 @@ export interface SaleDetail {
   recargoPorcentaje: number;
   recargoMonto: number;
   cantidad: number;
-  ProductId?: string;
+  ProductId?: number;
   StockId: string;
   SaleInvoiceId: string;
 }

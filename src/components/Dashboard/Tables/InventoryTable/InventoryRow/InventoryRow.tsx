@@ -29,7 +29,6 @@ export default function InventoryRow({
 
   return (
     <div className={style.row}>
-      <span>{stock.codigoDeBarras}</span>
       <span>{stock.IMEISerie}</span>
       <span>{stock.estado}</span>
       <span>
