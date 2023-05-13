@@ -19,6 +19,11 @@ interface Props {
   handleClose: () => void;
 }
 
+interface InputCheck {
+  numero: boolean;
+  total: boolean;
+}
+
 export default function Form({ handleClose }: Props) {
   const { invoice, details, priceDetails, errors, customs }: HookSaleInvoice =
     useSaleInvoice();
@@ -27,6 +32,10 @@ export default function Form({ handleClose }: Props) {
   const [addStock, setAddStock] = useState<boolean>(false);
   const [addClient, setAddClient] = useState<boolean>(false);
   const [invoiceType, setInvoiceType] = useState<number>(1);
+  const [disabled, setDisabled] = useState<InputCheck>({
+    numero: true,
+    total: true,
+  });
   const dispatch = useDispatch();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -70,6 +79,16 @@ export default function Form({ handleClose }: Props) {
 
   function handleAddClient() {
     setAddClient(!addClient);
+  }
+
+  function handleDisabled(event: React.ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.checked;
+
+    console.log(name, value);
+    console.log(disabled);
+
+    setDisabled({ ...disabled, [name]: !value });
   }
 
   return (
@@ -120,6 +139,14 @@ export default function Form({ handleClose }: Props) {
                 placeholder="numero"
                 value={invoice.numero}
                 onChange={handleChange}
+                disabled={disabled.numero}
+              />
+              <input
+                className={style.inputCheck}
+                type="checkbox"
+                name="numero"
+                checked={disabled.numero}
+                onChange={handleDisabled}
               />
               <label htmlFor="numero">Numero:</label>
               <small>{errors.numero}</small>
@@ -168,6 +195,14 @@ export default function Form({ handleClose }: Props) {
                 placeholder="total"
                 value={invoice.total}
                 onChange={handleChange}
+                disabled={disabled.total}
+              />
+              <input
+                className={style.inputCheck}
+                type="checkbox"
+                name="total"
+                checked={disabled.total}
+                onChange={handleDisabled}
               />
               <label htmlFor="total">Total:</label>
               <small>{errors.total}</small>

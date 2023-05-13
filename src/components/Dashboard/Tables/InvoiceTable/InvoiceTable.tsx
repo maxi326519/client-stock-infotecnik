@@ -33,9 +33,9 @@ export default function InvoiceTable() {
 
   useEffect(() => {
     const searchStr = search.toLowerCase();
-    const filter = invoices.filter((invoices: Invoices) => {
+    const filter = invoices.filter((invoice: Invoices) => {
       if (searchStr === "") return true;
-      if (invoices.numero.toString().includes(searchStr)) return true;
+      if (invoice.numero.toString().includes(searchStr)) return true;
       return false;
     });
 
