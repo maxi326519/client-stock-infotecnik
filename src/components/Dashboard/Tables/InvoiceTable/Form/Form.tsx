@@ -94,112 +94,113 @@ export default function Form({ handleForm }: Props) {
       ) : null}
       <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
         <div className={style.close}>
-          <h4>Nuevo cliente</h4>
+          <h4>Nuevo factura</h4>
           <div className="btn-close" onClick={handleClose} />
         </div>
-        <div className={style.inputs}>
-          <div className="form-floating">
-            <input
-              id="fecha"
-              className="form-control"
-              name="fecha"
-              type="date"
-              value={invoice.fecha}
-              onChange={handleChange}
-            />
-            <label className="form-label" htmlFor="fecha">
-              Fecha
-            </label>
-            <small></small>
-          </div>
-
-          <div className="form-floating">
-            <input
-              id="numero"
-              className="form-control"
-              name="numero"
-              type="text"
-              value={invoice.numero}
-              onChange={handleChange}
-            />
-            <label className="form-label" htmlFor="numero">
-              Numero
-            </label>
-            <small></small>
-          </div>
-
-          <div className={style.category}>
-            <div className={style.catContainer}>
-              <span className={style.title}>Categoria</span>
-              <span className={style.data}>{invoice.tipo}Luz</span>
-              <button
-                className="btn btn-outline-success"
-                type="button"
-                onClick={handleCategories}
-              >
-                Seleccionar
-              </button>
+        <div className={style.data}>
+          <div className={style.inputs}>
+            <div className="form-floating">
+              <input
+                id="fecha"
+                className="form-control"
+                name="fecha"
+                type="date"
+                value={invoice.fecha}
+                onChange={handleChange}
+              />
+              <label className="form-label" htmlFor="fecha">
+                Fecha
+              </label>
+              <small></small>
             </div>
-            <small></small>
-          </div>
 
-          <div className="form-floating">
-            <input
-              id="total"
-              className="form-control"
-              name="total"
-              type="number"
-              value={invoice.total}
-              onChange={handleChange}
+            <div className="form-floating">
+              <input
+                id="numero"
+                className="form-control"
+                name="numero"
+                type="text"
+                value={invoice.numero}
+                onChange={handleChange}
+              />
+              <label className="form-label" htmlFor="numero">
+                Numero
+              </label>
+              <small></small>
+            </div>
+
+            <div className={style.category}>
+              <div className={style.catContainer}>
+                <span className={style.title}>Categoria</span>
+                <span className={style.data}>{invoice.tipo}Luz</span>
+                <button
+                  className="btn btn-outline-success"
+                  type="button"
+                  onClick={handleCategories}
+                >
+                  Seleccionar
+                </button>
+              </div>
+              <small></small>
+            </div>
+
+            <div className="form-floating">
+              <input
+                id="total"
+                className="form-control"
+                name="total"
+                type="number"
+                value={invoice.total}
+                onChange={handleChange}
+              />
+              <label className="form-label" htmlFor="total">
+                Total
+              </label>
+              <small></small>
+            </div>
+
+            <div className={style.pending}>
+              <input
+                id="pendiente"
+                name="pendiente"
+                type="checkbox"
+                checked={invoice.pendiente}
+                onChange={handleChangeCheckbox}
+              />
+              <label htmlFor="pendiente">Pendiente</label>
+            </div>
+
+            <div className="form-floating">
+              <input
+                id="archivo"
+                className="form-control"
+                name="archivo"
+                type="file"
+                value={invoice.archivo}
+                onChange={handleChange}
+                disabled={invoice.pendiente}
+              />
+              <label className="form-label" htmlFor="archivo">
+                PDF
+              </label>
+              <small></small>
+            </div>
+
+            <SupplierData
+              supplier={supplier}
+              error={error.SupplierId}
+              handleFormSuppliers={handleFormSuppliers}
             />
-            <label className="form-label" htmlFor="total">
-              Total
-            </label>
-            <small></small>
+            <button className="btn btn-success" type="submit">
+              Agregar
+            </button>
           </div>
-
           <DetailsTable
             details={details}
             addDetail={addDetail}
             removeDetails={removeDetails}
             changeDetail={changeDetail}
           />
-
-          <div className={style.pending}>
-            <input
-              id="pendiente"
-              name="pendiente"
-              type="checkbox"
-              checked={invoice.pendiente}
-              onChange={handleChangeCheckbox}
-            />
-            <label htmlFor="pendiente">Pendiente</label>
-          </div>
-
-          <div className="form-floating">
-            <input
-              id="archivo"
-              className="form-control"
-              name="archivo"
-              type="file"
-              value={invoice.archivo}
-              onChange={handleChange}
-              disabled={invoice.pendiente}
-            />
-            <label className="form-label" htmlFor="archivo">
-              PDF
-            </label>
-            <small></small>
-          </div>
-
-          <SupplierData
-            supplier={supplier}
-            error={error.SupplierId}
-            handleFormSuppliers={handleFormSuppliers}
-          />
-          <button className="btn btn-success" type="submit">
-            Agregar
-          </button>
         </div>
       </form>
     </div>

@@ -1,38 +1,39 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Supplier, RootState } from "../../../../../../interfaces";
+import { RootState, Client } from "../../../../../../interfaces";
 
 import SupplierForm from "../../../SupplierTable/Form/Form";
 
-import style from "./AddSupplier.module.css";
+import style from "./AddClient.module.css";
 
 interface Props {
-  supplierSelected: Supplier | null;
-  setSupplier: (selected: Supplier | null) => void;
+  clientSelected: Client | null;
+  setClient: (selected: Client | null) => void;
   handleClose: () => void;
 }
 
-export default function AddSupplier({
-  supplierSelected,  setSupplier,
+export default function AddClient({
+  clientSelected,
+  setClient,
   handleClose,
 }: Props) {
-  const suppliers: Supplier[] = useSelector(
-    (state: RootState) => state.suppliers
+  const clients: Client[] = useSelector(
+    (state: RootState) => state.clients
   );
-  const [rows, setRows] = useState<Supplier[]>([]);
-  const [selected, setSelected] = useState<Supplier | null>(null);
-  const [supplierForm, setSupplierForm] = useState<boolean>(false);
+  const [rows, setRows] = useState<Client[]>([]);
+  const [selected, setSelected] = useState<Client | null>(null);
+  const [clientForm, setSupplierForm] = useState<boolean>(false);
 
   useEffect(() => {
-    setSelected(supplierSelected);
-  }, [supplierSelected]);
+    setSelected(clientSelected);
+  }, [clientSelected]);
 
   useEffect(() => {
-    setRows(suppliers);
-  }, [suppliers]);
+    setRows(clients);
+  }, [clients]);
 
   function handleSubmit(): void {
-    setSupplier(selected);
+    setClient(selected);
     handleClose();
     console.log(selected);
   }
@@ -41,16 +42,16 @@ export default function AddSupplier({
     const value = event.target.value;
 
     setRows(
-      suppliers.filter((p: Supplier) => {
+      clients.filter((c: Client) => {
         if (value === "") return true;
-        if (p.id.toString() === value) return true;
-        if (p.nombre.toLowerCase().includes(value.toLowerCase())) return true;
-        if (p.direccion.toLowerCase().includes(value.toLowerCase()))
+        if (c.id.toString() === value) return true;
+        if (c.nombre.toLowerCase().includes(value.toLowerCase())) return true;
+        if (c.direccion.toLowerCase().includes(value.toLowerCase()))
           return true;
-        if (p.poblacion.toLowerCase().includes(value.toLowerCase()))
+        if (c.poblacion.toLowerCase().includes(value.toLowerCase()))
           return true;
-        if (p.cifNif.toLowerCase().includes(value.toLowerCase())) return true;
-        if (p.telefono.toLowerCase().includes(value.toLowerCase())) return true;
+        if (c.cifNif.toLowerCase().includes(value.toLowerCase())) return true;
+        if (c.telefono.toLowerCase().includes(value.toLowerCase())) return true;
         return false;
       })
     );
@@ -58,11 +59,11 @@ export default function AddSupplier({
 
   function handleSelect(
     event: React.MouseEvent<HTMLDivElement>,
-    supplier: Supplier
+    client: Client
   ): void {
     // Verificamos si ya esta este proveedor
-    if (selected?.id !== supplier.id) {
-      setSelected(supplier);
+    if (selected?.id !== client.id) {
+      setSelected(client);
     } else {
       // Si esta lo eliminamos
       setSelected(null);
@@ -70,15 +71,15 @@ export default function AddSupplier({
   }
 
   function handleSupplierForm() {
-    setSupplierForm(!supplierForm);
+    setSupplierForm(!clientForm);
   }
 
   return (
     <div className={style.container}>
-      {supplierForm ? <SupplierForm handleForm={handleSupplierForm} /> : null}
+      {clientForm ? <SupplierForm handleForm={handleSupplierForm} /> : null}
       <div className={`toTop ${style.window}`}>
         <div className={style.close}>
-          <h5>Seleccione un proveedor</h5>
+          <h5>Seleccione un cliente</h5>
           <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.content}>
@@ -87,7 +88,7 @@ export default function AddSupplier({
               id="search"
               className="form-control"
               type="search"
-              placeholder="Buscar un proveedor"
+              placeholder="Buscar un cliente"
               onChange={handleSearch}
             />
           </div>
@@ -100,18 +101,17 @@ export default function AddSupplier({
               <span>Telefono</span>
             </div>
             <div className={style.data}>
-              {rows?.map((supplier: Supplier) => (
+              {rows?.map((client: Client) => (
                 <div
-                  className={`${style.row} ${
-                    selected?.id === supplier.id ? style.selected : ""
-                  }`}
-                  onClick={(e) => handleSelect(e, supplier)}
+                  className={`${style.row} ${selected?.id === client.id ? style.selected : ""
+                    }`}
+                  onClick={(e) => handleSelect(e, client)}
                 >
-                  <span>{supplier.nombre}</span>
-                  <span>{supplier.direccion}</span>
-                  <span>{supplier.poblacion}</span>
-                  <span>{supplier.cifNif}</span>
-                  <span>{supplier.telefono}</span>
+                  <span>{client.nombre}</span>
+                  <span>{client.direccion}</span>
+                  <span>{client.poblacion}</span>
+                  <span>{client.cifNif}</span>
+                  <span>{client.telefono}</span>
                 </div>
               ))}
             </div>

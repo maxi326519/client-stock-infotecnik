@@ -13,6 +13,7 @@ export interface SaleInvoice {
 export interface SaleDetail {
   id: string;
   date: Date;
+  concepto: string;
   tipoImpositivo: TipoImpositivoSale;
   baseImponible: number;
   ivaPorcentaje: number;
@@ -87,12 +88,13 @@ export const initSaleDetail: SaleDetail = {
   id: "",
   date: new Date(),
   tipoImpositivo: TipoImpositivoSale.IVA,
+  concepto: "",
+  cantidad: 1,
   baseImponible: 0,
   ivaPorcentaje: 0,
   ivaMonto: 0,
   recargoPorcentaje: 0,
   recargoMonto: 0,
-  cantidad: 0,
   StockId: "",
   SaleInvoiceId: "",
 };

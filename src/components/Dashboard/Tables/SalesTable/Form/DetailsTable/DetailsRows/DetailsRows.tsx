@@ -1,4 +1,5 @@
-import { Product, SaleDetail, TipoImpositivoSale } from "../../../../../../../interfaces";
+import { useEffect, useState } from "react";
+import { Product, SaleDetail, TipoImpositivoSale, initSaleDetail } from "../../../../../../../interfaces";
 
 import style from "./DetailsRows.module.css";
 
@@ -19,42 +20,45 @@ export default function DetailsRows({
   handleChange,
   handleRemove,
 }: Props) {
-  function handleLocalChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const [localDetail, setLocalDetail] = useState<SaleDetail>(initSaleDetail);
+
+  useEffect(() => {
+    setLocalDetail(detail);
+  }, [detail])
+
+  function handleLocalChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const name = event.target.name;
     const value = event.target.value;
 
-    handleChange(detail.id!, name, value);
-  }
-
-  function handleChangeSelect(event: React.ChangeEvent<HTMLSelectElement>) {
-    const name = event.target.name;
-    const value = event.target.value;
-
+    setLocalDetail({ ...localDetail, [name]: value });
     handleChange(detail.id!, name, value);
   }
 
   return (
     <div className={style.row}>
       <input
-        name="descripcion"
+        name="concepto"
+        type="text"
         className="form-control"
-        value={`${product?.marca}/${product?.modelo}`}
-        placeholder="Descripcion"
+        value={localDetail.concepto}
+        placeholder="Concepto"
         onChange={handleLocalChange}
       />
 
       <input
         name="cantidad"
+        type="numero"
         className="form-control"
-        value={detail.cantidad}
+        value={localDetail.cantidad}
         placeholder="Cantidad"
         onChange={handleLocalChange}
       />
 
       <input
         name="baseImponible"
+        type="numero"
         className="form-control"
-        value={detail.baseImponible}
+        value={localDetail.baseImponible.toFixed(2)}
         placeholder="Base Imponible"
         onChange={handleLocalChange}
       />
@@ -66,8 +70,8 @@ export default function DetailsRows({
           className="form-control"
           name="tipoImpositivo"
           placeholder="tipoImpositivo"
-          value={detail.tipoImpositivo}
-          onChange={handleChangeSelect}
+          value={localDetail.tipoImpositivo}
+          onChange={handleLocalChange}
         >
           <option value="">Seleccionar tipo impositivo</option>
           <option value={TipoImpositivoSale.IVA}>I.V.A.</option>
@@ -78,41 +82,45 @@ export default function DetailsRows({
       </div>
 
       <input
-        name="ivaMonto"
+        name="ivaPorcentaje"
+        type="numero"
         className="form-control"
-        value={detail.ivaPorcentaje}
-        placeholder="% I.V.A."
+        value={localDetail.ivaPorcentaje}
+        placeholder="$ I.V.A."
         onChange={handleLocalChange}
       />
 
       <input
         name="ivaMonto"
+        type="numero"
         className="form-control"
-        value={detail.ivaMonto}
+        value={localDetail.ivaMonto.toFixed(2)}
         placeholder="% I.V.A."
         onChange={handleLocalChange}
       />
 
       <input
         name="recargoPorcentaje"
+        type="numero"
         className="form-control"
-        value={detail.recargoPorcentaje}
-        placeholder="% I.V.A."
+        value={localDetail.recargoPorcentaje}
+        placeholder="% Recargo"
         onChange={handleLocalChange}
       />
 
       <input
         name="recargoMonto"
+        type="numero"
         className="form-control"
-        value={detail.recargoMonto}
-        placeholder="% I.V.A."
+        value={localDetail.recargoMonto.toFixed(2)}
+        placeholder="$ Recargo"
         onChange={handleLocalChange}
       />
 
       <button
         className="btn btn-outline-danger"
         type="button"
-        onClick={() => handleRemove(detail.id!)}
+        onClick={() => handleRemove(localDetail.id!)}
       >
         -
       </button>

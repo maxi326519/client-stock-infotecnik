@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Client, TipoImpositivoSale } from "../../../../../interfaces";
 import swal from "sweetalert";
@@ -11,7 +12,7 @@ import DetailsTable from "./DetailsTable/DetailsTable";
 
 import style from "./Form.module.css";
 import AddProduct from "./AddProduct/AddProduct";
-import { useEffect, useState } from "react";
+import AddClient from "./AddClient/AddClient";
 import PriceTable from "./DetailsTable copy/PriceTable";
 import ClientData from "./ClientData/ClientData";
 interface Props {
@@ -22,8 +23,10 @@ export default function Form({ handleClose }: Props) {
   const { invoice, details, priceDetails, errors, customs }: HookSaleInvoice =
     useSaleInvoice();
   const [stockSelected, setStockSelected] = useState<string[]>([]);
-  const [addStock, setAddStock] = useState<boolean>(false);
   const [clientSelected, setCLientSelected] = useState<Client | null>(null);
+  const [addStock, setAddStock] = useState<boolean>(false);
+  const [addClient, setAddClient] = useState<boolean>(false);
+  const [invoiceType, setInvoiceType] = useState<number>(1);
   const dispatch = useDispatch();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -65,7 +68,9 @@ export default function Form({ handleClose }: Props) {
     setAddStock(!addStock);
   }
 
-  function handleAddClient() {}
+  function handleAddClient() {
+    setAddClient(!addClient);
+  }
 
   return (
     <div className={style.container}>
@@ -77,14 +82,35 @@ export default function Form({ handleClose }: Props) {
           handleEmptyProduct={handleEmptyProduct}
         />
       ) : null}
-      <form className={style.form} onSubmit={handleSubmit}>
+      {addClient ? (
+        <AddClient
+          clientSelected={clientSelected}
+          setClient={setCLientSelected}
+          handleClose={handleAddClient}
+        />
+      ) : null}
+      <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
         <div className={style.close}>
           <h4>Nueva factura de venta</h4>
           <div className="btn-close" onClick={handleClose} />
         </div>
         <div className={style.flex}>
           <div className={style.inputs}>
-            {/* Numero: */}
+            {/* TIPO FACTURA */}
+            <div className={style.invoiceType}>
+              <button
+                className={`btn btn-${invoiceType === 1 ? "" : "outline-"}success`}
+                type="button"
+                onClick={() => setInvoiceType(1)}
+              >Particular</button>
+              <button
+                className={`btn btn-${invoiceType === 2 ? "" : "outline-"}success`}
+                type="button"
+                onClick={() => setInvoiceType(2)}
+              >Empresa</button>
+            </div>
+
+            {/* NUMERO: */}
             <div className="form-floating">
               <input
                 id={!errors.numero ? "floatingInputInvalid" : "numero"}
@@ -98,7 +124,8 @@ export default function Form({ handleClose }: Props) {
               <label htmlFor="numero">Numero:</label>
               <small>{errors.numero}</small>
             </div>
-            {/* Fecha */}
+
+            {/* FECHA */}
             <div className="form-floating">
               <input
                 id="fecha"
@@ -111,7 +138,8 @@ export default function Form({ handleClose }: Props) {
               />
               <label htmlFor="fecha">Fecha:</label>
             </div>
-            {/* Tipo impositivo: */}
+
+            {/* TIPO IMPOSITIVO: */}
             <div className="form-floating">
               <select
                 id="tipoImpositivo"
@@ -129,7 +157,8 @@ export default function Form({ handleClose }: Props) {
               </select>
               <label htmlFor="tipoImpositivo">Tipo Impositivo:</label>
             </div>
-            {/* Total: */}
+
+            {/* TOTAL: */}
             <div className="form-floating">
               <input
                 id={!errors.total ? "floatingInputInvalid" : "total"}
@@ -143,10 +172,23 @@ export default function Form({ handleClose }: Props) {
               <label htmlFor="total">Total:</label>
               <small>{errors.total}</small>
             </div>
+
+            {/* GENERAR FACTURA */}
             <div className={style.generated}>
               <input id="generated" type="checkbox" />
               <label htmlFor="generated">Generar factura</label>
             </div>
+
+            {/* AGREGAR CLIENTE */}
+            <div className={`${style.client} ${invoiceType === 2 ? "toBottom" : "hiddenUp"}`}>
+              <ClientData
+                client={clientSelected}
+                error={""}
+                handleFormSuppliers={handleAddClient}
+              />
+            </div>
+          </div>
+          <div className={style.tables}>
             <button
               className="btn btn-success"
               type="button"
@@ -165,12 +207,6 @@ export default function Form({ handleClose }: Props) {
               addDetail={customs.addPriceDetail}
               removeDetail={customs.removePriceDetail}
               changeDetail={customs.setPriceDetail}
-            />
-
-            <ClientData
-              client={clientSelected}
-              error={""}
-              handleFormSuppliers={handleAddClient}
             />
           </div>
         </div>

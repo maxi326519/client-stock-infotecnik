@@ -1,14 +1,18 @@
 .grid {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 40%;
+
   outline: 1px solid var(--border);
   border-radius: 5px;
   overflow: hidden;
 }
 
 .contentCard {
-  height: 100%;
+  flex-grow: 1;
   padding-bottom: 35px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .listEmpty {
