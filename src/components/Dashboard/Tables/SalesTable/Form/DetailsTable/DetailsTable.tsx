@@ -1,4 +1,4 @@
-import { RootState, SaleDetail } from "../../../../../../interfaces";
+import { RootState, SaleDetail, TipoImpositivoSale } from "../../../../../../interfaces";
 import DetailsRows from "./DetailsRows/DetailsRows";
 
 import style from "./DetailsTable.module.css";
@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 interface Props {
   details: SaleDetail[];
+  tipoImpositivoSale: TipoImpositivoSale;
   addDetail: (stockId?: string[]) => void;
   removeDetail: (detailId: string) => void;
   changeDetail: (
@@ -17,11 +18,11 @@ interface Props {
 
 export default function DetaisTable({
   details,
+  tipoImpositivoSale,
   addDetail,
   removeDetail,
   changeDetail,
 }: Props) {
-  const products = useSelector((state: RootState) => state.products);
 
   function handleChange(
     detailId: string,
@@ -31,11 +32,10 @@ export default function DetaisTable({
     changeDetail(detailId, name, value);
   }
 
-
   function handleAddDetail() {
     addDetail();
   }
-  
+
   function handleRemove(detailId: string) {
     removeDetail(detailId);
   }
@@ -51,14 +51,13 @@ export default function DetaisTable({
         <span>$IVA</span>
         <span>%RE</span>
         <span>$RE</span>
-        <span></span>
         <button
-        className="btn btn-success"
-        type="button"
-        onClick={handleAddDetail}
-      >
-        +
-      </button>
+          className="btn btn-success"
+          type="button"
+          onClick={handleAddDetail}
+        >
+          +
+        </button>
       </div>
       <div className={style.contentCard}>
         {details.length <= 0 ? (
@@ -70,9 +69,7 @@ export default function DetaisTable({
             <DetailsRows
               key={detail.id}
               detail={detail}
-              product={products.find(
-                (product) => product.id === detail.ProductId
-              )}
+              tipoImpositivoSale={tipoImpositivoSale}
               handleChange={handleChange}
               handleRemove={handleRemove}
             />

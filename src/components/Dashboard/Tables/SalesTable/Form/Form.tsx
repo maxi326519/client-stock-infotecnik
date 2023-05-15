@@ -179,7 +179,6 @@ export default function Form({ handleClose }: Props) {
                 value={invoice.tipoImpositivo}
                 onChange={handleChangeSelect}
               >
-                <option value="">Seleccionar tipo impositivo</option>
                 <option value={TipoImpositivoSale.Compuesto}>Compuesto</option>
                 <option value={TipoImpositivoSale.IVA}>I.V.A.</option>
                 <option value={TipoImpositivoSale.RE}>Recargo</option>
@@ -236,6 +235,7 @@ export default function Form({ handleClose }: Props) {
             </button>
             <DetailsTable
               details={details}
+              tipoImpositivoSale={invoice.tipoImpositivo}
               addDetail={customs.addDetail}
               removeDetail={customs.removeDetail}
               changeDetail={customs.setDetail}

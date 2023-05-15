@@ -13,7 +13,11 @@ import {
 } from "../../interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { postSaleInvoice } from "../../redux/actions/sales";
-import { MetodoDePago, PriceDetail, TipoImpositivoSale } from "../../interfaces/sales";
+import {
+  MetodoDePago,
+  PriceDetail,
+  TipoImpositivoSale,
+} from "../../interfaces/sales";
 import generateId from "../../functions/generateId";
 
 export default function useSaleInvoice() {
@@ -21,7 +25,7 @@ export default function useSaleInvoice() {
   const stock = useSelector((state: RootState) => state.stock);
   const products = useSelector((state: RootState) => state.products);
   const config = useSelector((state: RootState) => state.config.iva);
-  const [invoice, setInvoice] = useState<SaleInvoice>(initSaleInvoice);
+  const [invoice, setInvoiceData] = useState<SaleInvoice>(initSaleInvoice);
   const [details, setDetails] = useState<SaleDetail[]>([]);
   const [priceDetails, setPriceDetails] = useState<PriceDetail[]>([]);
   const [errors, setError] = useState<ErrorSaleInvoice>(initErrorSaleInvoice);
@@ -37,7 +41,7 @@ export default function useSaleInvoice() {
             Number(details.recargoMonto)))
     );
 
-    setInvoice({
+    setInvoiceData({
       ...invoice,
       total: total,
     });
@@ -80,78 +84,112 @@ export default function useSaleInvoice() {
     }
   }
 
+  function setInvoice(invoice: SaleInvoice) {
+    if (invoice.tipoImpositivo !== TipoImpositivoSale.Compuesto) {
+      setDetails(
+        details.map((detail: SaleDetail) =>
+          changeDetail(detail, "tipoImpositivo", invoice.tipoImpositivo)
+        )
+      );
+    }
+    setInvoiceData(invoice);
+  }
+
   function setDetail(detailId: string, name: string, value: string | number) {
     setDetails(
-      details.map((detail) => {
-        if (detail.id === detailId) {
-          switch (name) {
-            case "tipoImpositivo":
-              if(value === TipoImpositivoSale.IVA){
-                return {
-                  ...detail,
-                  [name]: value as TipoImpositivoSale,
-                  ivaPorcentaje: config.ivaGeneral,
-                  ivaMonto: Number(detail.baseImponible) * (Number(config.ivaGeneral) / 100),
-                  recargoPorcentaje: 0,
-                  recargoMonto: 0,
-                }
-              }else if (value === TipoImpositivoSale.RE){
-                return {
-                  ...detail,
-                  [name]: value as TipoImpositivoSale,
-                  ivaPorcentaje: config.ivaGeneral,
-                  ivaMonto: Number(detail.baseImponible) * (Number(config.ivaGeneral) / 100),
-                  recargoPorcentaje: config.recargo,
-                  recargoMonto: Number(detail.baseImponible) * (Number(config.recargo) / 100),
-                }
-              }else if (value === TipoImpositivoSale.REBU){
-                return {
-                  ...detail,
-                  [name]: value as TipoImpositivoSale,
-                  ivaPorcentaje: 0,
-                  ivaMonto: 0,
-                  recargoPorcentaje: 0,
-                  recargoMonto: 0,
-                }
-              }else return detail;
-            case "baseImponible":
-              return {
-                ...detail,
-                baseImponible: Number(value),
-                ivaMonto: Number(value) * (Number(detail.ivaPorcentaje) / 100),
-                recargoMonto: Number(value) * (Number(detail.recargoPorcentaje) / 100),
-              }
-            case "ivaPorcentaje":
-              return {
-                ...detail,
-                ivaPorcentaje: Number(value),
-                ivaMonto: detail.baseImponible * (Number(value) / 100),
-              };
-            case "ivaMonto":
-              return {
-                ...detail,
-                ivaPorcentaje: (Number(value) * 100) / detail.baseImponible,
-                ivaMonto: Number(value),
-              };
-            case "recargoPorcentaje":
-              return {
-                ...detail,
-                recargoPorcentaje: Number(value),
-                recargoMonto: detail.baseImponible * (Number(value) / 100),
-              };
-            case "recargoMonto":
-              return {
-                ...detail,
-                recargoPorcentaje: (Number(value) * 100) / detail.baseImponible,
-                recargoMonto: Number(value),
-              };
-            default:
-              return { ...detail, [name]: value };
-          }
-        }
-        return detail;
-      })
+      details.map((detail) =>
+        detail.id === detailId ? changeDetail(detail, name, value) : detail
+      )
     );
+  }
+
+  function changeDetail(
+    detail: SaleDetail,
+    name: string,
+    value: string | number
+  ) {
+    switch (name) {
+      case "tipoImpositivo":
+        if (value === TipoImpositivoSale.IVA) {
+          return {
+            ...detail,
+            [name]: value as TipoImpositivoSale,
+            ivaPorcentaje: config.ivaGeneral,
+            ivaMonto: Number(
+              (detail.baseImponible * (config.ivaGeneral / 100)).toFixed(2)
+            ),
+            recargoPorcentaje: 0,
+            recargoMonto: 0,
+          };
+        } else if (value === TipoImpositivoSale.RE) {
+          return {
+            ...detail,
+            [name]: value as TipoImpositivoSale,
+            ivaPorcentaje: config.ivaGeneral,
+            ivaMonto: Number(
+              (detail.baseImponible * (config.ivaGeneral / 100)).toFixed(2)
+            ),
+            recargoPorcentaje: config.recargo,
+            recargoMonto: Number(
+              (detail.baseImponible * (config.recargo / 100)).toFixed(2)
+            ),
+          };
+        } else if (value === TipoImpositivoSale.REBU) {
+          return {
+            ...detail,
+            [name]: value as TipoImpositivoSale,
+            ivaPorcentaje: 0,
+            ivaMonto: 0,
+            recargoPorcentaje: 0,
+            recargoMonto: 0,
+          };
+        } else return detail;
+      case "baseImponible":
+        return {
+          ...detail,
+          baseImponible: value as number,
+          ivaMonto: Number(
+            ((value as number) * (detail.ivaPorcentaje / 100)).toFixed(2)
+          ),
+          recargoMonto: Number(
+            ((value as number) * (detail.recargoPorcentaje / 100)).toFixed(2)
+          ),
+        };
+      case "ivaPorcentaje":
+        return {
+          ...detail,
+          ivaPorcentaje: value as number,
+          ivaMonto: Number(
+            (detail.baseImponible * ((value as number) / 100)).toFixed(2)
+          ),
+        };
+      case "ivaMonto":
+        return {
+          ...detail,
+          ivaPorcentaje: Number(
+            (((value as number) * 100) / detail.baseImponible).toFixed(2)
+          ),
+          ivaMonto: value as number,
+        };
+      case "recargoPorcentaje":
+        return {
+          ...detail,
+          recargoPorcentaje: value as number,
+          recargoMonto: Number(
+            ((detail.baseImponible * (value as number)) / 100).toFixed(2)
+          ),
+        };
+      case "recargoMonto":
+        return {
+          ...detail,
+          recargoPorcentaje: Number(
+            (((value as number) * 100) / detail.baseImponible).toFixed(2)
+          ),
+          recargoMonto: value as number,
+        };
+      default:
+        return { ...detail, [name]: value };
+    }
   }
 
   function removeDetail(detailId: string) {
