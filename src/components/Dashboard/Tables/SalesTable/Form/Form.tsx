@@ -32,9 +32,10 @@ export default function Form({ handleClose }: Props) {
   const [addStock, setAddStock] = useState<boolean>(false);
   const [addClient, setAddClient] = useState<boolean>(false);
   const [invoiceType, setInvoiceType] = useState<number>(1);
+  const [generate, setGenerate] = useState(false);
   const [disabled, setDisabled] = useState<InputCheck>({
-    numero: true,
-    total: true,
+    numero: false,
+    total: false,
   });
   const dispatch = useDispatch();
 
@@ -85,10 +86,12 @@ export default function Form({ handleClose }: Props) {
     const name = event.target.name;
     const value = event.target.checked;
 
-    console.log(name, value);
-    console.log(disabled);
+    setDisabled({ ...disabled, [name]: value });
+  }
 
-    setDisabled({ ...disabled, [name]: !value });
+  function handleGenerate(event: React.ChangeEvent<HTMLInputElement>) {
+    console.log("Generate:", event.target.checked);
+    setGenerate(event.target.checked);
   }
 
   return (
@@ -139,7 +142,7 @@ export default function Form({ handleClose }: Props) {
                 placeholder="numero"
                 value={invoice.numero}
                 onChange={handleChange}
-                disabled={disabled.numero}
+                disabled={!disabled.numero}
               />
               <input
                 className={style.inputCheck}
@@ -195,7 +198,7 @@ export default function Form({ handleClose }: Props) {
                 placeholder="total"
                 value={invoice.total}
                 onChange={handleChange}
-                disabled={disabled.total}
+                disabled={!disabled.total}
               />
               <input
                 className={style.inputCheck}
@@ -210,7 +213,7 @@ export default function Form({ handleClose }: Props) {
 
             {/* GENERAR FACTURA */}
             <div className={style.generated}>
-              <input id="generated" type="checkbox" />
+              <input id="generated" name="generated" type="checkbox" checked={generate} onChange={handleGenerate} />
               <label htmlFor="generated">Generar factura</label>
             </div>
 
