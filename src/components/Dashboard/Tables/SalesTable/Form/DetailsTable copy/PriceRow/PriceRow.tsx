@@ -27,7 +27,7 @@ export default function PriceRow({
 
   return (
     <div className={style.row}>
-      {/* Tipo impositivo: */}
+      {/* TIPO IMPOSITIVO */}
       <div className="form-floating">
         <select
           id="metodoDePago"
@@ -51,6 +51,7 @@ export default function PriceRow({
         <label htmlFor="metodoDePago">Metodo de pago:</label>
       </div>
 
+      {/* MONTO */}
       <input
         name="monto"
         className="form-control"
@@ -60,14 +61,18 @@ export default function PriceRow({
         onChange={handleLocalChange}
       />
 
-      <input
-        name="nroOperacion"
-        className="form-control"
-        value={detail.nroOperacion !== undefined ? detail.nroOperacion : "-"}
-        placeholder="Nro de operación"
-        onChange={handleLocalChange}
-        disabled={detail.nroOperacion === undefined}
-      />
+      {/* NRO DE OPEERACION / NRO DE CONTRATO */}
+      <div className="form-floating">
+        <input
+          name="nroOperacion"
+          className="form-control"
+          value={detail.nroOperacion !== undefined ? detail.nroOperacion : "-"}
+          placeholder={detail.metodoDePago === MetodoDePago.tarjeta ? "Nro de operación" : "Nro de contrato"}
+          onChange={handleLocalChange}
+          disabled={detail.nroOperacion === undefined}
+        />
+        <label className="form-label">{detail.metodoDePago === MetodoDePago.tarjeta ? "Nro de operación" : "Nro de contrato"}</label>
+      </div>
 
       <button
         className="btn btn-outline-danger"

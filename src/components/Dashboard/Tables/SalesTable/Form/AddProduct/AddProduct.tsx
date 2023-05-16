@@ -86,10 +86,10 @@ export default function AddProduct({
           <div className={style.table}>
             <div className={style.firstRow}>
               <span>Fecha</span>
-              <span>IMEISerie</span>
-              <span>codigoDeBarras</span>
-              <span>cantidad</span>
-              <span>total</span>
+              <span>IMEI /  Serie</span>
+              <span>Codigo de barras</span>
+              <span>Cantidad</span>
+              <span>Total</span>
             </div>
             <div className={style.data}>
               {rows?.map((s: Stock) => (

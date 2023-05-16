@@ -84,7 +84,7 @@
 
 .firstRow {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5 , 1fr);
   padding: 5px 10px;
   text-align: center;
   color: white;
@@ -112,6 +112,10 @@
   gap: 10px;
   grid-template-columns: 100px 1fr 140px;
   width: 100%;
+}
+
+.btnContainer button:last-child{
+  grid-column: 3 / 4;
 }
 
 .btnContainer button {

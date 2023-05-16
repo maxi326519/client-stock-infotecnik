@@ -64,13 +64,6 @@ export default function PriceTable({
           ))
         )}
       </div>
-      <button
-        className="btn btn-outline-success"
-        type="button"
-        onClick={handleAdd}
-      >
-        +
-      </button>
     </div>
   );
 }

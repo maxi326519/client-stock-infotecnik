@@ -211,7 +211,11 @@ export default function useSaleInvoice() {
   ) {
     const newValues = priceDetails.map((priceDetail) => {
       if (priceDetail.id === priceDetailId) {
-        if (name === "metodoDePago" && value === MetodoDePago.tarjeta) {
+        if (
+          name === "metodoDePago" &&
+          (value === MetodoDePago.tarjeta ||
+            value === MetodoDePago.contratoCompraventa)
+        ) {
           return {
             ...priceDetail,
             [name]: value,
