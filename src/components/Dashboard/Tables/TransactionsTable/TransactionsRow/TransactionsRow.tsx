@@ -8,6 +8,13 @@ import invoice from "../../../../../assets/svg/invoice-table.svg";
 import link from "../../../../../assets/svg/link.svg";
 import edit from "../../../../../assets/svg/edit.svg";
 import deleteSvg from "../../../../../assets/svg/delete.svg";
+import {
+  closeLoading,
+  loading,
+} from "../../../../../redux/actions/loading/loading";
+import { useDispatch } from "react-redux";
+import { deleteTransaction } from "../../../../../redux/actions/transactions";
+import swal from "sweetalert";
 
 interface Props {
   transaction: Transactions;
@@ -15,6 +22,7 @@ interface Props {
 }
 
 export default function TransactionsRow({ transaction, handleInvoice }: Props) {
+  const dispatch = useDispatch();
   const [fecha, setFecha] = useState<string>("");
 
   useEffect(() => {
@@ -27,6 +35,30 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
     setFecha(fechaStr);
   }, [transaction]);
 
+  function handleDelete() {
+    swal({
+      text: "¿Seguro que desea eliminar este movimiento?",
+      icon: "warning",
+      buttons: {
+        Si: true,
+        No: true,
+      },
+    }).then((response) => {
+      if ((response = "Si")) {
+        dispatch(loading());
+        dispatch<any>(deleteTransaction(transaction.id))
+          .then(() => {
+            dispatch(closeLoading());
+            swal("Eliminado", "Se eliminó el movimiento con éxito", "success");
+          })
+          .catch(() => {
+            dispatch(closeLoading());
+            swal("Error", "No se pudo eliminar el movimiento", "error");
+          });
+      }
+    });
+  }
+
   return (
     <div className={style.row}>
       <span>{dateFormat(fecha)}</span>
@@ -35,22 +67,16 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
         <b>{transaction.movimiento}</b>
       </span>
       <span>{transaction.masDatos}</span>
-      <span>$ {transaction.importe}</span>
-
-      <button
-        className="btn btn-outline-success table"
-        type="button"
-        onClick={() => handleInvoice(transaction?.invoiceId || "")}
-      >
-        <img src={invoice} alt="invoice" />
-      </button>
-      <button
-        className="btn btn-outline-success table"
-        type="button"
-        onClick={() => handleInvoice(transaction?.invoiceId || "")}
-      >
-        <img src={link} alt="link" />
-      </button>
+      <span>€ {transaction.importe}</span>
+      {transaction.invoiceId ? (
+        <button className="btn btn-outline-success table" type="button">
+          <img src={invoice} alt="invoice" />
+        </button>
+      ) : (
+        <button className="btn btn-outline-success table" type="button">
+          <img src={link} alt="link" />
+        </button>
+      )}
       <button
         className="btn btn-outline-success table"
         type="button"
@@ -61,7 +87,7 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
       <button
         className="btn btn-outline-danger table"
         type="button"
-        onClick={() => handleInvoice(transaction?.invoiceId || "")}
+        onClick={handleDelete}
       >
         <img src={deleteSvg} alt="delete" />
       </button>

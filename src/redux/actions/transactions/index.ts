@@ -49,14 +49,37 @@ export function getTransactions(
         }`
       );
 
-      const newData = transactions.data.map((data: any) => ({
-        ...data,
-        fecha: new Date(data.fecha),
-      }));
+      let newData = transactions.data
+        .map((data: any) => ({
+          ...data,
+          fecha: new Date(data.fecha),
+        }))
+        .sort(
+          (a: Transactions, b: Transactions) =>
+            b.fecha.getTime() - a.fecha.getTime()
+        );
 
       dispatch({
         type: GET_TRANSACTIONS,
         payload: newData,
+      });
+    } catch (error: any) {
+      console.log(error.response ? error.response.data.error : error);
+      throw new Error(error.response ? error.response.data.error : error);
+    }
+  };
+}
+
+export function deleteTransaction(
+  transactionId: string
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    try {
+      await axios.delete(`/transactions/${transactionId}`);
+
+      dispatch({
+        type: DELETE_TRANSACTION,
+        payload: transactionId,
       });
     } catch (error: any) {
       console.log(error.response ? error.response.data.error : error);

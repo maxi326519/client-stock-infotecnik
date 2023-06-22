@@ -17,9 +17,11 @@ export default function usePagination(data: any[], listLength = 11) {
   const [list, setList] = useState<any[]>([]);
 
   useEffect(() => {
+    console.log("Data: ", data);
+
     setPage({
       ...page,
-      length: Math.ceil(data.length / listLength),
+      length: Math.ceil(data.length / listLength) || 0,
       listLength,
     });
   }, [data, listLength]);
@@ -27,8 +29,11 @@ export default function usePagination(data: any[], listLength = 11) {
   useEffect(() => {
     const firstData = (page.current - 1) * page.listLength;
     const lastData = firstData + page.listLength;
+    
+    console.log("First data: ", firstData);
+    console.log("Data length: ", data.length);
 
-    if (firstData < data.length) {
+    if (firstData <= data.length) {
       setList(data.slice(firstData, lastData));
     }
 

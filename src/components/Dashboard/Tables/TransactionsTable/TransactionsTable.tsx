@@ -37,8 +37,7 @@ export default function TransactionsTable() {
   });
 
   useEffect(() => {
-    console.log(list);
-    console.log(page);
+    console.log("List:", list);
   }, [list]);
 
   useEffect(() => {
@@ -55,14 +54,22 @@ export default function TransactionsTable() {
       const from = new Date(filters.fromDate).getTime();
       const to = new Date(filters.toDate).getTime();
 
+      // Filters
       if (filters.linked !== "" && data.vinculada.toString() !== filters.linked)
         return false;
       if (data.fecha.getTime() < from) return false;
       if (data.fecha.getTime() >= to) return false;
+
+      // Searchbar
       if (search === "") return true;
-      return true;
+      if (data.importe.toString().includes(search)) return true;
+      if (data.movimiento.toLowerCase().includes(search.toLowerCase()))
+        return true;
+      if (data.masDatos.toLowerCase().includes(search.toLowerCase()))
+        return true;
+      return false;
     });
-    setRows(filter.slice(1, 15));
+    setRows(filter);
   }, [transactions, search, filters]);
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -173,6 +180,7 @@ export default function TransactionsTable() {
           )}
         </div>
         <div className={style.pagination}>
+          <span>{transactions.length} Movimientos</span>
           <button
             disabled={page.current <= 1}
             onClick={pageActions.prevPage}

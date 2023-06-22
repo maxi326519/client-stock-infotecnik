@@ -93,7 +93,7 @@
 .row {
   display: grid;
   grid-template-columns: repeat(2, 120px) 1fr 2fr repeat(1, 100px) repeat(
-      4,
+      3,
       60px
     );
   gap: 10px;

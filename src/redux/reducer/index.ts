@@ -25,7 +25,11 @@ import {
   DELETE_SUPPLIER,
 } from "../actions/suppliers";
 import { POST_CLIENT, GET_CLIENT } from "../actions/clients";
-import { POST_TRANSACTIONS, GET_TRANSACTIONS } from "../actions/transactions";
+import {
+  POST_TRANSACTIONS,
+  GET_TRANSACTIONS,
+  DELETE_TRANSACTION,
+} from "../actions/transactions";
 import {
   GET_CONFIGURATIONS,
   UPDATE_CONFIGURATIONS,
@@ -405,6 +409,14 @@ export default function Reducer(
           invoice.id === action.payload.SaleInvoiceId
             ? invoice.SaleDetails.filter((item) => item.id !== action.payload)
             : invoice
+        ),
+      };
+
+    case DELETE_TRANSACTION:
+      return {
+        ...state,
+        transactions: state.transactions.filter(
+          (transaction) => transaction.id !== action.payload
         ),
       };
 
