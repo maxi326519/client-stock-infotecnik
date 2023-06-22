@@ -16,58 +16,20 @@ export default function ProductCard({ product, handleDetails }: Props) {
 
   return (
     <div className={style.row}>
-      <input
-        className="form-control"
-        id="id"
-        placeholder="id"
-        type="text"
-        value={`0000000${product.id}`.slice(-7)}
-        disabled={true}
-      />
-      <input
-        className="form-control"
-        id="codigo"
-        placeholder="Codigo"
-        type="text"
-        value={product.codigo}
-        disabled={true}
-      />
-      <input
-        className="form-control"
-        id="codigoDeBarras"
-        placeholder="codigoDeBarras"
-        type="text"
-        value={product.codigoDeBarras}
-        disabled={true}
-      />
-      <input
-        className="form-control"
-        id="cantidad"
-        placeholder="Codigo"
-        type="text"
-        value={product.cantidad}
-        disabled={true}
-      />
-      <input
-        className="form-control"
-        id="marca"
-        placeholder="Msarca"
-        type="text"
-        value={`${product.marca} / ${product.modelo} / ${product.color} / ${product.capacidad}`}
-        disabled={true}
-      />
-      <input
-        className="form-control"
-        id="categoria"
-        placeholder="Categoria"
-        type="text"
-        value={
-          categories.find((cat: any) => cat[0] === product.CategoryId)?.[1] ||
-          ""
-        }
-        disabled={true}
-      />
-      <button className="btn btn-success" type="button" onClick={handleDetails}>
+      <span>{`0000000${product.id}`.slice(-7)}</span>
+      <span>{product.codigo}</span>
+      <span>{product.codigoDeBarras}</span>
+      <span>{`${product.marca} / ${product.modelo} / ${product.color} / ${product.capacidad}`}</span>
+      <span>{product.cantidad}</span>
+      <span>
+        {categories.find((cat: any) => cat[0] === product.CategoryId)?.[1] ||
+          ""}
+      </span>
+      <button
+        className="btn btn-outline-primary"
+        type="button"
+        onClick={handleDetails}
+      >
         <img src={details} alt="details" />
       </button>
       <span></span>

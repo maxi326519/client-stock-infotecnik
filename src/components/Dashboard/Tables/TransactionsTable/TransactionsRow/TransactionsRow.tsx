@@ -1,10 +1,13 @@
 import { Transactions } from "../../../../../interfaces";
+import { useEffect, useState } from "react";
+import dateFormat from "../../../../../functions/dateFormat";
+
 import style from "./TransactionsRow.module.css";
 
-import invoice from "../../../../../assets/svg/invoices.svg";
+import invoice from "../../../../../assets/svg/invoice-table.svg";
 import link from "../../../../../assets/svg/link.svg";
+import edit from "../../../../../assets/svg/edit.svg";
 import deleteSvg from "../../../../../assets/svg/delete.svg";
-import { useEffect, useState } from "react";
 
 interface Props {
   transaction: Transactions;
@@ -26,33 +29,42 @@ export default function TransactionsRow({ transaction, handleInvoice }: Props) {
 
   return (
     <div className={style.row}>
-      <span>{fecha}</span>
+      <span>{dateFormat(fecha)}</span>
       <span>{transaction.fechaValor}</span>
-      <span>{transaction.movimiento}</span>
+      <span>
+        <b>{transaction.movimiento}</b>
+      </span>
       <span>{transaction.masDatos}</span>
-      <span>{transaction.importe}</span>
+      <span>$ {transaction.importe}</span>
+
       <button
-        className="btn btn-primary"
+        className="btn btn-outline-success table"
         type="button"
         onClick={() => handleInvoice(transaction?.invoiceId || "")}
       >
         <img src={invoice} alt="invoice" />
       </button>
       <button
-        className="btn btn-primary"
+        className="btn btn-outline-success table"
         type="button"
         onClick={() => handleInvoice(transaction?.invoiceId || "")}
       >
         <img src={link} alt="link" />
       </button>
       <button
-        className="btn btn-danger"
+        className="btn btn-outline-success table"
+        type="button"
+        onClick={() => handleInvoice(transaction?.invoiceId || "")}
+      >
+        <img src={edit} alt="edit" />
+      </button>
+      <button
+        className="btn btn-outline-danger table"
         type="button"
         onClick={() => handleInvoice(transaction?.invoiceId || "")}
       >
         <img src={deleteSvg} alt="delete" />
       </button>
-      <span></span>
     </div>
   );
 }

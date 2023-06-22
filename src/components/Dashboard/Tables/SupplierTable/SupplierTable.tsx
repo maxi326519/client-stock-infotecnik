@@ -35,9 +35,8 @@ export default function SupplierTable() {
           type="search"
           placeholder="Buscar proveedor"
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nuevo proveedor</span>
+        <button className="btn btn-outline-success" type="button" onClick={handleForm}>
+          <b>+</b> Nuevo proveedor
         </button>
       </div>
       <div className={style.dashboardList__grid}>
@@ -49,8 +48,6 @@ export default function SupplierTable() {
           <span>CP</span>
           <span>Poblacion</span>
           <span>CIF / NIF</span>
-          <span>Editar</span>
-          <span>Eliminar</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (

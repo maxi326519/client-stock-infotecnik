@@ -56,12 +56,14 @@
   align-items: center;
 }
 
-.inputs div:nth-child(7) {
-  grid-column: 1 / 3;
+.btnContainer {
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
 }
 
-.inputs div:last-child {
-  grid-column: 1 / 3;
+.btnContainer button {
+  width: 100%;
 }
 
 .inputCheck {

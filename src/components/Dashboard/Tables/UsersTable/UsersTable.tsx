@@ -31,9 +31,8 @@ export default function UsersTable() {
           type="search"
           placeholder="Buscar usuario"
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nuevo usuario</span>
+        <button className="btn btn-outline-success" type="button" onClick={handleForm}>
+          <b>+</b> Nuevo usuario
         </button>
       </div>
       <div className={style.dashboardList__grid}>

@@ -1,13 +1,27 @@
 .row{
   display: grid;
-  grid-template-columns: 100px 150px 300px 100px 1fr 200px 80px;
+  grid-template-columns: 100px 150px 300px 1fr 100px 200px 50px;
   grid-template-rows: 1fr;
   gap: 10px;
   padding: 10px;
-  padding-bottom: 0px;
-  outline: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .row span{
-  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.row button{
+  border: none;
+}
+
+.row button img {
+  filter: invert(9%) sepia(93%) saturate(5805%) hue-rotate(359deg)
+    brightness(84%) contrast(109%);
+}
+
+.row button:hover img {
+  filter: none;
+  filter: invert(100%);
 }

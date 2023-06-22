@@ -96,7 +96,7 @@ export default function SupplieRows({ supplier }: Props) {
     <div className={style.row}>
       <input
         name="numero"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.numero}
         placeholder="Numero"
         onChange={handleChange}
@@ -104,7 +104,7 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="nombre"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.nombre}
         placeholder="Nombre"
         onChange={handleChange}
@@ -112,7 +112,7 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="direccion"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.direccion}
         placeholder="Direccion"
         onChange={handleChange}
@@ -120,7 +120,7 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="telefono"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.telefono}
         placeholder="Telefono"
         onChange={handleChange}
@@ -128,7 +128,7 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="poblacion"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.poblacion}
         placeholder="Poblacion"
         onChange={handleChange}
@@ -136,7 +136,7 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="postal"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.postal}
         placeholder="Postal"
         onChange={handleChange}
@@ -144,30 +144,30 @@ export default function SupplieRows({ supplier }: Props) {
       />
       <input
         name="cifNif"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localSupplier.cifNif}
         placeholder="CIF NIF"
         onChange={handleChange}
         disabled={isDisabled}
       />
       {isDisabled ? <button
-        className="btn btn-primary"
+        className="btn btn-outline-primary"
         type="button"
         onClick={handleDisabled}
       >
         <img src={edit} alt="edit" />
       </button>
         :
-        <div className="btn-content">
+        <div className={style.btnContent}>
           <button
-            className="btn btn-success"
+            className="btn btn-outline-success"
             type="button"
             onClick={handleUpdate}
           >
             <img src={save} alt="edit" />
           </button>
           <button
-            className="btn btn-danger"
+            className="btn btn-outline-danger"
             type="button"
             onClick={handleDisabled}
           >
@@ -175,7 +175,7 @@ export default function SupplieRows({ supplier }: Props) {
           </button>
         </div>
       }
-      <button className="btn btn-danger" type="button" onClick={handleRemove}>
+      <button className="btn btn-outline-danger" type="button" onClick={handleRemove}>
         <img src={deleteSvg} alt="delete" />
       </button>
     </div>

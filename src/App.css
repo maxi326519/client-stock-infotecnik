@@ -1,6 +1,8 @@
 :root {
   --primary-color: #b3071b;
   --primary-color--transp: #b3071b44;
+  --filter-primary: invert(24%) sepia(87%) saturate(6383%) hue-rotate(345deg)
+    brightness(69%) contrast(107%);
 
   --background: #fff;
   --panel: #ccc;
@@ -15,6 +17,11 @@
 
 .App {
   background-color: var(--background);
+}
+
+.btn img {
+  width: 25px;
+  filter: invert(100%);
 }
 
 .btn-primary {
@@ -40,7 +47,7 @@
 
 .btn-outline-primary {
   color: var(--primary-color);
-  border-color: var(--primary-color);
+  border-color: transparent;
   background-color: transparent;
 }
 
@@ -58,8 +65,15 @@
   background-color: var(--primary-color);
 }
 
-.btn img {
-  width: 25px;
+.table {
+  border: none;
+}
+
+.table img {
+  filter: invert(40%);
+}
+
+.table:hover img {
   filter: invert(100%);
 }
 

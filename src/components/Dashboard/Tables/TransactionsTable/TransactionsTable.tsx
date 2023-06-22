@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { RootState, Transactions } from "../../../../interfaces";
 import { useDispatch, useSelector } from "react-redux";
+import { getDateRange } from "../../../../functions/getDateRange";
 import {
   getTransactions,
   postTransactions,
@@ -14,16 +15,19 @@ import swal from "sweetalert";
 
 import TransactionsRow from "./TransactionsRow/TransactionsRow";
 import ImportExcel from "./ImportExcel/ImportExcel";
+import Filters from "./FIlters/Filters";
 
 import style from "./TransactionsTable.module.css";
 import importSvg from "../../../../assets/svg/import.svg";
-import { getDateRange } from "../../../../functions/getDateRange";
-import Filters from "./FIlters/Filters";
+import usePagination from "../../../../hooks/pagination/usePagination";
 
 export default function TransactionsTable() {
   const dispatch = useDispatch();
+
   const transactions = useSelector((state: RootState) => state.transactions);
   const [rows, setRows] = useState<Transactions[]>([]);
+  const { list, page, pageActions } = usePagination(rows);
+
   const [search, setSearch] = useState<string>("");
   const [transactionForm, setTransactionForm] = useState<boolean>(false);
   const [filters, setFilters] = useState({
@@ -31,6 +35,11 @@ export default function TransactionsTable() {
     toDate: new Date().toISOString().split("T")[0],
     linked: "",
   });
+
+  useEffect(() => {
+    console.log(list);
+    console.log(page);
+  }, [list]);
 
   useEffect(() => {
     const { from, to } = getDateRange();
@@ -53,7 +62,7 @@ export default function TransactionsTable() {
       if (search === "") return true;
       return true;
     });
-    setRows(filter);
+    setRows(filter.slice(1, 15));
   }, [transactions, search, filters]);
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -123,7 +132,11 @@ export default function TransactionsTable() {
           placeholder="Buscar movimiento"
           onChange={handleSearchChange}
         />
-        <button className="btn btn-success" type="button" onClick={handleClose}>
+        <button
+          className="btn btn-outline-success"
+          type="button"
+          onClick={handleClose}
+        >
           <img src={importSvg} alt="importSvg" />
           <span>Importar</span>
         </button>
@@ -142,17 +155,15 @@ export default function TransactionsTable() {
           <span>Movimiento</span>
           <span>Mas datos</span>
           <span>Importe</span>
-          <span>Factura</span>
-          <span>Vincular</span>
-          <span>Eliminar</span>
+          <span>Acciones</span>
         </div>
         <div className={style.contentCard}>
-          {rows.length <= 0 ? (
+          {list.length <= 0 ? (
             <div className={style.listEmpty}>
               <span>No hay movimientos</span>
             </div>
           ) : (
-            rows?.map((transaction: Transactions) => (
+            list?.map((transaction: Transactions) => (
               <TransactionsRow
                 key={transaction.id}
                 transaction={transaction}
@@ -160,6 +171,17 @@ export default function TransactionsTable() {
               />
             ))
           )}
+        </div>
+        <div className={style.pagination}>
+          <button
+            disabled={page.current <= 1}
+            onClick={pageActions.prevPage}
+          >{`<`}</button>
+          <span>{`${page.current} de ${page.length}`}</span>
+          <button
+            disabled={page.current >= page.length}
+            onClick={pageActions.nextPage}
+          >{`>`}</button>
         </div>
       </div>
     </div>

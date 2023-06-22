@@ -9,7 +9,10 @@ import ProductRow from "./ProductRow/ProductRow";
 import style from "./ProductsTable.module.css";
 import add from "../../../../assets/svg/add.svg";
 import Filters from "./FIlters/Filters";
-import { closeLoading, loading } from "../../../../redux/actions/loading/loading";
+import {
+  closeLoading,
+  loading,
+} from "../../../../redux/actions/loading/loading";
 import { getProduct } from "../../../../redux/actions/products";
 import swal from "sweetalert";
 
@@ -34,8 +37,13 @@ export default function ProductTable() {
 
       if (filters.marca !== "" && product.marca !== filters.marca) return false;
       if (filters.color !== "" && product.color !== filters.color) return false;
-      if (filters.capacidad !== "" && product.capacidad !== filters.capacidad) return false;
-      if (filters.categoria !== "" && product.CategoryId.toString() !== filters.categoria.toString()) return false;
+      if (filters.capacidad !== "" && product.capacidad !== filters.capacidad)
+        return false;
+      if (
+        filters.categoria !== "" &&
+        product.CategoryId.toString() !== filters.categoria.toString()
+      )
+        return false;
 
       if (searchStr === "") return true;
       if (product.id === Number(searchStr)) return true;
@@ -84,9 +92,12 @@ export default function ProductTable() {
           placeholder="Buscar producto"
           onChange={handleChangeSearch}
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nuevo producto</span>
+        <button
+          className="btn btn-outline-success"
+          type="button"
+          onClick={handleForm}
+        >
+          <b>+</b> Nuevo producto
         </button>
         <Filters
           marca={filters.marca}
@@ -101,10 +112,9 @@ export default function ProductTable() {
           <span>Numero</span>
           <span>Codigo</span>
           <span>Codigo de Barra</span>
-          <span>Cantidad</span>
           <span>Descripcion</span>
+          <span>Cantidad</span>
           <span>Cateogria</span>
-          <span>Detalle</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (

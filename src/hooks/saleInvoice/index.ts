@@ -229,7 +229,6 @@ export default function useSaleInvoice() {
         return priceDetail;
       }
     });
-    console.log(newValues);
     setPriceDetails(newValues);
   }
 
@@ -242,9 +241,17 @@ export default function useSaleInvoice() {
   function postInvoice() {
     const newSaleInvoice = {
       ...invoice,
-      SaleDetails: details,
+      SaleDetails: details.map(deleteId),
+      PriceDetails: priceDetails.map(deleteId),
     };
+
+    console.log(newSaleInvoice);
     return dispatch<any>(postSaleInvoice(newSaleInvoice));
+  }
+
+  function deleteId(data: any) {
+    const { id, ...rest } = data;
+    return rest;
   }
 
   function validations() {
@@ -264,8 +271,12 @@ export default function useSaleInvoice() {
       newErrors.total = "El total no coincide con los datos ingresados";
       validation = false;
     }
-    if (invoice.cantidad === 0) {
-      newErrors.cantidad = "Debes agregar una cantidad";
+    if (invoice.SaleDetails.length === 0) {
+      newErrors.SaleDetails = "Debes agregar productos";
+      validation = false;
+    }
+    if (invoice.PriceDetails.length === 0) {
+      newErrors.PriceDetails = "Debes agregar un metodo de pago";
       validation = false;
     }
     setError(newErrors);

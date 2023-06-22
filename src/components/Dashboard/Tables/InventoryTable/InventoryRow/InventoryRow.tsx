@@ -29,7 +29,7 @@ export default function InventoryRow({
 
   return (
     <div className={style.row}>
-      <span>{stock.IMEISerie}</span>
+      <span>{stock.IMEISerie || "000000000"}</span>
       <span>{stock.estado}</span>
       <span>
         {`${product?.marca} / ${product?.modelo} / ${product?.color} / ${product?.capacidad}`}
@@ -39,14 +39,14 @@ export default function InventoryRow({
       <span>{stock.precioIVA.toFixed(2)}</span>
       <span>{stock.precioIVAINC.toFixed(2)}</span>
       <button
-        className="btn btn-primary"
+        className="btn btn-outline-primary"
         type="button"
         onClick={() => handleProveedor(stock)}
       >
         <img src={supplier} alt="supplier" />
       </button>
       <button
-        className="btn btn-primary"
+        className="btn btn-outline-primary"
         type="button"
         onClick={() => handleDetails(stock)}
       >

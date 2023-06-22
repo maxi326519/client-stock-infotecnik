@@ -1,14 +1,38 @@
-export interface SaleInvoice {
-  id: string;
-  numero: string;
-  fecha: Date;
-  cantidad: number;
-  total: number;
-  ticket: string;
-  tipoImpositivo: TipoImpositivoSale;
-  SaleDetails: SaleDetail[];
-  detallesDePrecio: PriceDetail[];
+export enum TipoImpositivoSale {
+  Compuesto = "Compuesto",
+  IVA = "IVA",
+  RE = "RE",
+  REBU = "REBU",
 }
+
+export enum MetodoDePago {
+  efectivo = "EFECTIVO",
+  tarjeta = "TARJETA",
+  transferenciaBancaria = "TRANSFERENCIA BANCARIA",
+  bizum = "BIZUM",
+  contratoCompraventa = "CONTRATO COMPRAVENTA",
+}
+
+export interface SaleInvoice {
+  id?: string;
+  numero?: string;
+  fecha: Date;
+  total: number;
+  tipoImpositivo: TipoImpositivoSale;
+  generada: boolean;
+  ticketUrl?: string;
+  SaleDetails: SaleDetail[];
+  PriceDetails: PriceDetail[];
+}
+
+export const initSaleInvoice: SaleInvoice = {
+  fecha: new Date(),
+  total: 0,
+  tipoImpositivo: TipoImpositivoSale.Compuesto,
+  generada: false,
+  SaleDetails: [],
+  PriceDetails: [],
+};
 
 export interface SaleDetail {
   id: string;
@@ -26,64 +50,6 @@ export interface SaleDetail {
   SaleInvoiceId: string;
 }
 
-export interface PriceDetail{
-  id: string;
-  metodoDePago: MetodoDePago;
-  monto: number;
-  nroOperacion?: number;
-}
-
-export enum TipoImpositivoSale {
-  Compuesto = "Compuesto",
-  IVA = "IVA",
-  RE = "RE",
-  REBU = "REBU",
-}
-
-export enum MetodoDePago {
-  efectivo = "EFECTIVO",
-  tarjeta = "TARJETA",
-  transferenciaBancaria = "TRANSFERENCIA BANCARIA",
-  bizum = "BIZUM",
-  contratoCompraventa = "CONTRATO COMPRAVENTA",
-}
-
-export interface ErrorSaleInvoice {
-  numero: string;
-  total: string;
-  cantidad: string;
-}
-
-export interface HookSaleInvoice {
-  invoice: SaleInvoice;
-  details: SaleDetail[];
-  priceDetails: PriceDetail[];
-  errors: ErrorSaleInvoice;
-  customs: {
-    setInvoice: (invoice: SaleInvoice) => void;
-    reset: () => void;
-    addDetail: (stockId?: string[]) => void;
-    setDetail: (detailId: string, name: string, value: string | number) => void;
-    removeDetail: (detailId: string) => void;
-    addPriceDetail: () => void;
-    setPriceDetail: (priceDetailId: string, name: string, value: string | number) => void;
-    removePriceDetail: (priceDetailId: string) => void;
-    postInvoice: () => Promise<any>;
-  };
-}
-
-export const initSaleInvoice: SaleInvoice = {
-  id: "",
-  numero: "",
-  fecha: new Date(),
-  tipoImpositivo: TipoImpositivoSale.Compuesto,
-  total: 0,
-  cantidad: 1,
-  ticket: "",
-  SaleDetails: [],
-  detallesDePrecio:[],
-};
-
 export const initSaleDetail: SaleDetail = {
   id: "",
   date: new Date(),
@@ -99,15 +65,51 @@ export const initSaleDetail: SaleDetail = {
   SaleInvoiceId: "",
 };
 
+export interface PriceDetail {
+  id: string;
+  metodoDePago: MetodoDePago;
+  monto: number;
+  nroOperacion?: number;
+}
+
 export const initPriceDetail = {
   id: "",
   metodoDePago: MetodoDePago.efectivo,
   monto: 0,
+};
+
+export interface ErrorSaleInvoice {
+  numero: string;
+  total: string;
+  SaleDetails: string;
+  PriceDetails: string;
 }
 
-export const initErrorSaleInvoice = {
-  id: "",
+export const initErrorSaleInvoice: ErrorSaleInvoice = {
   numero: "",
   total: "",
-  cantidad: "",
+  SaleDetails: "",
+  PriceDetails: "",
 };
+
+export interface HookSaleInvoice {
+  invoice: SaleInvoice;
+  details: SaleDetail[];
+  priceDetails: PriceDetail[];
+  errors: ErrorSaleInvoice;
+  customs: {
+    setInvoice: (invoice: SaleInvoice) => void;
+    reset: () => void;
+    addDetail: (stockId?: string[]) => void;
+    setDetail: (detailId: string, name: string, value: string | number) => void;
+    removeDetail: (detailId: string) => void;
+    addPriceDetail: () => void;
+    setPriceDetail: (
+      priceDetailId: string,
+      name: string,
+      value: string | number
+    ) => void;
+    removePriceDetail: (priceDetailId: string) => void;
+    postInvoice: () => Promise<any>;
+  };
+}

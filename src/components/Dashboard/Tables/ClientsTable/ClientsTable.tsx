@@ -49,9 +49,12 @@ export default function ClientsTable() {
           placeholder="Buscar cliente"
           onChange={handleChange}
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nuevo cliente</span>
+        <button
+          className="btn btn-outline-success"
+          type="button"
+          onClick={handleForm}
+        >
+          <b>+</b> Nuevo cliente
         </button>
       </div>
       <div className={style.dashboardList__grid}>
@@ -63,8 +66,6 @@ export default function ClientsTable() {
           <span>CP</span>
           <span>Poblacion</span>
           <span>CIF / NIF</span>
-          <span>Editar</span>
-          <span>Eliminar</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (

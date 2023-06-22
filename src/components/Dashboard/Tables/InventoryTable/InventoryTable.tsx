@@ -112,17 +112,15 @@ export default function InventoryTable() {
           onChange={handleChangeSearch}
         />
         <button
-          className="btn btn-success"
+          className="btn btn-outline-success"
           type="button"
           onClick={handleCloseForm}
         >
-          <img src={add} alt="add" />
-          <span>Nuevo inventario</span>
+          <b>+</b> Nuevo inventario
         </button>
       </div>
       <div className={style.dashboardList__grid}>
         <div className={`${style.card} ${style.firstrow}`}>
-          <span>Codigo de barras</span>
           <span>Nro de Serie</span>
           <span>Estado</span>
           <span>Marca / Modelo / Color / Capacidad</span>
@@ -130,8 +128,6 @@ export default function InventoryTable() {
           <span>Precio</span>
           <span>Precio IVA</span>
           <span>Precio IVA INC</span>
-          <span>Proveedor</span>
-          <span>Detalle</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (

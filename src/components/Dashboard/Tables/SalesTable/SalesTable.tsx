@@ -83,9 +83,12 @@ export default function SalesTable() {
           placeholder="Buscar venta"
           onChange={handleChange}
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nueva venta</span>
+        <button
+          className="btn btn-outline-success"
+          type="button"
+          onClick={handleForm}
+        >
+          <b>+</b> Nueva venta
         </button>
         <Filters
           fromDate={filters.fromDate}

@@ -1,11 +1,10 @@
 .dashboardList {
-  position: relative;
   flex-grow: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 20px;
   padding-top: 0;
-  background: var(--background);
 }
 
 .dashboardList__searchBar {
@@ -25,19 +24,45 @@
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  filter: invert(100);
+  filter: invert(60%) sepia(69%) saturate(3800%) hue-rotate(65deg)
+    brightness(80%) contrast(80%);
 }
 
 .dashboardList__grid {
   flex-grow: 1;
-  outline: 1px solid var(--border);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  outline: 1px solid var(--dark-panel);
+  height: calc(100px - 60px - 780px - 35px);
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px;
+  color: white;
+  background-color: var(--dark-panel);
+}
+
+.pagination button {
+  border: 1px solid var(--dark-panel);
+  color: white;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.pagination button:hover {
+  border: 1px solid var(--dark-border);
+}
+
+.pagination button:active {
+  filter: brightness(70%);
 }
 
 .contentCard {
   height: 100%;
-  padding-bottom: 35px;
-  overflow: scroll;
+  overflow-y: auto;
 }
 
 .listEmpty {
@@ -67,9 +92,9 @@
 
 .row {
   display: grid;
-  grid-template-columns: repeat(2, 100px) repeat(2, 1fr) repeat(1, 100px) repeat(
-      3,
-      80px
+  grid-template-columns: repeat(2, 120px) 1fr 2fr repeat(1, 100px) repeat(
+      4,
+      60px
     );
   gap: 10px;
   padding: 10px;

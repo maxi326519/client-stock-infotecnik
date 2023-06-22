@@ -14,9 +14,7 @@ import InvoiceRow from "./InvoiceRow/InvoiceRow";
 import Filters from "./FIlters/Filters";
 
 import style from "./InvoiceTable.module.css";
-import add from "../../../../assets/svg/add.svg";
 import swal from "sweetalert";
-import { getInventory } from "../../../../redux/actions/inventory";
 
 export default function InvoiceTable() {
   const invoices = useSelector((state: RootState) => state.invoices);
@@ -134,9 +132,8 @@ export default function InvoiceTable() {
           placeholder="Buscar factura"
           onChange={handleSearchChange}
         />
-        <button className="btn btn-success" type="button" onClick={handleForm}>
-          <img src={add} alt="add" />
-          <span>Nueva Facturas</span>
+        <button className="btn btn-outline-success" type="button" onClick={handleForm}>
+          <b>+</b> Nueva Facturas
         </button>
         <Filters
           fromDate={filters.fromDate}
@@ -149,12 +146,8 @@ export default function InvoiceTable() {
         <div className={`${style.row} ${style.firstRow}`}>
           <span>Fecha</span>
           <span>Numero</span>
-          <span>Archivo</span>
           <span>Tipo impositivo</span>
           <span>Total</span>
-          <span>Productos</span>
-          <span>Proveedor</span>
-          <span>Eliminar</span>
         </div>
         <div className={style.contentCard}>
           {rows.length <= 0 ? (

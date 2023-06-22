@@ -32,7 +32,6 @@ export default function Form({ handleClose }: Props) {
   const [addStock, setAddStock] = useState<boolean>(false);
   const [addClient, setAddClient] = useState<boolean>(false);
   const [invoiceType, setInvoiceType] = useState<number>(1);
-  const [generate, setGenerate] = useState(false);
   const [disabled, setDisabled] = useState<InputCheck>({
     numero: false,
     total: false,
@@ -90,8 +89,7 @@ export default function Form({ handleClose }: Props) {
   }
 
   function handleGenerate(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("Generate:", event.target.checked);
-    setGenerate(event.target.checked);
+    customs.setInvoice({ ...invoice, generada: event.target.checked });
   }
 
   return (
@@ -112,24 +110,32 @@ export default function Form({ handleClose }: Props) {
         />
       ) : null}
       <form className={`toTop ${style.form}`} onSubmit={handleSubmit}>
-        <div className={style.close}>
+        <header className={style.close}>
           <h4>Nueva factura de venta</h4>
           <div className="btn-close" onClick={handleClose} />
-        </div>
+        </header>
         <div className={style.flex}>
           <div className={style.inputs}>
             {/* TIPO FACTURA */}
             <div className={style.invoiceType}>
               <button
-                className={`btn btn-${invoiceType === 1 ? "" : "outline-"}success`}
+                className={`btn btn-${
+                  invoiceType === 1 ? "" : "outline-"
+                }success`}
                 type="button"
                 onClick={() => setInvoiceType(1)}
-              >Particular</button>
+              >
+                Particular
+              </button>
               <button
-                className={`btn btn-${invoiceType === 2 ? "" : "outline-"}success`}
+                className={`btn btn-${
+                  invoiceType === 2 ? "" : "outline-"
+                }success`}
                 type="button"
                 onClick={() => setInvoiceType(2)}
-              >Empresa</button>
+              >
+                Empresa
+              </button>
             </div>
 
             {/* NUMERO: */}
@@ -212,17 +218,33 @@ export default function Form({ handleClose }: Props) {
 
             {/* GENERAR FACTURA */}
             <div className={style.generated}>
-              <input id="generated" name="generated" type="checkbox" checked={generate} onChange={handleGenerate} />
-              <label htmlFor="generated">Generar factura</label>
+              <input
+                id="generada"
+                name="generada"
+                type="checkbox"
+                checked={invoice.generada}
+                onChange={handleGenerate}
+              />
+              <label htmlFor="generada">Generar factura</label>
             </div>
 
             {/* AGREGAR CLIENTE */}
-            <div className={`${style.client} ${invoiceType === 2 ? "toBottom" : "hiddenUp"}`}>
+            <div
+              className={`${style.client} ${
+                invoiceType === 2 ? "toBottom" : "hiddenUp"
+              }`}
+            >
               <ClientData
                 client={clientSelected}
                 error={""}
                 handleFormSuppliers={handleAddClient}
               />
+            </div>
+
+            <div className={style.btnContainer}>
+              <button className="btn btn-success" type="submit">
+                Agregar factura
+              </button>
             </div>
           </div>
           <div className={style.tables}>

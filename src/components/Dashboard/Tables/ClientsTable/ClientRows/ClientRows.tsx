@@ -96,7 +96,7 @@ export default function ClientRows({ client }: Props) {
     <div className={style.row}>
       <input
         name="numero"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.numero}
         placeholder="Numero"
         disabled={isDisabled}
@@ -105,7 +105,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="nombre"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.nombre}
         placeholder="Nombre"
         disabled={isDisabled}
@@ -114,7 +114,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="direccion"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.direccion}
         placeholder="Direccion"
         disabled={isDisabled}
@@ -123,7 +123,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="telefono"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.telefono}
         placeholder="Telefono"
         disabled={isDisabled}
@@ -132,7 +132,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="poblacion"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.poblacion}
         placeholder="Poblacion"
         disabled={isDisabled}
@@ -141,7 +141,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="postal"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.postal}
         placeholder="Postal"
         disabled={isDisabled}
@@ -150,7 +150,7 @@ export default function ClientRows({ client }: Props) {
 
       <input
         name="cifNif"
-        className="form-control"
+        className={`form-control ${isDisabled ? "" : style.enable}`}
         value={localClient.cifNif}
         placeholder="CIF NIF"
         disabled={isDisabled}
@@ -158,23 +158,23 @@ export default function ClientRows({ client }: Props) {
       />
 
       {isDisabled ? <button
-        className="btn btn-primary"
+        className="btn btn-outline-primary"
         type="button"
         onClick={handleDisabled}
       >
         <img src={edit} alt="edit" />
       </button>
         :
-        <div>
+        <div className={style.btnContent}>
           <button
-            className="btn btn-success"
+            className="btn btn-outline-success"
             type="button"
             onClick={handleUpdate}
           >
             <img src={save} alt="edit" />
           </button>
           <button
-            className="btn btn-danger"
+            className="btn btn-outline-danger"
             type="button"
             onClick={handleDisabled}
           >
@@ -182,7 +182,7 @@ export default function ClientRows({ client }: Props) {
           </button>
         </div>
       }
-      <button className="btn btn-danger" type="button" onClick={handleRemove}>
+      <button className="btn btn-outline-danger" type="button" onClick={handleRemove}>
         <img src={deleteSvg} alt="delete" />
       </button>
     </div>

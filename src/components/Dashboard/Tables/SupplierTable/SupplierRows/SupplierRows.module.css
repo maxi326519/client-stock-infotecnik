@@ -1,13 +1,41 @@
 .row{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 100px 80px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 100px 50px;
   grid-template-rows: 1fr;
   gap: 10px;
   padding: 10px;
-  padding-bottom: 0px;
-  outline: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .row input{
-  border-right: 1px solid var(--border);
+  border: none;
+  padding-left: 5px;
+  border: 1px solid transparent;
+}
+
+.row .enable{
+  border: 1px solid #0003;
+}
+
+.row .btnContent button:first-child img {
+  filter: invert(29%) sepia(83%) saturate(1156%) hue-rotate(120deg) brightness(93%) contrast(91%);
+}
+
+.row .btnContent button:first-child:hover img {
+  filter: none;
+  filter: invert(100%);
+}
+
+.row button{
+  border: none;
+}
+
+.row button img {
+  filter: invert(9%) sepia(93%) saturate(5805%) hue-rotate(359deg)
+    brightness(84%) contrast(109%);
+}
+
+.row button:hover img {
+  filter: none;
+  filter: invert(100%);
 }

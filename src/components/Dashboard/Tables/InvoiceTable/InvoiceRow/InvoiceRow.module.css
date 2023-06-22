@@ -1,13 +1,36 @@
 .row {
   display: grid;
-  grid-template-columns: repeat(2, 100px) repeat(3, 1fr) repeat(3, 80px);
+  grid-template-columns: 100px 200px repeat(2, 1fr) repeat(4, 50px);
   grid-template-rows: 1fr;
   gap: 10px;
   padding: 10px;
   padding-bottom: 0px;
-  outline: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .row span {
-  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.row button{
+  border: none;
+}
+
+.row a {
+  display: flex;
+  align-items: center;
+  border: none;
+}
+
+.row button img,
+.row a img {
+  filter: invert(9%) sepia(93%) saturate(5805%) hue-rotate(359deg)
+    brightness(84%) contrast(109%);
+}
+
+.row button:hover img,
+.row a:hover img {
+  filter: none;
+  filter: invert(100%);
 }
