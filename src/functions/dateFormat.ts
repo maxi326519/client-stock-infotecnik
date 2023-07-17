@@ -1,5 +1,7 @@
 export default function dateFormat(fecha: string) {
-  const partes = fecha.split("/"); // Dividir la cadena de fecha en partes
+  const partes = fecha.split("-"); // Dividir la cadena de fecha en partes
+
+  console.log(partes);
 
   const dia = parseInt(partes[0], 10); // Obtener el día como número entero
   const mes = parseInt(partes[1], 10); // Obtener el mes como número entero
