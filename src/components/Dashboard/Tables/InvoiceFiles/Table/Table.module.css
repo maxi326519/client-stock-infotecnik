@@ -1,0 +1,31 @@
+.table{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--dark-panel);
+}
+
+.table .header{
+  display: grid;
+  grid-template-columns: 100px 1fr repeat(3, 80px);
+  padding: 3px 10px;
+  color: var(--dark-font);
+  background-color: var(--dark-panel);
+}
+
+.table .body{
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  overflow-y: auto;
+}
+
+.table .row{
+  grid-template-columns: 100px 1fr repeat(3, 80px);
+}
+
+.table .footer{
+  text-align: right;
+  padding: 3px 10px;
+  color: var(--dark-font);
+  background-color: var(--dark-panel);
+}

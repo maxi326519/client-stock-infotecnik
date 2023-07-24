@@ -1,0 +1,7 @@
+.row{
+  grid-template-columns: 100px 1fr repeat(3, 80px);
+}
+
+.row label{
+  display: none;
+}

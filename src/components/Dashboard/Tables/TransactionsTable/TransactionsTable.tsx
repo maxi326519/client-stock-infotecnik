@@ -20,6 +20,7 @@ import Filters from "./FIlters/Filters";
 import style from "./TransactionsTable.module.css";
 import importSvg from "../../../../assets/svg/import.svg";
 import usePagination from "../../../../hooks/pagination/usePagination";
+import { InvoiceFiles } from "../InvoiceFiles/InvoiceFiles";
 
 export default function TransactionsTable() {
   const dispatch = useDispatch();
@@ -131,6 +132,7 @@ export default function TransactionsTable() {
       {transactionForm ? (
         <ImportExcel handleData={handleData} handleClose={handleClose} />
       ) : null}
+      <InvoiceFiles handleClose={() => {}}/>
       <h3>Movimientos</h3>
       <div className={style.dashboardList__searchBar}>
         <input

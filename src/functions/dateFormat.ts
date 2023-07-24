@@ -1,5 +1,5 @@
 export default function dateFormat(fecha: string) {
-  const partes = fecha.split("-"); // Dividir la cadena de fecha en partes
+  const partes = fecha.split("/"); // Dividir la cadena de fecha en partes
 
   console.log(partes);
 

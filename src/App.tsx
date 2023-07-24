@@ -12,6 +12,8 @@ import { getConfig } from "./redux/actions/configurations";
 import { getClients } from "./redux/actions/clients";
 import { getUsers } from "./redux/actions/user";
 import { persistence } from "./redux/actions/login";
+import { getDateRange } from "./functions/getDateRange";
+import { getSales } from "./redux/actions/sales";
 import { useApi } from "./hooks";
 import swal from "sweetalert";
 import axios from "axios";
@@ -23,8 +25,6 @@ import Dashboad from "./components/Dashboard/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./Animation.css";
-import { getSales } from "./redux/actions/sales";
-import { getDateRange } from "./functions/getDateRange";
 
 function App() {
   const redirect = useNavigate();
