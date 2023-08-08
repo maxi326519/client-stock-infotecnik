@@ -1,11 +1,17 @@
 export interface InvoiceFile {
   id?: string;
-  date: string;
+  date: Date | null;
   description: string;
   type: string;
   url: string;
   InvoiceId?: string;
   TransactionId?: string;
+}
+
+export interface ErrorInvoiceFile {
+  date: string;
+  description: string;
+  type: string;
 }
 
 export interface Search {
@@ -14,10 +20,16 @@ export interface Search {
 }
 
 export const initInvoiceFile = (): InvoiceFile => ({
-  date: "",
+  date: null,
   description: "",
   type: "",
   url: "",
+});
+
+export const initErrorInvoiceFile = (): ErrorInvoiceFile => ({
+  date: "",
+  description: "",
+  type: "",
 });
 
 export const initSearch = (): Search => ({

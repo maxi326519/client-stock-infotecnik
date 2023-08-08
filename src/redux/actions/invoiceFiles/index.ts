@@ -19,6 +19,9 @@ export function postFile(
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append('date', fileData.date!.toISOString());
+      formData.append('description', fileData.description);
+      formData.append('type', fileData.type);
 
       const response = await axios.post("/invoiceFile", formData, {
         headers: {
@@ -31,14 +34,12 @@ export function postFile(
         payload: response.data,
       });
     } catch (error: any) {
-      throw new Error(
-        error.response ? error.response.data.error : error.message
-      );
+      throw new Error(error.message);
     }
   };
 }
 
-export function getFilesData(): ThunkAction<
+export function getFilesData(unlinked: boolean, from: string, to: string): ThunkAction<
   Promise<void>,
   RootState,
   null,
@@ -46,7 +47,9 @@ export function getFilesData(): ThunkAction<
 > {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
-      const response = await axios.get("/invoiceFile");
+      const response = await axios.get(`/invoiceFile?unlinked=${unlinked}&from=${from}&to=${to}`);
+
+      console.log(response.data);
 
       dispatch({
         type: GET_FILES,

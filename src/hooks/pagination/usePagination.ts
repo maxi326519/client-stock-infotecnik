@@ -17,28 +17,23 @@ export default function usePagination(data: any[], listLength = 11) {
   const [list, setList] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log("Data: ", data);
-
-    setPage({
+    // Create the new page
+    const newPage = {
       ...page,
       length: Math.ceil(data.length / listLength) || 0,
       listLength,
-    });
-  }, [data, listLength]);
+    };
 
-  useEffect(() => {
+    // Get data for this page
     const firstData = (page.current - 1) * page.listLength;
     const lastData = firstData + page.listLength;
-    
-    console.log("First data: ", firstData);
-    console.log("Data length: ", data.length);
 
-    if (firstData <= data.length) {
-      setList(data.slice(firstData, lastData));
-    }
+    // While the firstData is in the data
+    if (firstData <= data.length) setList(data.slice(firstData, lastData));
 
-    console.log("Set page");
-  }, [page]);
+                                                                    
+    setPage(newPage);
+  }, [data, listLength]);
 
   function updatePage(pageNumber: number) {
     setPage({

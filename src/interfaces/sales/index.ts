@@ -36,7 +36,7 @@ export const initSaleInvoice: SaleInvoice = {
 
 export interface SaleDetail {
   id: string;
-  date: Date;
+  fecha: Date;
   concepto: string;
   tipoImpositivo: TipoImpositivoSale;
   baseImponible: number;
@@ -46,13 +46,13 @@ export interface SaleDetail {
   recargoMonto: number;
   cantidad: number;
   ProductId?: number;
-  StockId: string;
-  SaleInvoiceId: string;
+  StockId?: string;
+  SaleInvoiceId?: string;
 }
 
 export const initSaleDetail: SaleDetail = {
   id: "",
-  date: new Date(),
+  fecha: new Date(),
   tipoImpositivo: TipoImpositivoSale.IVA,
   concepto: "",
   cantidad: 1,
@@ -61,8 +61,6 @@ export const initSaleDetail: SaleDetail = {
   ivaMonto: 0,
   recargoPorcentaje: 0,
   recargoMonto: 0,
-  StockId: "",
-  SaleInvoiceId: "",
 };
 
 export interface PriceDetail {

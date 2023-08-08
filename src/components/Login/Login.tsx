@@ -81,7 +81,6 @@ export default function Signin() {
             dispatch<any>(getConfig()),
             dispatch<any>(getInvoice(from, to)),
             dispatch<any>(getSales(from, to)),
-            dispatch<any>(getTransactions(from, to)),
           ])
             .then(() => {
               dispatch(closeLoading());

@@ -1,7 +1,33 @@
-.row{
-  grid-template-columns: 100px 1fr repeat(3, 80px);
+.row {
+  display: grid;
+  grid-template-columns: 50px min-content 130px 1fr repeat(3, 50px);
+  align-items: center;
+  justify-items: center;
 }
 
-.row label{
+.row label {
+  display: none;
+}
+
+.row a img,
+.row button img {
+  filter: invert(40%);
+}
+
+.row a:hover img,
+.row button:hover img {
+  filter: var(--filter-success);
+}
+
+.row a:last-child:hover img,
+.row button:last-child:hover img {
+  filter: var(--filter-danger);
+}
+
+.selected {
+  background-color: #0001;
+}
+
+.row label {
   display: none;
 }

@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { InvoiceFile } from "../../../../../../interfaces/invoices/InvoiceFile";
 
 import styles from "./Row.module.css";
+import viewSvg from "../../../../../../assets/svg/view.svg";
+import editSvg from "../../../../../../assets/svg/edit.svg";
+import removeSvg from "../../../../../../assets/svg/delete.svg";
 
 interface Props {
   item: InvoiceFile;
-  view: (url: string) => void;
+  selected: string;
   update: (item: InvoiceFile) => void;
   remove: (id: string) => void;
+  handleSelected: (id: string) => void;
 }
 
-export default function Row({ item, view, update, remove }: Props) {
+export default function Row({ item, selected, update, remove, handleSelected }: Props) {
   const [disabled, setDisabled] = useState(true);
   const [edit, setEdit] = useState<InvoiceFile>(item);
 
@@ -24,44 +28,63 @@ export default function Row({ item, view, update, remove }: Props) {
   }
 
   function handleDisabled() {
+    if (!disabled) update(edit);
     setDisabled(!disabled);
   }
 
   return (
-    <div className={styles.row}>
+    <div className={`${styles.row} ${item.id === selected && styles.selected}`}>
+      <input
+        type="checkbox"
+        className="form-check-input"
+        checked={item.id === selected}
+        placeholder="Fecha"
+        onClick={() => handleSelected(item.id!)}
+      />
+
       <input
         name="date"
-        value={edit.date}
+        type="date"
+        className="form-control"
         placeholder="Fecha"
         onChange={handleChange}
-        disabled={true}
+        disabled={disabled}
       />
-      <label htmlFor="type">Tipo</label>
+
       <select
         id="type"
         name="type"
+        className="form-select"
         value={edit.type}
         placeholder="Tipo de factura"
         onChange={handleChange}
         disabled={disabled}
       >
-        <option>Seleccionar</option>
+        <option value="">Seleccionar</option>
+        <option value="Compra">Compra</option>
+        <option value="Venta">Venta</option>
+        <option value="Servicios">Servicios</option>
       </select>
+      <label htmlFor="type">.</label>
+
       <input
+        id="description"
         name="description"
+        placeholder="description"
+        className="form-control"
         value={edit.description}
-        placeholder="Descripción"
         onChange={handleChange}
         disabled={disabled}
       />
-      <button onClick={() => view(item.url)} type="button">
-        <img src="" alt="view" />
+
+      <a className="btn btn-outline-success-outline" href={"http://" + edit.url} target="_blank" rel="noreferrer">
+        <img src={viewSvg} alt="view" />
+      </a>
+      <button className="btn btn-outline-success-outline" onClick={handleDisabled} type="button">
+        <img src={editSvg} alt="edit" />
       </button>
-      <button onClick={handleDisabled} type="button">
-        <img src="" alt="update" />
-      </button>
-      <button onClick={() => remove(item.id!)} type="button">
-        <img src="" alt="remove" />
+      <button className="btn btn-outline-success-outline" onClick={() => remove(item.id!)} type="button">
+        <img src={removeSvg} alt="remove" />
       </button>
     </div>
   );

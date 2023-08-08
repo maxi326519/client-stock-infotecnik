@@ -5,6 +5,8 @@ import axios from "axios";
 
 export const POST_TRANSACTIONS: string = "POST_TRANSACTIONS";
 export const GET_TRANSACTIONS: string = "GET_TRANSACTIONS";
+export const UPDATE_TRANSACTION: string = "UPDATE_TRANSACTION";
+export const BIND_TRANSACTIONS = "BIND_TRANSACTIONS";
 export const DELETE_TRANSACTION: string = "DELETE_TRANSACTION";
 
 export function postTransactions(
@@ -15,8 +17,6 @@ export function postTransactions(
       const transactions: Transactions[] = [];
 
       const response = await axios.post(`/transactions`, newTransactions);
-
-      console.log(response.data);
 
       response.data.forEach((data: any) => {
         transactions.push({
@@ -30,8 +30,7 @@ export function postTransactions(
         payload: transactions,
       });
     } catch (error: any) {
-      console.log(error.response ? error.response.data.error : error);
-      throw new Error(error.response ? error.response.data.error : error);
+      throw new Error(error);
     }
   };
 }
@@ -44,8 +43,7 @@ export function getTransactions(
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
       const transactions = await axios.get(
-        `/transactions?from=${from}&to=${to}${
-          linked ? `&linked=${linked}` : ""
+        `/transactions?from=${from}&to=${to}${linked ? `&linked=${linked}` : ""
         }`
       );
 
@@ -64,8 +62,62 @@ export function getTransactions(
         payload: newData,
       });
     } catch (error: any) {
-      console.log(error.response ? error.response.data.error : error);
-      throw new Error(error.response ? error.response.data.error : error);
+      throw new Error(error);
+    }
+  };
+}
+
+export function updateTransaction(
+  transaction: Transactions
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    try {
+      await axios.patch("/transactions", transaction);
+
+      dispatch({
+        type: UPDATE_TRANSACTION,
+        payload: transaction,
+      });
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
+}
+
+export function bindTransactions(
+  transactionId: string[],
+  notes: string,
+  invoiceFileId: string,
+): ThunkAction<Promise<void>, RootState, null, AnyAction> {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    try {
+
+      let data: {
+        transactions: string[],
+        notes: string,
+        invoiceFile: string,
+      } = {
+        transactions: [],
+        notes: "",
+        invoiceFile: "",
+      }
+
+      if (transactionId) data.transactions = transactionId;
+      if (notes) data.notes = notes;
+      if (invoiceFileId) data.invoiceFile = invoiceFileId;
+
+      console.log(data);
+
+      await axios.patch("/transactions/link", data);
+
+      dispatch({
+        type: BIND_TRANSACTIONS,
+        payload: data,
+      });
+    } catch (error: any) {
+      throw new Error(
+        error.response ? error.response.data.error : error.message
+      );
     }
   };
 }
@@ -82,7 +134,6 @@ export function deleteTransaction(
         payload: transactionId,
       });
     } catch (error: any) {
-      console.log(error.response ? error.response.data.error : error);
       throw new Error(error.response ? error.response.data.error : error);
     }
   };

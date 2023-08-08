@@ -1,8 +1,8 @@
 .row {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(2, 120px) 1fr 2fr repeat(1, 100px) repeat(
-      3,
+  grid-template-columns: 30px repeat(2, 120px) 1fr 2fr repeat(1, 100px) repeat(
+      4,
       60px
     );
   gap: 10px;
@@ -26,4 +26,8 @@
 .row button:last-child:hover img {
   filter: none;
   filter: invert(100%);
+}
+
+.selected {
+  background-color: #0001;
 }

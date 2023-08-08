@@ -11,8 +11,8 @@
   background-color: #0006;
 }
 
-.background .container {
-  width: 700px;
+.background form {
+  width: 400px;
   padding: 20px;
   border-radius: 5px;
   background-color: white;
@@ -25,32 +25,5 @@
 }
 
 .close h4 {
-  flex-grow: 1;
-}
-
-.selected {
-  display: block;
-  color: blue;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.controls div:first-child {
-  flex-grow: 1;
-}
-
-.bottomControls {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.bottomControls div:first-child {
   flex-grow: 1;
 }

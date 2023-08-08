@@ -29,6 +29,8 @@ import {
   POST_TRANSACTIONS,
   GET_TRANSACTIONS,
   DELETE_TRANSACTION,
+  UPDATE_TRANSACTION,
+  BIND_TRANSACTIONS,
 } from "../actions/transactions";
 import {
   GET_CONFIGURATIONS,
@@ -52,6 +54,7 @@ import {
   DELETE_SALE_INVOICE,
   DELETE_SALE_ITEM,
 } from "../actions/sales";
+import { GET_FILES, POST_FILE } from "../actions/invoiceFiles";
 
 const initialState: RootState = {
   profile: {
@@ -75,6 +78,7 @@ const initialState: RootState = {
   stock: [],
   sales: [],
   invoices: [],
+  invoiceFiles: [],
   transactions: [],
   config: {
     iva: {
@@ -315,6 +319,22 @@ export default function Reducer(
         ),
       };
 
+    case UPDATE_TRANSACTION:
+      return {
+        ...state,
+        transactions: state.transactions.map((transaction) => transaction.id === action.payload.id ? action.payload : transaction)
+      }
+
+    case BIND_TRANSACTIONS:
+      return {
+        ...state,
+        transactions: state.transactions.map((transaction) =>
+          action.payload.transactions.some((id: string) => id === transaction.id)
+            ? { ...transaction, InvoiceFileId: action.payload.invoiceFileId }
+            : transaction
+        ),
+      }
+
     case UPDATE_CONFIGURATIONS:
       return {
         ...state,
@@ -390,8 +410,8 @@ export default function Reducer(
         sales: state.sales.map((invoice) =>
           invoice.id === action.payload.SaleInvoiceId
             ? invoice.SaleDetails.map((item) =>
-                item.id === action.payload.id ? action.payload : item
-              )
+              item.id === action.payload.id ? action.payload : item
+            )
             : invoice
         ),
       };
@@ -418,6 +438,19 @@ export default function Reducer(
         transactions: state.transactions.filter(
           (transaction) => transaction.id !== action.payload
         ),
+      };
+
+
+    case POST_FILE:
+      return {
+        ...state,
+        invoiceFiles: [...state.invoiceFiles, action.payload]
+      };
+
+    case GET_FILES:
+      return {
+        ...state,
+        invoiceFiles: action.payload
       };
 
     /* Sales */

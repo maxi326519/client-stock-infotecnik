@@ -22,6 +22,7 @@ import {
 } from "./sales";
 
 import { Product, initProduct } from "./products";
+import { InvoiceFile } from "./invoices/InvoiceFile";
 
 interface Login {
   email: string;
@@ -79,9 +80,10 @@ interface Transactions {
   masDatos: string;
   importe: number;
   saldo: number;
+  notas: string;
   vinculada: boolean;
-  invoiceId?: string;
   invoiceType?: string;
+  InvoiceFileId: string;
 }
 
 enum BarCode {
@@ -123,6 +125,7 @@ interface RootState {
   clients: Array<Client>;
   stock: Array<Stock>;
   invoices: Array<Invoices>;
+  invoiceFiles: Array<InvoiceFile>;
   sales: SaleInvoice[];
   transactions: Array<Transactions>;
   config: Config;

@@ -18,7 +18,7 @@ import Filters from "./FIlters/Filters";
 export default function SalesTable() {
   const dispatch = useDispatch();
   const sales = useSelector((state: RootState) => state.sales);
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<SaleInvoice[]>([]);
   const [form, setForm] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [filters, setFilters] = useState({
@@ -28,13 +28,8 @@ export default function SalesTable() {
 
   useEffect(() => {
     const searchStr = search.toLowerCase();
-    const data: SaleDetail[] = [];
 
-    sales.forEach((invoice: SaleInvoice) =>
-      invoice.SaleDetails.map((detail: SaleDetail) => data.push(detail))
-    );
-
-    const filter = data.filter((sales: SaleDetail) => {
+    const filter = sales.filter((sales: SaleInvoice) => {
       if (searchStr === "") return true;
       return false;
     });
@@ -105,7 +100,7 @@ export default function SalesTable() {
           <span>Producto</span>
           <span>Cliente</span>
           <span>Total</span>
-          <span>Detalles</span>
+          <span>Ticket</span>
           <span>Eliminar</span>
         </div>
         <div className={style.contentCard}>
@@ -114,7 +109,7 @@ export default function SalesTable() {
               <span>No hay clientes</span>
             </div>
           ) : (
-            rows?.map((sale: SaleDetail) => (
+            rows?.map((sale: SaleInvoice) => (
               <SaleRow key={sale.id} sale={sale} />
             ))
           )}

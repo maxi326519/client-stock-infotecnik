@@ -1,43 +1,29 @@
-import { useState } from "react";
-import {
-  Search,
-  initSearch,
-} from "../../../../../interfaces/invoices/InvoiceFile";
-
 import styles from "./SearchBar.module.css";
 
 interface Props {
-  submit: (search: Search) => void;
+  search: string;
+  handleChange: (search: string) => void;
 }
 
-export default function SearchBar({ submit }: Props) {
-  const [search, setSearch] = useState<Search>(initSearch());
+export default function SearchBar({ search, handleChange }: Props) {
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearch({ ...search, [event.target.name]: event.target.value });
-  }
-
-  function handleSubmit() {
-    submit(search);
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    handleChange(event.target.value);
   }
 
   return (
-    <form className={styles.searchBar} onSubmit={handleSubmit}>
-      <input
-        name="text"
-        type="text"
-        placeholder="Buscar factura"
-        onChange={handleChange}
-      />
-      <input
-        name="date"
-        type="date"
-        placeholder="Buscar factura"
-        onChange={handleChange}
-      />
-      <button className="btn btn-success" type="submit">
-        Buscar
-      </button>
-    </form>
+    <div className={styles.searchBar}>
+      {/* SEARCH BAR */}
+      <div className="form-floating">
+        <input
+          id="search"
+          type="text"
+          value={search}
+          className="form-control"
+          onChange={handleSearch}
+        />
+        <label htmlFor="search">Buscar</label>
+      </div>
+    </div>
   );
 }

@@ -16,6 +16,9 @@ export function postSaleInvoice(
 ): ThunkAction<Promise<void>, RootState, null, AnyAction> {
   return async (dispatch: Dispatch<AnyAction>) => {
     try {
+
+      console.log(sale);
+
       const newSale = await axios.post("/sales", sale);
 
       dispatch({
@@ -36,9 +39,14 @@ export function getSales(
     try {
       const sales = await axios.get(`/sales?from=${from}&to=${to}`);
 
+      const data = sales.data.map((sale: any) => ({
+        ...sale,
+        fecha: new Date(sale.fecha),
+      }));
+
       dispatch({
         type: GET_SALES,
-        payload: sales.data,
+        payload: data,
       });
     } catch (error: any) {
       throw new Error(error.response ? error.response.data.error : error);

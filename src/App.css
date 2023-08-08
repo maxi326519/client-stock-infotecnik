@@ -3,6 +3,12 @@
   --primary-color--transp: #b3071b44;
   --filter-primary: invert(24%) sepia(87%) saturate(6383%) hue-rotate(345deg)
     brightness(69%) contrast(107%);
+  --filter-success: invert(29%) sepia(75%) saturate(2423%) hue-rotate(124deg)
+    brightness(88%) contrast(101%);
+  --filter-danger: invert(25%) sepia(97%) saturate(7462%) hue-rotate(0deg)
+    brightness(97%) contrast(120%);
+
+  --background: #ff0000;
 
   --background: #fff;
   --panel: #ccc;

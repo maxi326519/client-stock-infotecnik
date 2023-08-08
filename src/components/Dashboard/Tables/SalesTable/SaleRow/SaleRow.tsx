@@ -21,35 +21,23 @@ import deleteSvg from "../../../../../assets/svg/delete.svg";
 
 import style from "./SaleRow.module.css";
 import { useSelector } from "react-redux";
+import { useApi } from "../../../../../hooks";
 
 interface Props {
-  sale: SaleDetail;
+  sale: SaleInvoice;
 }
 
 export default function SaleRow({ sale }: Props) {
   /*   const dispatch = useDispatch(); */
+  const api = useApi();
   const stocks = useSelector((state: RootState) => state.stock);
   const products = useSelector((state: RootState) => state.products);
   const invoices = useSelector((state: RootState) => state.sales);
   const [isDisabled, setDisabled] = useState(true);
-  const [localSale, setLocalSale] = useState<SaleDetail>(sale);
+  const [localSale, setLocalSale] = useState<SaleInvoice>(sale);
   const [invoice, setInvoice] = useState<SaleInvoice>();
   const [stock, setStock] = useState<Stock>();
   const [product, setProduct] = useState<Product>();
-
-  useEffect(() => {
-    const newstock = stocks.find((stock) => stock.id === sale.StockId);
-    const newproduct = products.find(
-      (product) => product.id === sale.ProductId
-    );
-    const newinvoice = invoices.find(
-      (invoice: SaleInvoice) => invoice.id === sale.SaleInvoiceId
-    );
-
-    if (newstock) setStock(newstock);
-    if (newproduct) setProduct(newproduct);
-    if (newinvoice) setInvoice(newinvoice);
-  }, [sale, invoices, stocks, products]);
 
   function handleDisabled() {
     setDisabled(!isDisabled);
@@ -95,7 +83,7 @@ export default function SaleRow({ sale }: Props) {
       <input
         name="date"
         className="form-control"
-        value={localSale.date?.toISOString().split("T")[0]}
+        value={localSale.fecha?.toISOString()?.split("T")[0]}
         placeholder="date"
         disabled={isDisabled}
         onChange={handleChange}
@@ -146,40 +134,14 @@ export default function SaleRow({ sale }: Props) {
         onChange={handleChange}
       />
 
-      <button
+      <a
+        href={`${api}/${sale.ticketUrl}`}
         className="btn btn-primary"
-        type="button"
-        onClick={handleDisabled}
+        target="_blank"
       >
         <img src={details} alt="details" />
-      </button>
+      </a>
 
-      {/*       {isDisabled ? (
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={handleDisabled}
-        >
-          <img src={edit} alt="edit" />
-        </button>
-      ) : (
-        <div>
-          <button
-            className="btn btn-success"
-            type="button"
-            onClick={handleUpdate}
-          >
-            <img src={save} alt="edit" />
-          </button>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleDisabled}
-          >
-            <img src={cancel} alt="edit" />
-          </button>
-        </div>
-      )} */}
       <button className="btn btn-danger" type="button" onClick={handleRemove}>
         <img src={deleteSvg} alt="delete" />
       </button>
